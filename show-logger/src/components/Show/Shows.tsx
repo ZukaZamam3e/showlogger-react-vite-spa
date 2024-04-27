@@ -1,6 +1,6 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { AppBar, Box, Container, Stack, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
-import { ShowsList } from "./ShowsList";
+import { ShowsList } from "../Old/ShowsList";
 import { ShowsTab } from "./ShowsTab";
 
 interface ShowsTabPanelProps {
@@ -10,7 +10,7 @@ interface ShowsTabPanelProps {
 }
 
 export const ShowsTabPanel = (props: ShowsTabPanelProps) => {
-    const {children, value, index } = props;
+    const { children, value, index } = props;
 
     return (
         <div
@@ -18,9 +18,12 @@ export const ShowsTabPanel = (props: ShowsTabPanelProps) => {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
+            style={{
+                marginTop: 85
+            }}
         >
             {value === index && (
-                <Box sx={{ p: 1 }}>
+                <Box>
                     {children}
                 </Box>
             )}
@@ -31,12 +34,13 @@ export const ShowsTabPanel = (props: ShowsTabPanelProps) => {
 export const Shows = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
-    const tabsVarient:any = isMobile ? "scrollable" : "standard";
+    const tabsVarient: any = isMobile ? "scrollable" : "standard";
+    const theme = useTheme();
 
     const tabs = [
-        { id: 0, label: "Shows", content: null },
+        { id: 0, label: "Shows", content: <ShowsTab isMobile={isMobile} /> },
         { id: 1, label: "TV Stats", content: null },
-        { id: 2, label: "Movies Stats", content: null },
+        { id: 2, label: "Movie Stats", content: null },
         { id: 3, label: "Friends", content: null },
         { id: 4, label: "Year Stats", content: null },
         { id: 5, label: "Watchlist", content: null },
@@ -44,6 +48,7 @@ export const Shows = () => {
     ];
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        console.log(newValue);
         setSelectedTab(newValue);
     };
 
@@ -53,30 +58,61 @@ export const Shows = () => {
     }, [window.screen.width]);
 
     const detectWindowSize = () => {
-        window.innerWidth <= 760 ? setIsMobile(true) : setIsMobile(false);        
+        window.innerWidth <= 760 ? setIsMobile(true) : setIsMobile(false);
     }
-    
+
+
     window.onresize = detectWindowSize;
+    const tabWidth = isMobile ? '95vw' : 'initial';
     // window.onscroll = handleScroll;
 
     return (
-        <Box>
-            <Box sx={{ width: '100%',borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs
+        <>
+            <div style={{
+                position: 'fixed',
+                left: 0,
+                margin: '0 auto',
+                alignItems: 'center',
+                width: '100vw',
+                top: 48,
+                zIndex: 2,
+                backgroundColor: theme.palette.background.default
+            }}>
+                <Stack
+                    alignItems="center"
+                >
+                    <Tabs
                     value={selectedTab}
                     onChange={handleChange}
-                    variant={tabsVarient}
-                    centered={!isMobile}
-                    //allowScrollButtonsMobile={isMobile}
+                    variant="scrollable"
+                    scrollButtons
+                    //centered={!isMobile}
+                    allowScrollButtonsMobile
+                    sx={{
+                        width: tabWidth,
+                        // border: '1px solid #90caf9'
+                        "& .MuiTabScrollButton-root": {
+                            width: "20px"
+                        }
+                    }}
                 >
                     {tabs.map((tab: any, index) => (
                         <Tab
                             key={tab.id}
                             label={tab.label}
+                            sx={{
+                                minWidth: '45px',
+                                padding: '14px 8px',
+                                textTransform: 'none',
+                                letterSpacing: 0
+                            }}
                         />
                     ))}
                 </Tabs>
-            </Box>
+                </Stack>
+                
+            </div>
+            
             {tabs.map((tab: any, index) => (
                 <ShowsTabPanel
                     key={tab.id}
@@ -86,6 +122,6 @@ export const Shows = () => {
                     {tab.content}
                 </ShowsTabPanel>
             ))}
-        </Box>
+        </>
     )
 }

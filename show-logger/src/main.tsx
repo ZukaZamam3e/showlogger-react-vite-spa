@@ -19,6 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         redirect_uri: window.location.origin,
         scope: "openid profile email offline_access User.ReadWrite"
       }}
+      useRefreshTokens={true}
+      cacheLocation='localstorage'
     >
       <BrowserRouter>
         <HeadProvider headTags={headTags}>

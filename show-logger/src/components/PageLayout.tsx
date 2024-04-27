@@ -7,78 +7,51 @@ import { Box, Container, Paper } from "@mui/material";
 import { InteractionType } from "@azure/msal-browser";
 import { Profile } from "./Profile";
 import { useAuth0 } from "@auth0/auth0-react";
-import {useFetch} from "../hooks/useFetchOAProjectsAPI"
-import {protectedResources} from "../config/apiConfig"
+import { useFetch } from "../hooks/useFetchOAProjectsAPI"
+import { protectedResources } from "../config/apiConfig"
 // import useFetchWithAuth0 from "../hooks/useFetchWithAuth0";
 
 interface PageLayoutProps {
     children: ReactNode;
 }
 
-export const PageLayout = ({children}:PageLayoutProps) => {
+export const PageLayout = ({ children }: PageLayoutProps) => {
     const { isAuthenticated } = useAuth0();
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
     const { getData } = useFetch();
-    // const authRequest = {
-    //     ...loginRequest,
-    // };
-
-    // const apiAuth:any = useFetchWithAuth0({
-    //     scopes: protectedResources.oaprojectsApi.scopes.write,
-    // });
-
-    const fetchData = async() => {
+    
+    const fetchData = async () => {
         await getData(protectedResources.oaprojectsApi.authEndpoint + '/login');
-        // apiAuth.execute("GET", protectedResources.oaprojectsApi.authEndpoint + '/login').then((res:any) => {
-        //     if (!!res) {
-        //         setAuthenticated(res);
-        //         console.log(res)
-        //     }
-        // });
     }
-
-    // useEffect(() => {
-    //     if(!apiAuth.data) {
-    //         fetchData();
-    //     }
-    // }, [apiAuth.execute, apiAuth.data]);
 
     useEffect(() => {
         fetchData();
     })
 
     return (
-        <>
+        <Box sx={{
+            maxWidth: { xs: '100vw', sm: '100vw', md: '100%', lg: '100%' },
+            bgcolor: 'background.paper',
+
+        }}
+        >
             <NavigationBar />
+
             <br />
-            {isAuthenticated ?
-                <Container className="app_container" component="main">
-                    <Box sx={{ my: 3 }}>
-                        {children}
-                    </Box>
-                </Container>
-                : <div>need to authenticate</div>
-            }
-            {/* <Profile /> */}
-        </>
+            <Container className="app_container" component="main"
+                maxWidth={false}
+                sx={{
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+                    paddingTop: '10px',
+                }}>
+                <Box sx={{ marginTop: 3 }}>
+                    {isAuthenticated ?
+                        children
+                        : 
+                        <div>need to authenticate</div>
+                    }
+                </Box>
+            </Container>
+        </Box>
     );
-
-    // return (
-    //     <MsalAuthenticationTemplate
-    //         interactionType={InteractionType.Redirect}
-    //         authenticationRequest={authRequest}
-    //     >
-    //         <NavigationBar />
-    //         <br />
-    //         {authenticated ?
-    //             <Container className="app_container" component="main">
-    //                 <Box sx={{ my: 3 }}>
-    //                     {children}
-    //                 </Box>
-    //             </Container>
-    //             : <div>need to authenticate</div>
-    //         }
-
-    //     </MsalAuthenticationTemplate>
-    // );
 }

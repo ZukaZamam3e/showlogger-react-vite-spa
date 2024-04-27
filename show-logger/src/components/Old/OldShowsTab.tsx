@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { ShowModel, createNewShow, getShowData } from "../models/ShowModel"
-import { ShowCard } from "./ShowCard";
+import { ShowModel, createNewShow, getShowData } from "../../models/ShowModel"
+import { ShowCard } from "../Show/ShowCard";
 import Grid from '@mui/material/Unstable_Grid2';
 import { Backdrop, BottomNavigation, Box, CircularProgress, Collapse, Fab, Fade, FormControlLabel, InputAdornment, Pagination, Paper, Switch, TextField, Zoom } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import useFetchWithMsal from "../hooks/useFetchWithMsal";
-import { protectedResources } from "../authConfig";
-import { EditShow } from "./EditShow";
-import { CodeValueModel } from "../models/CodeValueModel";
-import { ShowListSearch } from "./ShowListSearch";
+import useFetchWithMsal from "../../hooks/useFetchWithMsal";
+import { protectedResources } from "../../authConfig";
+import { EditShow } from "../Show/EditShow";
+import { CodeValueModel } from "../../models/CodeValueModel";
+import { ShowListSearch } from "../Show/ShowListSearch";
 import SearchIcon from '@mui/icons-material/Search';
-import { useIsVisible } from "../hooks/useIsVisible";
+import { useIsVisible } from "../../hooks/useIsVisible";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ShowsList } from "./ShowsList";
 

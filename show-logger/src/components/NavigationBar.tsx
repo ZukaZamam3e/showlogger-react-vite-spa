@@ -14,8 +14,6 @@ export const NavigationBar = () => {
     ];
     
     const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
-    console.log(isAuthenticated);
-
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(null);
 

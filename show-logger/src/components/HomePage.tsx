@@ -4,7 +4,7 @@ import { InteractionType } from '@azure/msal-browser';
 // import useFetchWithMsal from '../hooks/useFetchWithMsal';
 import { useEffect, useState } from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
-import { Shows } from "./Shows";
+import { Shows } from "./Show/Shows";
 
 export const HomePage = () => {
     // const authRequest = {

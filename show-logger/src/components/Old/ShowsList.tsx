@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { CodeValueModel } from "../models/CodeValueModel";
-import { ShowModel, createNewShow } from "../models/ShowModel";
-import useFetchWithMsal from "../hooks/useFetchWithMsal";
-import { protectedResources } from "../authConfig";
-import { EditShow } from "./EditShow";
+import { CodeValueModel } from "../../models/CodeValueModel";
+import { ShowModel, createNewShow } from "../../models/ShowModel";
+import { protectedResources } from "../../authConfig";
+import { EditShow } from "../Show/EditShow";
 import { Backdrop, CircularProgress, Fab } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import { ShowListSearch } from "./ShowListSearch";
+import { ShowListSearch } from "../Show/ShowListSearch";
 import Grid from '@mui/material/Unstable_Grid2';
-import { ShowCard } from "./ShowCard";
+import { ShowCard } from "../Show/ShowCard";
 
 interface ShowsListProps {
     isMobile: boolean;
