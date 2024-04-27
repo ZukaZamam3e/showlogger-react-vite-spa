@@ -120,8 +120,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
             data = watchFromSearch;
         }
 
-        console.log(data)
-
         await postData(url, data)
             .then(data => data ? data.json() : null)
             .then(async (json) => {
@@ -265,7 +263,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
 
     const handlePageOnChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage((prev) => value);
-        get(value - 1, '');
+        get(value - 1, searchText);
     }
 
     const handleAddNew = () => {
@@ -373,7 +371,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
                 errors={errors}
                 hasError={hasError}
                 onCloseErrors={handleCloseErrors}
-                isLoading={true}
+                isLoading={isLoading}
             />
         )
     } else {

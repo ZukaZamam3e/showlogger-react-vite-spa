@@ -13,6 +13,7 @@ import { EditShow } from "./EditShow";
 import { ShowLookUp } from "./ShowLookUp";
 import { SearchResultsModel } from "../../models/SearchResultsModel";
 import { ErrorMessage } from "../ErrorMessage";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 const steps = ["Search", "Create"];
 
@@ -77,7 +78,7 @@ export const NewShow = (props: NewShowProps) => {
 
         let showTypeId = 1000;
 
-        if(searchResult.type === 1) {
+        if (searchResult.type === 1) {
             const airDate = new Date(searchResult.airDate);
             const d = new Date();
 
@@ -90,114 +91,86 @@ export const NewShow = (props: NewShowProps) => {
     }
 
     return (
-        
-        <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}
-                
-            >
-                {steps.map((label, index) => {
-                    const stepProps: { completed?: boolean } = {};
-                    const labelProps: {
-                        optional?: React.ReactNode;
-                    } = {};
-                    if (isStepOptional(index)) {
-                        labelProps.optional = (
-                            <Typography variant="caption">Optional</Typography>
-                        );
-                    }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>  
-            
-            {activeStep === steps.length ? (
-                <>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you&apos;re finished
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                </>
-            ) : (
-                <Box>
-                    {activeStep === 0 &&
-                        <ShowLookUp 
-                            onSelectResult={handleSelectResult}
+
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <Stepper activeStep={activeStep}>
+                            {steps.map((label, index) => {
+                                const stepProps: { completed?: boolean } = {};
+                                const labelProps: {
+                                    optional?: React.ReactNode;
+                                } = {};
+                                if (isStepOptional(index)) {
+                                    labelProps.optional = (
+                                        <Typography variant="caption">Optional</Typography>
+                                    );
+                                }
+                                if (isStepSkipped(index)) {
+                                    stepProps.completed = false;
+                                }
+                                return (
+                                    <Step key={label} {...stepProps}>
+                                        <StepLabel {...labelProps}>{label}</StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                {activeStep === 0 &&
+                    <ShowLookUp
+                        onSelectResult={handleSelectResult}
+                    />
+                }
+            </Box >
+            <Box sx={{
+                maxWidth: 1200
+            }}>
+
+                {activeStep === 1 &&
+                    <Box>
+                        <EditShow
+                            show={props.show}
+                            transactionItems={props.transactionItems}
+                            showTypeIds={props.showTypeIds}
+                            onShowSave={props.onShowSave}
+                            onCancelSelectedShow={props.onCancelSelectedShow}
+                            searchSkippedOrEdit={skipped}
                         />
-                    }
-                        {activeStep === 1 &&
-                            <Box>
-                                <EditShow
-                                    show={props.show}
-                                    transactionItems={props.transactionItems}
-                                    showTypeIds={props.showTypeIds}
-                                    onShowSave={props.onShowSave}
-                                    onCancelSelectedShow={props.onCancelSelectedShow}
-                                    searchSkippedOrEdit={skipped}
-                                />
-                                <ErrorMessage
-                                    open={props.hasError}
-                                    onClose={props.onCloseErrors}
-                                    errors={props.errors}
-                                />
-                            </Box>
-                        }
-                        {activeStep === 0 &&
-                            <Box sx={{
-                                display: 'flex', flexDirection: 'row', pt: 0, position: 'fixed',
-                                bottom: 0,
-                                right: 0,
-                                left: 0,
-                                height: 48,
-                                //paddingTop: 7,
-                                backgroundColor: theme.palette.secondary.dark
-                            }}>
-                            {activeStep === 0 &&
-                                <Button
-                                    color="inherit"
-                                    onClick={props.onCancelSelectedShow}
-                                    sx={{ mr: 1 }}
-                                >
-                                    Cancel
-                                </Button>
-                            }
-                            {/* {activeStep === 1 &&
-                                <Button
-                                    color="inherit"
-                                    onClick={handleBack}
-                                    sx={{ mr: 1 }}
-                                >
-                                    Back
-                                </Button>
-                            } */}
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            {activeStep === 0 &&
-                                <Button color="inherit" onClick={handleSkip}>
-                                    Skip
-                                </Button>
-                            }
-                            {/* {activeStep === 1 &&
-                                <Button onClick={handleNext}>
-                                    Save
-                                </Button>
-                            } */}
-                        </Box>
-                    }
-                </Box>
-            )}
+                        <ErrorMessage
+                            open={props.hasError}
+                            onClose={props.onCloseErrors}
+                            errors={props.errors}
+                        />
+                    </Box>
+                }
+                {activeStep === 0 &&
+                    <Box sx={{
+                        display: 'flex', flexDirection: 'row', pt: 0, position: 'fixed',
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        height: 48,
+                        //paddingTop: 7,
+                        backgroundColor: theme.palette.secondary.dark
+                    }}>
+                        <Button
+                            color="inherit"
+                            onClick={props.onCancelSelectedShow}
+                            sx={{ mr: 1 }}
+                        >
+                            Cancel
+                        </Button>
+                        <Box sx={{ flex: '1 1 auto' }} />
+                        <Button color="inherit" onClick={handleSkip}>
+                            Skip
+                        </Button>
+                    </Box>
+                }
+            </Box>
             <Backdrop
                 open={props.isLoading}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-        </Box>
+        </>
     );
 }
