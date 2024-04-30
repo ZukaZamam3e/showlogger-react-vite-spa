@@ -59,9 +59,9 @@
  */
 export const protectedResources = {
     oaprojectsApi: {
-        weatherEndpoint: import.meta.env.REACT_APP_API_URL + '/WeatherForecast',
-        authEndpoint: import.meta.env.REACT_APP_API_URL  + '/auth',
-        showEndpoint: import.meta.env.REACT_APP_API_URL  + '/show',
+        weatherEndpoint: import.meta.env.VITE_APP_API_URL + '/WeatherForecast',
+        authEndpoint: import.meta.env.VITE_APP_API_URL  + '/auth',
+        showEndpoint: import.meta.env.VITE_APP_API_URL  + '/show',
         scopes: {
             write: ['api://89f937e2-f440-4ae3-86dc-b0ec5ba9a11c/User.ReadWrite'],
         }

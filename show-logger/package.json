@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "build:production": "vite build --mode production",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -21,12 +22,14 @@
     "@mui/x-date-pickers": "^7.0.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.10",
+    "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-head": "^3.4.2",
     "react-helmet": "^6.1.0",
     "react-query": "^3.39.3",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "vite-plugin-pwa": "^0.19.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

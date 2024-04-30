@@ -14,7 +14,10 @@ export const ShowListSearch = (props: ShowListSearchProps) => {
 
     const boxSx = { 
         position: 'fixed', 
-        bottom: 16+26, 
+        bottom: {
+            xs: 16+26 + 12,
+            sm: 16+26
+        },
         left: 0, 
         right: 0, 
         backgroundColor: theme.palette.secondary.dark, 
@@ -45,7 +48,14 @@ export const ShowListSearch = (props: ShowListSearchProps) => {
                 }}
             />
             <Fab
-                sx={{ position: 'fixed', 'bottom': 32 + 32 + 56, 'right': 16 }}
+                sx={{ 
+                    position: 'fixed', 
+                    bottom: {
+                        xs: 32 + 32 + 56 + 12,
+                        sm: 32 + 32 + 56
+                    },
+                    right: 16 
+                }}
                 color="error"
                 aria-label="add"
                 onClick={props.onCancelSearch}
