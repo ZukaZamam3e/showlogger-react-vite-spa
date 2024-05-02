@@ -94,8 +94,8 @@ export const NewShow = (props: NewShowProps) => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Stepper activeStep={activeStep}>
+      <Box>
+        {/* <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
@@ -115,7 +115,7 @@ export const NewShow = (props: NewShowProps) => {
               </Step>
             );
           })}
-        </Stepper>
+        </Stepper> */}
         {activeStep === 0 && <ShowLookUp onSelectResult={handleSelectResult} />}
       </Box>
       <Box

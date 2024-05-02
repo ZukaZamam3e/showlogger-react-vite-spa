@@ -22,6 +22,8 @@ import { NewShow } from './NewShow';
 import { AddWatchFromSearchModel } from '../../models/AddWatchFromSearchModel';
 import { ErrorMessage } from '../ErrorMessage';
 import { BingeWatch } from './BingeWatch';
+import { placements } from '../../config/placementConfig';
+import { BingeWatchModel } from '../../models/BingeWatchModel';
 
 interface ShowsTabProps {
   isMobile: boolean;
@@ -275,6 +277,31 @@ export const ShowsTab = (props: ShowsTabProps) => {
     await get(0, '');
   };
 
+  const handleBingeSave = async (binge: BingeWatchModel) => {
+    setIsLoading(true);
+
+    let url = `${protectedResources.oaprojectsApi.showEndpoint}/addrange`;
+
+    await postData(url, binge)
+      .then(data => (data ? data.json() : null))
+      .then(async json => {
+        if (json.errors.length == 0) {
+          handleCancelBingeWatchShow();
+
+          await get(0, '');
+        } else {
+          setHasError(true);
+          setErrors(json.errors);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   const handleBingeWatchShow = (show: ShowModel) => {
     setBingeWatchEdit({ show: true, bingeWatchEditShow: show });
   };
@@ -299,11 +326,8 @@ export const ShowsTab = (props: ShowsTabProps) => {
     load();
   }, []);
 
-  const handlePageOnChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(prev => value);
+  const handlePageOnChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(() => value);
     get(value - 1, searchText);
   };
 
@@ -389,9 +413,14 @@ export const ShowsTab = (props: ShowsTabProps) => {
         onShowSave={handleShowSave}
       />
     );
-  }
-  if (bingeWatchEdit.show) {
-    body = <BingeWatch show={bingeWatchEdit.bingeWatchEditShow} />;
+  } else if (bingeWatchEdit.show) {
+    body = (
+      <BingeWatch
+        show={bingeWatchEdit.bingeWatchEditShow}
+        onBingeSave={handleBingeSave}
+        onCancelBinge={handleCancelBingeWatchShow}
+      />
+    );
   } else {
     body = (
       <>
@@ -474,11 +503,8 @@ export const ShowsTab = (props: ShowsTabProps) => {
               <Fab
                 sx={{
                   position: 'fixed',
-                  bottom: {
-                    xs: 32 + 16 + 12,
-                    sm: 32 + 16,
-                  },
-                  right: 16,
+                  bottom: placements.fab.firstIconBottom,
+                  right: placements.fab.right,
                 }}
                 color="success"
                 aria-label="add"
@@ -489,11 +515,8 @@ export const ShowsTab = (props: ShowsTabProps) => {
               <Fab
                 sx={{
                   position: 'fixed',
-                  bottom: {
-                    xs: 32 + 32 + 56 + 12,
-                    sm: 32 + 32 + 56,
-                  },
-                  right: 16,
+                  bottom: placements.fab.secondIconBottom,
+                  right: placements.fab.right,
                 }}
                 color="info"
                 aria-label="add"

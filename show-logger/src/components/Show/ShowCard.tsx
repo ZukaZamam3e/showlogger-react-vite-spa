@@ -137,7 +137,7 @@ export const ShowCard = (props: ShowCardProps) => {
                   props.onSelectShow(props.show);
                 }}
               >
-                <EditIcon />
+                <EditIcon style={{ color: 'cornflowerblue' }} />
               </IconButton>
               {isTV && (
                 <IconButton
@@ -147,7 +147,7 @@ export const ShowCard = (props: ShowCardProps) => {
                     props.onAddNextEpisode(props.show.showId);
                   }}
                 >
-                  <AddIcon />
+                  <AddIcon style={{ color: 'lightgreen' }} />
                 </IconButton>
               )}
               <IconButton
@@ -157,7 +157,7 @@ export const ShowCard = (props: ShowCardProps) => {
                   props.onDeleteShow(props.show.showId);
                 }}
               >
-                <DeleteIcon />
+                <DeleteIcon style={{ color: 'red' }} />
               </IconButton>
             </Stack>
             {isTV && (
@@ -173,7 +173,7 @@ export const ShowCard = (props: ShowCardProps) => {
                     props.onSubtractOneDay(props.show.showId);
                   }}
                 >
-                  <FastRewindIcon />
+                  <FastRewindIcon style={{ color: 'yellow' }} />
                 </IconButton>
                 <IconButton
                   aria-label="Add One Day"
@@ -182,7 +182,7 @@ export const ShowCard = (props: ShowCardProps) => {
                     props.onAddOneDay(props.show.showId);
                   }}
                 >
-                  <FastForewardIcon />
+                  <FastForewardIcon style={{ color: 'cyan' }} />
                 </IconButton>
                 <IconButton
                   aria-label="Binge"
@@ -191,7 +191,7 @@ export const ShowCard = (props: ShowCardProps) => {
                     props.onBingeWatchShow(props.show);
                   }}
                 >
-                  <TrackChangesIcon />
+                  <TrackChangesIcon style={{ color: 'orange' }} />
                 </IconButton>
               </Stack>
             )}
