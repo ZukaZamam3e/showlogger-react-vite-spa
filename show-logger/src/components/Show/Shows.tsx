@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
 import { ShowsTab } from './ShowsTab';
+import { TvStatsTab } from '../TvStats/TvStatsTab';
+import { MovieStatsTab } from '../MovieStats/MovieStatsTab';
 
 interface ShowsTabPanelProps {
   children?: ReactNode;
@@ -24,10 +26,8 @@ export const ShowsTabPanel = (props: ShowsTabPanelProps) => {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
       style={{
-        marginTop: 85,
+        marginTop: 45,
       }}
     >
       {value === index && <Box>{children}</Box>}
@@ -38,13 +38,24 @@ export const ShowsTabPanel = (props: ShowsTabPanelProps) => {
 export const Shows = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const tabsVarient: any = isMobile ? 'scrollable' : 'standard';
   const theme = useTheme();
 
   const tabs = [
-    { id: 0, label: 'Shows', content: <ShowsTab isMobile={isMobile} /> },
-    { id: 1, label: 'TV Stats', content: null },
-    { id: 2, label: 'Movie Stats', content: null },
+    {
+      id: 0,
+      label: 'Shows',
+      content: <ShowsTab isMobile={isMobile} />,
+    },
+    {
+      id: 1,
+      label: 'TV Stats',
+      content: <TvStatsTab isMobile={isMobile} />,
+    },
+    {
+      id: 2,
+      label: 'Movie Stats',
+      content: <MovieStatsTab isMobile={isMobile} />,
+    },
     { id: 3, label: 'Friends', content: null },
     { id: 4, label: 'Year Stats', content: null },
     { id: 5, label: 'Watchlist', content: null },

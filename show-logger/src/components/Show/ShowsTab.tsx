@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import { ShowCard } from './ShowCard';
 import { EditShow } from './EditShow';
-import { ShowListSearch } from './ShowListSearch';
+import { ListSearch } from '../ListSearch';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { NewShow } from './NewShow';
 import { AddWatchFromSearchModel } from '../../models/AddWatchFromSearchModel';
@@ -24,6 +24,7 @@ import { ErrorMessage } from '../ErrorMessage';
 import { BingeWatch } from './BingeWatch';
 import { placements } from '../../config/placementConfig';
 import { BingeWatchModel } from '../../models/BingeWatchModel';
+import { List } from '../List';
 
 interface ShowsTabProps {
   isMobile: boolean;
@@ -47,6 +48,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
   const [isSearching, setIsSearching] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isScrollable, setIsScrollable] = useState(false);
+  const [clearSearch, setClearSearch] = useState(false);
 
   const [editing, setEditing] = useState({
     show: false,
@@ -176,7 +178,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
   };
 
   const handleAddNextEpisode = async (showId: number) => {
-    clearSearch();
+    setClearSearch(prev => !prev);
     setIsLoading(true);
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/addNextEpisode`,
@@ -203,7 +205,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
   };
 
   const handleDelete = async (showId: number) => {
-    clearSearch();
+    setClearSearch(prev => !prev);
     setIsLoading(true);
     await postData(`${protectedResources.oaprojectsApi.showEndpoint}/delete`, {
       showId: showId,
@@ -226,7 +228,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
   };
 
   const handleAddOneDay = async (showId: number) => {
-    clearSearch();
+    setClearSearch(prev => !prev);
     setIsLoading(true);
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/addoneday`,
@@ -252,7 +254,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
   };
 
   const handleSubtractOneDay = async (showId: number) => {
-    clearSearch();
+    setClearSearch(prev => !prev);
     setIsLoading(true);
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/subtractoneday`,
@@ -326,10 +328,10 @@ export const ShowsTab = (props: ShowsTabProps) => {
     load();
   }, []);
 
-  const handlePageOnChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setPage(() => value);
-    get(value - 1, searchText);
-  };
+  // const handlePageOnChange = (_: React.ChangeEvent<unknown>, value: number) => {
+  //   setPage(() => value);
+  //   get(value - 1, searchText);
+  // };
 
   const handleAddNew = () => {
     let newShow: ShowModel = createNewShow();
@@ -337,51 +339,39 @@ export const ShowsTab = (props: ShowsTabProps) => {
     setCreating({ show: true, creatingShow: newShow });
   };
 
-  const handleToggleSearch = () => {
-    setIsSearching(prev => {
-      if (prev) {
-        handleSearchUpdate('');
-      }
-      return !prev;
-    });
+  // const handleToggleSearch = () => {
+  //   setIsSearching(prev => {
+  //     if (prev) {
+  //       handleSearchUpdate('');
+  //     }
+  //     return !prev;
+  //   });
+  // };
 
-    // setZoom((prev) => !prev);
-  };
+  // const clearSearch = () => {
+  //   setIsSearching(false);
+  //   setSearchText('');
+  //   clearTimeout(searchTimer);
+  //   setSearchTimer(null);
+  // };
 
-  const clearSearch = () => {
-    setIsSearching(false);
-    setSearchText('');
-    clearTimeout(searchTimer);
-    setSearchTimer(null);
-  };
+  // const handleSearchUpdate = (text: string) => {
+  //   setSearchText(text);
 
-  const handleSearchUpdate = (text: string) => {
-    setSearchText(text);
+  //   if (!!searchTimer) {
+  //     clearTimeout(searchTimer);
+  //     setSearchTimer(null);
+  //   }
 
-    if (!!searchTimer) {
-      clearTimeout(searchTimer);
-      setSearchTimer(null);
-    }
+  //   if (searchText !== '') {
+  //     const timer = setTimeout(() => {
+  //       setPage(1);
+  //       get(0, text);
+  //     }, 250);
 
-    if (searchText !== '') {
-      const timer = setTimeout(() => {
-        setPage(1);
-        get(0, text);
-      }, 250);
-
-      setSearchTimer(timer);
-    }
-
-    // if(text !== '') {
-    //     apiShow.execute("GET", protectedResources.oaprojectsApi.showEndpoint + `/Get?search=${text}`).then((res: any) => {
-    //         setShows(res.model.shows);
-    //     });
-    // } else {
-    //     apiShow.execute("GET", protectedResources.oaprojectsApi.showEndpoint + `/Get?offset=0`).then((res: any) => {
-    //         setShows(res.model.shows);
-    //     });
-    // }
-  };
+  //     setSearchTimer(timer);
+  //   }
+  // };
 
   const handleCloseErrors = () => {
     setErrors([]);
@@ -423,112 +413,133 @@ export const ShowsTab = (props: ShowsTabProps) => {
     );
   } else {
     body = (
-      <>
-        <Box
-          sx={{
-            width: '90vw',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'grid',
-              columnGap: '10px',
-              rowGap: '10px',
-              // paddingBottom: '185px',
-              paddingBottom: {
-                xs: '185px',
-                sm: '185px',
-                md: '52px',
-                lg: '52px',
-              },
-              gridTemplateColumns: {
-                xs: '1fr',
-                sm: '1fr 1fr',
-                md: '1fr 1fr 1fr',
-                lg: '1fr 1fr 1fr 1fr',
-                xl: '1fr 1fr 1fr 1fr 1fr 1fr',
-              },
-            }}
-          >
-            {shows.map((show: ShowModel) => (
-              <ShowCard
-                key={show.showId}
-                show={show}
-                isMobile={props.isMobile}
-                onSelectShow={handleSelectShow}
-                onAddNextEpisode={handleAddNextEpisode}
-                onDeleteShow={handleDelete}
-                onAddOneDay={handleAddOneDay}
-                onSubtractOneDay={handleSubtractOneDay}
-                onBingeWatchShow={handleBingeWatchShow}
-              />
-            ))}
-          </Box>
-          <Stack
-            alignItems="center"
-            sx={{
-              position: 'fixed',
-              bottom: 0,
-              right: 0,
-              left: 0,
-              height: {
-                xs: 54,
-                sm: 42,
-              },
-              //paddingTop: 7,
-              backgroundColor: theme.palette.secondary.dark,
-            }}
-          >
-            <Pagination
-              sx={{
-                paddingTop: '7px',
-              }}
-              size="small"
-              siblingCount={siblingCount}
-              count={pages}
-              page={page}
-              onChange={handlePageOnChange}
-            />
-          </Stack>
-          {isSearching ? (
-            <>
-              <ShowListSearch
-                searchText={searchText}
-                onCancelSearch={handleToggleSearch}
-                onSearchUpdate={handleSearchUpdate}
-              />
-            </>
-          ) : (
-            <>
-              <Fab
-                sx={{
-                  position: 'fixed',
-                  bottom: placements.fab.firstIconBottom,
-                  right: placements.fab.right,
-                }}
-                color="success"
-                aria-label="add"
-                onClick={handleAddNew}
-              >
-                <AddIcon />
-              </Fab>
-              <Fab
-                sx={{
-                  position: 'fixed',
-                  bottom: placements.fab.secondIconBottom,
-                  right: placements.fab.right,
-                }}
-                color="info"
-                aria-label="add"
-                onClick={handleToggleSearch}
-              >
-                <SearchIcon />
-              </Fab>
-            </>
-          )}
-        </Box>
-      </>
+      <List
+        count={showCount}
+        isMobile={props.isMobile}
+        onGet={get}
+        clearSearch={clearSearch}
+      >
+        {shows.map((show: ShowModel) => (
+          <ShowCard
+            key={show.showId}
+            show={show}
+            isMobile={props.isMobile}
+            onSelectShow={handleSelectShow}
+            onAddNextEpisode={handleAddNextEpisode}
+            onDeleteShow={handleDelete}
+            onAddOneDay={handleAddOneDay}
+            onSubtractOneDay={handleSubtractOneDay}
+            onBingeWatchShow={handleBingeWatchShow}
+          />
+        ))}
+      </List>
     );
+    // body = (
+    //   <>
+    //     <Box
+    //       sx={{
+    //         width: '90vw',
+    //       }}
+    //     >
+    //       <Box
+    //         sx={{
+    //           display: 'grid',
+    //           columnGap: '10px',
+    //           rowGap: '10px',
+    //           paddingBottom: {
+    //             xs: '185px',
+    //             sm: '185px',
+    //             md: '52px',
+    //             lg: '52px',
+    //           },
+    //           gridTemplateColumns: {
+    //             xs: '1fr',
+    //             sm: '1fr 1fr',
+    //             md: '1fr 1fr 1fr',
+    //             lg: '1fr 1fr 1fr 1fr',
+    //             xl: '1fr 1fr 1fr 1fr 1fr 1fr',
+    //           },
+    //         }}
+    //       >
+    //         {shows.map((show: ShowModel) => (
+    //           <ShowCard
+    //             key={show.showId}
+    //             show={show}
+    //             isMobile={props.isMobile}
+    //             onSelectShow={handleSelectShow}
+    //             onAddNextEpisode={handleAddNextEpisode}
+    //             onDeleteShow={handleDelete}
+    //             onAddOneDay={handleAddOneDay}
+    //             onSubtractOneDay={handleSubtractOneDay}
+    //             onBingeWatchShow={handleBingeWatchShow}
+    //           />
+    //         ))}
+    //       </Box>
+    //       <Stack
+    //         alignItems="center"
+    //         sx={{
+    //           position: 'fixed',
+    //           bottom: 0,
+    //           right: 0,
+    //           left: 0,
+    //           height: {
+    //             xs: 54,
+    //             sm: 42,
+    //           },
+    //           //paddingTop: 7,
+    //           backgroundColor: theme.palette.secondary.dark,
+    //         }}
+    //       >
+    //         <Pagination
+    //           sx={{
+    //             paddingTop: '7px',
+    //           }}
+    //           size="small"
+    //           siblingCount={siblingCount}
+    //           count={pages}
+    //           page={page}
+    //           onChange={handlePageOnChange}
+    //         />
+    //       </Stack>
+    //       {isSearching ? (
+    //         <>
+    //           <ListSearch
+    //             searchText={searchText}
+    //             onCancelSearch={handleToggleSearch}
+    //             onSearchUpdate={handleSearchUpdate}
+    //           />
+    //         </>
+    //       ) : (
+    //         <>
+    //           <Fab
+    //             sx={{
+    //               position: 'fixed',
+    //               bottom: placements.fab.firstIconBottom,
+    //               right: placements.fab.right,
+    //             }}
+    //             color="success"
+    //             aria-label="add"
+    //             onClick={handleAddNew}
+    //           >
+    //             <AddIcon />
+    //           </Fab>
+    //           <Fab
+    //             sx={{
+    //               position: 'fixed',
+    //               bottom: placements.fab.secondIconBottom,
+    //               right: placements.fab.right,
+    //             }}
+    //             color="info"
+    //             aria-label="add"
+    //             onClick={handleToggleSearch}
+    //           >
+    //             <SearchIcon />
+    //           </Fab>
+    //         </>
+    //       )}
+    //     </Box>
+    //   </>
+    // );
   }
 
   return (
@@ -544,165 +555,4 @@ export const ShowsTab = (props: ShowsTabProps) => {
       </Backdrop>
     </>
   );
-
-  // if (isLoading) {
-  //     return (
-  //         <Backdrop
-  //             open={true}
-  //         >
-  //             <CircularProgress color="inherit" />
-  //         </Backdrop>
-  //     )
-  // } else
-
-  //   if (editing.show) {
-  //     return (
-  //       <>
-  //         <EditShow
-  //           show={editing.editingShow}
-  //           showTypeIds={showTypeIds}
-  //           transactionItems={transactionItems}
-  //           onCancelSelectedShow={handleCancelSelectedShow}
-  //           onShowSave={handleShowSave}
-  //           searchSkippedOrEdit={true}
-  //         />
-  //         <ErrorMessage
-  //           open={hasError}
-  //           onClose={handleCloseErrors}
-  //           errors={errors}
-  //         />
-  //         <Backdrop open={isLoading}>
-  //           <CircularProgress color="inherit" />
-  //         </Backdrop>
-  //       </>
-  //     );
-  //   } else if (creating.show) {
-  //     return (
-  //       <NewShow
-  //         show={createNewShow()}
-  //         showTypeIds={showTypeIds}
-  //         transactionItems={transactionItems}
-  //         onCancelSelectedShow={handleCancelCreatingShow}
-  //         onShowSave={handleShowSave}
-  //       />
-  //     );
-  //   } else {
-  //     return (
-  //       <>
-  //         <Box
-  //           sx={{
-  //             width: '90vw',
-  //           }}
-  //         >
-  //           <Box
-  //             sx={{
-  //               display: 'grid',
-  //               columnGap: '10px',
-  //               rowGap: '10px',
-  //               // paddingBottom: '185px',
-  //               paddingBottom: {
-  //                 xs: '185px',
-  //                 sm: '185px',
-  //                 md: '52px',
-  //                 lg: '52px',
-  //               },
-  //               gridTemplateColumns: {
-  //                 xs: '1fr',
-  //                 sm: '1fr 1fr',
-  //                 md: '1fr 1fr 1fr',
-  //                 lg: '1fr 1fr 1fr 1fr',
-  //                 xl: '1fr 1fr 1fr 1fr 1fr 1fr',
-  //               },
-  //             }}
-  //           >
-  //             {shows.map((show: ShowModel) => (
-  //               <ShowCard
-  //                 key={show.showId}
-  //                 show={show}
-  //                 isMobile={props.isMobile}
-  //                 onSelectShow={handleSelectShow}
-  //                 onAddNextEpisode={handleAddNextEpisode}
-  //                 onDeleteShow={handleDelete}
-  //                 onAddOneDay={handleAddOneDay}
-  //                 onSubtractOneDay={handleSubtractOneDay}
-  //               />
-  //             ))}
-  //           </Box>
-  //           <Stack
-  //             alignItems="center"
-  //             sx={{
-  //               position: 'fixed',
-  //               bottom: 0,
-  //               right: 0,
-  //               left: 0,
-  //               height: {
-  //                 xs: 54,
-  //                 sm: 42,
-  //               },
-  //               //paddingTop: 7,
-  //               backgroundColor: theme.palette.secondary.dark,
-  //             }}
-  //           >
-  //             <Pagination
-  //               sx={{
-  //                 paddingTop: '7px',
-  //               }}
-  //               size="small"
-  //               siblingCount={siblingCount}
-  //               count={pages}
-  //               page={page}
-  //               onChange={handlePageOnChange}
-  //             />
-  //           </Stack>
-  //           {isSearching ? (
-  //             <>
-  //               <ShowListSearch
-  //                 searchText={searchText}
-  //                 onCancelSearch={handleToggleSearch}
-  //                 onSearchUpdate={handleSearchUpdate}
-  //               />
-  //             </>
-  //           ) : (
-  //             <>
-  //               <Fab
-  //                 sx={{
-  //                   position: 'fixed',
-  //                   bottom: {
-  //                     xs: 32 + 16 + 12,
-  //                     sm: 32 + 16,
-  //                   },
-  //                   right: 16,
-  //                 }}
-  //                 color="success"
-  //                 aria-label="add"
-  //                 onClick={handleAddNew}
-  //               >
-  //                 <AddIcon />
-  //               </Fab>
-  //               <Fab
-  //                 sx={{
-  //                   position: 'fixed',
-  //                   bottom: {
-  //                     xs: 32 + 32 + 56 + 12,
-  //                     sm: 32 + 32 + 56,
-  //                   },
-  //                   right: 16,
-  //                 }}
-  //                 color="info"
-  //                 aria-label="add"
-  //                 onClick={handleToggleSearch}
-  //               >
-  //                 <SearchIcon />
-  //               </Fab>
-  //             </>
-  //           )}
-  //         </Box>
-  //         <ErrorMessage
-  //           open={hasError}
-  //           onClose={handleCloseErrors}
-  //           errors={errors}
-  //         />
-  //       </>
-  //     );
-  //   }
 };

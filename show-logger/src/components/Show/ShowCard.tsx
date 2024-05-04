@@ -65,7 +65,7 @@ export const ShowCard = (props: ShowCardProps) => {
         image={imageUrl}
         sx={{
           height: {
-            xs: 145,
+            xs: 205,
             sm: 265,
           },
         }}

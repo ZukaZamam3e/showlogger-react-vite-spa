@@ -95,7 +95,7 @@ export const NewShow = (props: NewShowProps) => {
   return (
     <>
       <Box>
-        {/* <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
@@ -115,7 +115,7 @@ export const NewShow = (props: NewShowProps) => {
               </Step>
             );
           })}
-        </Stepper> */}
+        </Stepper>
         {activeStep === 0 && <ShowLookUp onSelectResult={handleSelectResult} />}
       </Box>
       <Box
@@ -140,12 +140,15 @@ export const NewShow = (props: NewShowProps) => {
             sx={{
               display: 'flex',
               flexDirection: 'row',
-              pt: 0,
               position: 'fixed',
               bottom: 0,
               right: 0,
               left: 0,
-              height: 48,
+              height: {
+                xs: 52,
+                sm: 42,
+              },
+              pb: '15px',
               //paddingTop: 7,
               backgroundColor: theme.palette.secondary.dark,
             }}
@@ -153,12 +156,30 @@ export const NewShow = (props: NewShowProps) => {
             <Button
               color="inherit"
               onClick={props.onCancelSelectedShow}
-              sx={{ mr: 1 }}
+              sx={{
+                pl: 5,
+                pr: 5,
+                height: {
+                  xs: 52,
+                  sm: 42,
+                },
+              }}
             >
               Cancel
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button color="inherit" onClick={handleSkip}>
+            <Button
+              color="inherit"
+              onClick={handleSkip}
+              sx={{
+                pl: 5,
+                pr: 5,
+                height: {
+                  xs: 52,
+                  sm: 42,
+                },
+              }}
+            >
               Skip
             </Button>
           </Box>
