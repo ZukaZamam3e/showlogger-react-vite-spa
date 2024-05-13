@@ -1,7 +1,5 @@
-import { TvStatModel } from '../../models/TvStatModel';
-import { Card, CardMedia, IconButton, Stack, Typography } from '@mui/material';
+import { Card, CardMedia, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import AddIcon from '@mui/icons-material/Add';
 import { MovieStatModel } from '../../models/MovieStatModel';
 import { formatter } from '../../models/ShowModel';
 

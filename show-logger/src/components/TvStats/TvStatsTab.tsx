@@ -3,7 +3,7 @@ import { TvStatModel } from '../../models/TvStatModel';
 import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { ErrorMessage } from '../ErrorMessage';
-import { Backdrop, CircularProgress, useTheme } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 import { TvStatCard } from './TvStatCard';
 import { List } from '../List';
 
@@ -13,7 +13,6 @@ interface TvStatsTabProps {
 
 export const TvStatsTab = (props: TvStatsTabProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const theme = useTheme();
   const { getData, postData } = useFetch();
   const [tvStats, setTvStats] = useState<TvStatModel[]>([]);
   const [tvStatsCount, setTvStatsCount] = useState<number>(0);

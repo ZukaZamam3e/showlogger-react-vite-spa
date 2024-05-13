@@ -44,7 +44,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
     CodeValueModel[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
   const [hideAddButton, setHideAddButton] = useState(false);
