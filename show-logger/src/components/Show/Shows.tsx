@@ -1,17 +1,10 @@
-import {
-  AppBar,
-  Box,
-  Container,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Stack, Tab, Tabs, useTheme } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
 import { ShowsTab } from './ShowsTab';
 import { TvStatsTab } from '../TvStats/TvStatsTab';
 import { MovieStatsTab } from '../MovieStats/MovieStatsTab';
+import { YearStatsTab } from '../YearStats/YearStatsTab';
+import { WatchListTab } from '../WatchList/WatchListTab';
 
 interface ShowsTabPanelProps {
   children?: ReactNode;
@@ -57,8 +50,16 @@ export const Shows = () => {
       content: <MovieStatsTab isMobile={isMobile} />,
     },
     { id: 3, label: 'Friends', content: null },
-    { id: 4, label: 'Year Stats', content: null },
-    { id: 5, label: 'Watchlist', content: null },
+    {
+      id: 4,
+      label: 'Year Stats',
+      content: <YearStatsTab isMobile={isMobile} />,
+    },
+    {
+      id: 5,
+      label: 'Watchlist',
+      content: <WatchListTab isMobile={isMobile} />,
+    },
     { id: 6, label: 'AMC', content: null },
   ];
 

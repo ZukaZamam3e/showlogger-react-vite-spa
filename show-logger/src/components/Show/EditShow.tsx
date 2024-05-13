@@ -92,6 +92,13 @@ export const EditShow = (props: EditShowProps) => {
     amcBenefits
   ).toFixed(2);
 
+  const dateWatchLabel =
+    props.show.watchlist != null && props.show.watchlist
+      ? 'Date Added'
+      : 'Date Watched';
+  const dateWatchEnabled =
+    props.show.watchlist == null || !props.show.watchlist;
+
   const onChange = (e: any) => {
     const updatedShow = () => {
       if (
@@ -341,9 +348,10 @@ export const EditShow = (props: EditShowProps) => {
           <Grid xs={12}>
             <DatePicker
               slotProps={{ textField: { fullWidth: true } }}
-              label="Date Watched"
+              label={dateWatchLabel}
               value={dayjs(show.dateWatched)}
               onChange={value => handleShowDateChange(value)}
+              disabled={!dateWatchEnabled}
             />
           </Grid>
           <Grid xs={12}>

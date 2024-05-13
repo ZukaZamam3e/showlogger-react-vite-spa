@@ -1,65 +1,111 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery } from "react-query"
+import { useAuth0 } from '@auth0/auth0-react';
+import { useQuery } from 'react-query';
 
 export const useFetch = () => {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, error } = useAuth0();
 
-    const getData = async (endpoint: string) => {
-        if (isAuthenticated) {
-            let accessToken = await getAccessTokenSilently({
-                authorizationParams: {
-                    audience: "https://oaprojects-api.oaprojects.net",
-                    scope: "User.ReadWrite"
-                }
-            });
+  const getData = async (endpoint: string) => {
+    let accessToken;
+    try {
+      if (isAuthenticated) {
+        accessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: 'https://oaprojects-api.oaprojects.net',
+            scope: 'User.ReadWrite',
+          },
+        });
+      }
+    } catch {
+      const body = {
+        errors: ['Login session has expired. Please login again.'],
+      };
+      return body;
+    }
 
-            const headers = new Headers();
-            const bearer = `Bearer ${accessToken}`;
-            //console.log(accessToken);
-            headers.append("Authorization", bearer);
+    try {
+      if (isAuthenticated) {
+        const headers = new Headers();
+        const bearer = `Bearer ${accessToken}`;
 
-            let options = {
-                method: "GET",
-                headers: headers,
+        headers.append('Authorization', bearer);
+
+        let options = {
+          method: 'GET',
+          headers: headers,
+        };
+
+        const response = await fetch(endpoint, options)
+          .then(data => (data ? data.json() : null))
+          .catch(e => {
+            return {
+              errors: [e],
             };
+          });
 
-            const response = (await fetch(endpoint, options));
+        return response;
+      }
+    } catch {
+      const body = {
+        errors: ['Error during request. Please try again later.'],
+      };
+      return body;
+    }
+  };
 
-            return response;
-        }
+  const postData = async (endpoint: string, data: any) => {
+    let accessToken;
+    try {
+      if (isAuthenticated) {
+        accessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: 'https://oaprojects-api.oaprojects.net',
+            scope: 'User.ReadWrite',
+          },
+        });
+      }
+    } catch {
+      const body = {
+        errors: ['Login session has expired. Please login again.'],
+      };
+      return body;
     }
 
-    const postData = async (endpoint: string, data:any) => {
-        if (isAuthenticated) {
-            let accessToken = await getAccessTokenSilently({
-                authorizationParams: {
-                    audience: "https://oaprojects-api.oaprojects.net",
-                    scope: "User.ReadWrite"
-                }
-            });
+    try {
+      if (isAuthenticated) {
+        const headers = new Headers();
+        const bearer = `Bearer ${accessToken}`;
+        headers.append('Authorization', bearer);
+        headers.append('Content-Type', 'application/json');
 
-            const headers = new Headers();
-            const bearer = `Bearer ${accessToken}`;
-            headers.append("Authorization", bearer);
-            headers.append("Content-Type", "application/json");
+        let options = {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(data),
+        };
 
-            let options = {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify(data)
+        const response = await fetch(endpoint, options)
+          .then(data => (data ? data.json() : null))
+          .catch(e => {
+            return {
+              errors: [e],
             };
+          });
 
-            const response = (await fetch(endpoint, options));
-
-            return response;
-        }
+        return response;
+      }
+    } catch {
+      const body = {
+        errors: ['Login session has expired. Please login again.'],
+      };
+      return body;
     }
+  };
 
-    return {
-        getData,
-        postData
-    }
-}
+  return {
+    getData,
+    postData,
+  };
+};
 
 // export const useFetch = () => {
 //     const { isAuthenticated, getAccessTokenSilently } = useAuth0();

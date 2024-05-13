@@ -59,7 +59,6 @@ export const ListSearch = (props: ListSearchProps) => {
           right: 16,
         }}
         color="error"
-        aria-label="add"
         onClick={props.onCancelSearch}
       >
         <CancelIcon />

@@ -15,7 +15,7 @@ import { SearchResultsModel } from '../../models/SearchResultsModel';
 import { LookUpCard } from './LookUpCard';
 
 export interface ShowLookUpProps {
-  onSelectResult: (searchResult: SearchResultsModel) => void;
+  onWatchResult: (searchResult: SearchResultsModel, watchlist: boolean) => void;
 }
 
 export const ShowLookUp = (props: ShowLookUpProps) => {
@@ -42,7 +42,6 @@ export const ShowLookUp = (props: ShowLookUpProps) => {
         name: name,
       },
     )
-      .then(data => (data ? data.json() : null))
       .then(json => {
         setSearchResults(json.model.searchResults);
       })
@@ -121,15 +120,15 @@ export const ShowLookUp = (props: ShowLookUpProps) => {
             sm: '90vw',
           },
           display: 'grid',
-          columnGap: '10px',
-          rowGap: '10px',
+          columnGap: '30px',
+          rowGap: '30px',
           paddingBottom: '52px',
           gridTemplateColumns: {
             xs: '1fr',
             sm: '1fr 1fr',
             md: '1fr 1fr 1fr',
             lg: '1fr 1fr 1fr 1fr',
-            xl: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+            xl: '1fr 1fr 1fr 1fr 1fr',
           },
         }}
       >
@@ -137,7 +136,7 @@ export const ShowLookUp = (props: ShowLookUpProps) => {
           <LookUpCard
             key={searchResult.id}
             searchResult={searchResult}
-            onSelectResult={props.onSelectResult}
+            onWatchResult={props.onWatchResult}
           />
         ))}
       </Box>

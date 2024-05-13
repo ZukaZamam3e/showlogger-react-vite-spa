@@ -3,39 +3,42 @@ import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { ErrorMessage } from '../ErrorMessage';
 import { Backdrop, CircularProgress } from '@mui/material';
-import { MovieStatCard } from './MovieStatCard';
-import { MovieStatModel } from '../../models/MovieStatModel';
+import { YearStatCard } from './YearStatCard';
+import { YearStatModel } from '../../models/YearStatModel';
 import { List } from '../List';
 
-interface MovieStatsTabProps {
+interface YearStatsTabProps {
   isMobile: boolean;
 }
 
-export const MovieStatsTab = (props: MovieStatsTabProps) => {
+export const YearStatsTab = (props: YearStatsTabProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { getData } = useFetch();
-  const [movieStats, setMovieStats] = useState<MovieStatModel[]>([]);
-  const [movieStatsCount, setMovieStatsCount] = useState<number>(0);
+  const [yearStats, setYearStats] = useState<YearStatModel[]>([]);
+  const [yearStatsCount, setYearStatsCount] = useState<number>(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [hasError, setHasError] = useState(false);
-  const take = 12;
+  const take = 18;
+  let pages = yearStatsCount && Math.floor(yearStatsCount / take);
+  if (yearStatsCount % take >= 1) {
+    pages += 1;
+  }
 
   const get = async (page: number, search: string) => {
     setIsLoading(true);
     const offset = page * take;
     await getData(
-      `${protectedResources.oaprojectsApi.statEndpoint}/getmoviestats?offset=${offset}&take=${take}&search=${search}`,
+      `${protectedResources.oaprojectsApi.statEndpoint}/getyearstats?offset=${offset}&take=${take}&search=${search}`,
     )
       .then(json => {
         if (json.errors.length == 0) {
-          setMovieStats(json.model.movieStats);
-          setMovieStatsCount(json.model.count);
+          setYearStats(json.model.yearStats);
+          setYearStatsCount(json.model.count);
         } else {
           setHasError(true);
           setErrors(json.errors);
         }
       })
-      .catch(() => {})
       .finally(() => {
         setIsLoading(false);
       });
@@ -51,9 +54,12 @@ export const MovieStatsTab = (props: MovieStatsTabProps) => {
 
   return (
     <>
-      <List count={movieStatsCount} isMobile={props.isMobile} onGet={get}>
-        {movieStats.map((movieStat: MovieStatModel) => (
-          <MovieStatCard key={movieStat.showId} movieStat={movieStat} />
+      <List count={yearStatsCount} isMobile={props.isMobile} onGet={get}>
+        {yearStats.map((yearStat: YearStatModel) => (
+          <YearStatCard
+            key={`${yearStat.userId}-${yearStat.year}`}
+            yearStat={yearStat}
+          />
         ))}
       </List>
       <ErrorMessage

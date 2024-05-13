@@ -3,18 +3,7 @@ import { TvStatModel } from '../../models/TvStatModel';
 import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { ErrorMessage } from '../ErrorMessage';
-import {
-  Backdrop,
-  Box,
-  CircularProgress,
-  Fab,
-  Pagination,
-  Stack,
-  useTheme,
-} from '@mui/material';
-import { ListSearch } from '../ListSearch';
-import { placements } from '../../config/placementConfig';
-import SearchIcon from '@mui/icons-material/Search';
+import { Backdrop, CircularProgress, useTheme } from '@mui/material';
 import { TvStatCard } from './TvStatCard';
 import { List } from '../List';
 
@@ -30,17 +19,8 @@ export const TvStatsTab = (props: TvStatsTabProps) => {
   const [tvStatsCount, setTvStatsCount] = useState<number>(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [hasError, setHasError] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const [page, setPage] = useState(1);
-  const [searchText, setSearchText] = useState('');
-  const [searchTimer, setSearchTimer] = useState<any>(null);
   const [clearSearch, setClearSearch] = useState(false);
   const take = 12;
-  let pages = tvStatsCount && Math.floor(tvStatsCount / take);
-  if (tvStatsCount % take >= 1) {
-    pages += 1;
-  }
-  const siblingCount = props.isMobile ? 0 : 1;
 
   const get = async (page: number, search: string) => {
     setIsLoading(true);
@@ -48,7 +28,6 @@ export const TvStatsTab = (props: TvStatsTabProps) => {
     await getData(
       `${protectedResources.oaprojectsApi.statEndpoint}/gettvstats?offset=${offset}&take=${take}&search=${search}`,
     )
-      .then(data => (data ? data.json() : null))
       .then(json => {
         if (json.errors.length == 0) {
           setTvStats(json.model.tvStats);

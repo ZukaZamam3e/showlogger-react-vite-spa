@@ -1,6 +1,6 @@
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../config/apiConfig';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ShowModel, createNewShow } from '../../models/ShowModel';
 import {
   Backdrop,
@@ -43,12 +43,11 @@ export const ShowsTab = (props: ShowsTabProps) => {
   const [transactionTypeIds, setTransactionTypeIds] = useState<
     CodeValueModel[]
   >([]);
-  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [isScrollable, setIsScrollable] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
+  const [hideAddButton, setHideAddButton] = useState(false);
 
   const [editing, setEditing] = useState({
     show: false,
@@ -65,26 +64,15 @@ export const ShowsTab = (props: ShowsTabProps) => {
     bingeWatchEditShow: createNewShow(),
   });
 
-  const [searchText, setSearchText] = useState('');
-  const [searchTimer, setSearchTimer] = useState<any>(null);
   const [errors, setErrors] = useState<string[]>([]);
 
   const take = 12;
-
-  let pages = showCount && Math.floor(showCount / take);
-
-  if (showCount % take >= 1) {
-    pages += 1;
-  }
-
-  const siblingCount = props.isMobile ? 0 : 1;
 
   const load = async () => {
     setIsLoading(true);
     await getData(
       `${protectedResources.oaprojectsApi.showEndpoint}/load?take=${take}`,
     )
-      .then(data => (data ? data.json() : null))
       .then(json => {
         if (json.errors.length == 0) {
           setShows(json.model.shows);
@@ -97,7 +85,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
           setErrors(json.errors);
         }
       })
-      .catch(() => {})
       .finally(() => {
         setIsLoading(false);
       });
@@ -109,7 +96,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
     await getData(
       `${protectedResources.oaprojectsApi.showEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
     )
-      .then(data => (data ? data.json() : null))
       .then(json => {
         if (json.errors.length == 0) {
           setShows(json.model.shows);
@@ -119,7 +105,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
           setErrors(json.errors);
         }
       })
-      .catch(() => {})
       .finally(() => {
         setIsLoading(false);
       });
@@ -131,11 +116,13 @@ export const ShowsTab = (props: ShowsTabProps) => {
   ) => {
     setIsLoading(true);
 
-    let url = `${protectedResources.oaprojectsApi.showEndpoint}/save`;
+    let endpoint = protectedResources.oaprojectsApi.showEndpoint;
+    let hook = 'save';
+
     let data: any = show;
 
     if (!searchSkippedOrEdit) {
-      url = `${protectedResources.oaprojectsApi.showEndpoint}/addwatchfromsearch`;
+      hook = 'addwatchfromsearch';
       const watchFromSearch: AddWatchFromSearchModel = {
         api: show.api,
         type: show.type,
@@ -153,8 +140,14 @@ export const ShowsTab = (props: ShowsTabProps) => {
       data = watchFromSearch;
     }
 
+    if (show.watchlist !== null && show.watchlist) {
+      endpoint = protectedResources.oaprojectsApi.watchlistEnpoint;
+      data.dateAdded = show.dateWatched;
+    }
+
+    let url = `${endpoint}/${hook}`;
+
     await postData(url, data)
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           if (!searchSkippedOrEdit) {
@@ -187,7 +180,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
         dateWatched: new Date(),
       },
     )
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           await get(0, '');
@@ -200,8 +192,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
       .finally(() => {
         setIsLoading(false);
       });
-
-    await get(0, '');
   };
 
   const handleDelete = async (showId: number) => {
@@ -210,7 +200,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
     await postData(`${protectedResources.oaprojectsApi.showEndpoint}/delete`, {
       showId: showId,
     })
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           await get(0, '');
@@ -223,8 +212,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
       .finally(() => {
         setIsLoading(false);
       });
-
-    await get(0, '');
   };
 
   const handleAddOneDay = async (showId: number) => {
@@ -236,7 +223,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
         showId: showId,
       },
     )
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           await get(0, '');
@@ -249,8 +235,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
       .finally(() => {
         setIsLoading(false);
       });
-
-    await get(0, '');
   };
 
   const handleSubtractOneDay = async (showId: number) => {
@@ -262,7 +246,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
         showId: showId,
       },
     )
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           await get(0, '');
@@ -275,8 +258,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
       .finally(() => {
         setIsLoading(false);
       });
-
-    await get(0, '');
   };
 
   const handleBingeSave = async (binge: BingeWatchModel) => {
@@ -285,7 +266,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
     let url = `${protectedResources.oaprojectsApi.showEndpoint}/addrange`;
 
     await postData(url, binge)
-      .then(data => (data ? data.json() : null))
       .then(async json => {
         if (json.errors.length == 0) {
           handleCancelBingeWatchShow();
@@ -328,57 +308,22 @@ export const ShowsTab = (props: ShowsTabProps) => {
     load();
   }, []);
 
-  // const handlePageOnChange = (_: React.ChangeEvent<unknown>, value: number) => {
-  //   setPage(() => value);
-  //   get(value - 1, searchText);
-  // };
-
   const handleAddNew = () => {
     let newShow: ShowModel = createNewShow();
 
     setCreating({ show: true, creatingShow: newShow });
   };
 
-  // const handleToggleSearch = () => {
-  //   setIsSearching(prev => {
-  //     if (prev) {
-  //       handleSearchUpdate('');
-  //     }
-  //     return !prev;
-  //   });
-  // };
-
-  // const clearSearch = () => {
-  //   setIsSearching(false);
-  //   setSearchText('');
-  //   clearTimeout(searchTimer);
-  //   setSearchTimer(null);
-  // };
-
-  // const handleSearchUpdate = (text: string) => {
-  //   setSearchText(text);
-
-  //   if (!!searchTimer) {
-  //     clearTimeout(searchTimer);
-  //     setSearchTimer(null);
-  //   }
-
-  //   if (searchText !== '') {
-  //     const timer = setTimeout(() => {
-  //       setPage(1);
-  //       get(0, text);
-  //     }, 250);
-
-  //     setSearchTimer(timer);
-  //   }
-  // };
-
   const handleCloseErrors = () => {
     setErrors([]);
     setHasError(false);
   };
 
-  let body: any;
+  const handleToggleSearch = () => {
+    setHideAddButton(prev => !prev);
+  };
+
+  let body: ReactNode;
 
   if (editing.show) {
     body = (
@@ -413,26 +358,43 @@ export const ShowsTab = (props: ShowsTabProps) => {
     );
   } else {
     body = (
-      <List
-        count={showCount}
-        isMobile={props.isMobile}
-        onGet={get}
-        clearSearch={clearSearch}
-      >
-        {shows.map((show: ShowModel) => (
-          <ShowCard
-            key={show.showId}
-            show={show}
-            isMobile={props.isMobile}
-            onSelectShow={handleSelectShow}
-            onAddNextEpisode={handleAddNextEpisode}
-            onDeleteShow={handleDelete}
-            onAddOneDay={handleAddOneDay}
-            onSubtractOneDay={handleSubtractOneDay}
-            onBingeWatchShow={handleBingeWatchShow}
-          />
-        ))}
-      </List>
+      <>
+        {!hideAddButton && (
+          <Fab
+            sx={{
+              position: 'fixed',
+              bottom: placements.fab.secondIconBottom,
+              right: placements.fab.right,
+            }}
+            color="success"
+            aria-label="add"
+            onClick={handleAddNew}
+          >
+            <AddIcon />
+          </Fab>
+        )}
+        <List
+          count={showCount}
+          isMobile={props.isMobile}
+          onGet={get}
+          clearSearch={clearSearch}
+          onToggleSearch={handleToggleSearch}
+        >
+          {shows.map((show: ShowModel) => (
+            <ShowCard
+              key={show.showId}
+              show={show}
+              isMobile={props.isMobile}
+              onSelectShow={handleSelectShow}
+              onAddNextEpisode={handleAddNextEpisode}
+              onDeleteShow={handleDelete}
+              onAddOneDay={handleAddOneDay}
+              onSubtractOneDay={handleSubtractOneDay}
+              onBingeWatchShow={handleBingeWatchShow}
+            />
+          ))}
+        </List>
+      </>
     );
     // body = (
     //   <>

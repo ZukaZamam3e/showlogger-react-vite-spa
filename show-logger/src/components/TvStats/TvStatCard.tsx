@@ -69,7 +69,10 @@ export const TvStatCard = (props: TvStatCardProps) => {
           xs={10}
           sm={12}
           sx={{
-            minHeight: 128,
+            minHeight: {
+              xs: 155,
+              sm: 175,
+            },
             p: 1,
             mt: {
               xs: 0,

@@ -70,7 +70,10 @@ export const NewShow = (props: NewShowProps) => {
     setActiveStep(0);
   };
 
-  const handleSelectResult = (searchResult: SearchResultsModel) => {
+  const handleWatchResult = (
+    searchResult: SearchResultsModel,
+    watchList: boolean,
+  ) => {
     setSelectedResult(searchResult);
     props.show.id = searchResult.id.toString();
     props.show.api = searchResult.api;
@@ -89,6 +92,8 @@ export const NewShow = (props: NewShowProps) => {
     }
 
     props.show.showTypeId = showTypeId;
+
+    props.show.watchlist = watchList;
     setActiveStep(1);
   };
 
@@ -116,7 +121,7 @@ export const NewShow = (props: NewShowProps) => {
             );
           })}
         </Stepper>
-        {activeStep === 0 && <ShowLookUp onSelectResult={handleSelectResult} />}
+        {activeStep === 0 && <ShowLookUp onWatchResult={handleWatchResult} />}
       </Box>
       <Box
         sx={{

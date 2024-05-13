@@ -6,5 +6,6 @@ export const protectedResources = {
     showEndpoint: import.meta.env.VITE_APP_API_URL + '/show',
     statEndpoint: import.meta.env.VITE_APP_API_URL + '/stat',
     infoEndpoint: import.meta.env.VITE_APP_API_URL + '/info',
+    watchlistEnpoint: import.meta.env.VITE_APP_API_URL + '/watchlist',
   },
 };

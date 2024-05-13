@@ -27,6 +27,9 @@ export interface ShowModel {
   id?: string;
 
   totalPurchases?: number;
+
+  watchlist?: boolean;
+  dateAdded?: Date;
 }
 
 export const createNewShow = () => {

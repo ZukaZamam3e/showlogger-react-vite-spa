@@ -1,13 +1,5 @@
 import { useEffect, useState, ReactNode } from 'react';
-import {
-  Backdrop,
-  Box,
-  CircularProgress,
-  Fab,
-  Pagination,
-  Stack,
-  useTheme,
-} from '@mui/material';
+import { Box, Fab, Pagination, Stack, useTheme } from '@mui/material';
 import { placements } from '../config/placementConfig';
 import SearchIcon from '@mui/icons-material/Search';
 import { ListSearch } from './ListSearch';
@@ -17,14 +9,12 @@ interface ListProps {
   isMobile: boolean;
   count: number;
   onGet: (page: number, searchText: string) => void;
+  onToggleSearch?: () => void;
   clearSearch?: boolean;
 }
 
 export const List = (props: ListProps) => {
-  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
-  const [errors, setErrors] = useState<string[]>([]);
-  const [hasError, setHasError] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
@@ -51,6 +41,11 @@ export const List = (props: ListProps) => {
       if (prev) {
         handleSearchUpdate('');
       }
+
+      if (!!props.onToggleSearch) {
+        props.onToggleSearch();
+      }
+
       return !prev;
     });
   };
@@ -120,7 +115,6 @@ export const List = (props: ListProps) => {
               xs: 54,
               sm: 42,
             },
-            //paddingTop: 7,
             backgroundColor: theme.palette.secondary.dark,
           }}
         >
@@ -151,7 +145,7 @@ export const List = (props: ListProps) => {
                 bottom: placements.fab.firstIconBottom,
                 right: placements.fab.right,
               }}
-              color="success"
+              color="info"
               aria-label="add"
               onClick={handleToggleSearch}
             >
