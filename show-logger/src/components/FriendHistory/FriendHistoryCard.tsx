@@ -3,18 +3,13 @@ import { TvCard } from '../Common/TvCard';
 import { MovieCard } from '../Common/MovieCard';
 import { AmcCard } from '../Common/AmcCard';
 
-interface ShowCardProps {
+interface FriendHistoryCardProps {
   show: ShowModel;
+  name: string;
   isMobile: boolean;
-  onSelectShow: (show: ShowModel) => void;
-  onAddNextEpisode: (showId: number) => void;
-  onDeleteShow: (showId: number) => void;
-  onAddOneDay: (showId: number) => void;
-  onSubtractOneDay: (showId: number) => void;
-  onBingeWatchShow: (show: ShowModel) => void;
 }
 
-export const ShowCard = (props: ShowCardProps) => {
+export const FriendHistoryCard = (props: FriendHistoryCardProps) => {
   const isTV = props.show.showTypeId === 1000;
   const isMovie = props.show.showTypeId === 1001;
   const isAMC = props.show.showTypeId === 1002;
@@ -25,31 +20,37 @@ export const ShowCard = (props: ShowCardProps) => {
     body = (
       <TvCard
         show={props.show}
+        name={props.name}
         isMobile={props.isMobile}
-        onSelectShow={props.onSelectShow}
-        onAddNextEpisode={props.onAddNextEpisode}
-        onDeleteShow={props.onDeleteShow}
-        onAddOneDay={props.onAddOneDay}
-        onSubtractOneDay={props.onSubtractOneDay}
-        onBingeWatchShow={props.onBingeWatchShow}
+        hasButtons={false}
+        onSelectShow={() => {}}
+        onAddNextEpisode={() => {}}
+        onDeleteShow={() => {}}
+        onAddOneDay={() => {}}
+        onSubtractOneDay={() => {}}
+        onBingeWatchShow={() => {}}
       />
     );
   } else if (isMovie) {
     body = (
       <MovieCard
         show={props.show}
+        name={props.name}
         isMobile={props.isMobile}
-        onSelectShow={props.onSelectShow}
-        onDeleteShow={props.onDeleteShow}
+        hasButtons={false}
+        onSelectShow={() => {}}
+        onDeleteShow={() => {}}
       />
     );
   } else if (isAMC) {
     body = (
       <AmcCard
         show={props.show}
+        name={props.name}
         isMobile={props.isMobile}
-        onSelectShow={props.onSelectShow}
-        onDeleteShow={props.onDeleteShow}
+        hasButtons={false}
+        onSelectShow={() => {}}
+        onDeleteShow={() => {}}
       />
     );
   }

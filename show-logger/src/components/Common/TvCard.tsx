@@ -11,7 +11,9 @@ import nia_landscape from './../../assets/nia_landscape.png';
 
 interface TvCardProps {
   show: ShowModel;
+  name?: string;
   isMobile: boolean;
+  hasButtons?: boolean;
   onSelectShow: (show: ShowModel) => void;
   onAddNextEpisode: (showId: number) => void;
   onDeleteShow: (showId: number) => void;
@@ -21,6 +23,11 @@ interface TvCardProps {
 }
 
 export const TvCard = (props: TvCardProps) => {
+  let hasButtons = true;
+  if (props.hasButtons != null) {
+    hasButtons = props.hasButtons;
+  }
+
   const sxButton = { border: 1, borderRadius: '25%' };
 
   const hasInfoUrl = !!props.show.infoUrl;
@@ -34,6 +41,18 @@ export const TvCard = (props: TvCardProps) => {
   );
 
   const runtime = <>{props.show.runtime && <>{props.show.runtimeZ}</>}</>;
+
+  const name =
+    props.name != null ? (
+      <Typography variant="body2" color="text.primary" sx={{ fontSize: 20 }}>
+        {props.name}
+      </Typography>
+    ) : (
+      <></>
+    );
+
+  const hasName = props.name != null;
+  const titleFontSize = hasName ? 14 : 18;
 
   let imageUrl = props.show.imageUrl;
 
@@ -85,10 +104,11 @@ export const TvCard = (props: TvCardProps) => {
             },
           }}
         >
+          {name}
           <Typography
             variant="body2"
             color="text.primary"
-            sx={{ fontSize: 18 }}
+            sx={{ fontSize: titleFontSize }}
           >
             {props.show.showName}
           </Typography>
@@ -104,76 +124,78 @@ export const TvCard = (props: TvCardProps) => {
             {runtime}
           </Typography>
         </Grid>
-        <Grid xs={6} sm={12}>
-          <Stack direction="column" spacing={2}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ justifyContent: 'center' }}
-            >
-              <IconButton
-                aria-label="Edit"
-                sx={sxButton}
-                onClick={() => {
-                  props.onSelectShow(props.show);
-                }}
+        {hasButtons && (
+          <Grid xs={6} sm={12}>
+            <Stack direction="column" spacing={2}>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: 'center' }}
               >
-                <EditIcon style={{ color: 'cornflowerblue' }} />
-              </IconButton>
-              <IconButton
-                aria-label="Add Next Episode"
-                sx={sxButton}
-                onClick={() => {
-                  props.onAddNextEpisode(props.show.showId);
-                }}
+                <IconButton
+                  aria-label="Edit"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onSelectShow(props.show);
+                  }}
+                >
+                  <EditIcon style={{ color: 'cornflowerblue' }} />
+                </IconButton>
+                <IconButton
+                  aria-label="Add Next Episode"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onAddNextEpisode(props.show.showId);
+                  }}
+                >
+                  <AddIcon style={{ color: 'lightgreen' }} />
+                </IconButton>
+                <IconButton
+                  aria-label="Delete"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onDeleteShow(props.show.showId);
+                  }}
+                >
+                  <DeleteIcon style={{ color: 'red' }} />
+                </IconButton>
+              </Stack>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: 'center' }}
               >
-                <AddIcon style={{ color: 'lightgreen' }} />
-              </IconButton>
-              <IconButton
-                aria-label="Delete"
-                sx={sxButton}
-                onClick={() => {
-                  props.onDeleteShow(props.show.showId);
-                }}
-              >
-                <DeleteIcon style={{ color: 'red' }} />
-              </IconButton>
+                <IconButton
+                  aria-label="Subtract One Day"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onSubtractOneDay(props.show.showId);
+                  }}
+                >
+                  <FastRewindIcon style={{ color: 'yellow' }} />
+                </IconButton>
+                <IconButton
+                  aria-label="Add One Day"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onAddOneDay(props.show.showId);
+                  }}
+                >
+                  <FastForewardIcon style={{ color: 'cyan' }} />
+                </IconButton>
+                <IconButton
+                  aria-label="Binge"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onBingeWatchShow(props.show);
+                  }}
+                >
+                  <TrackChangesIcon style={{ color: 'orange' }} />
+                </IconButton>
+              </Stack>
             </Stack>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ justifyContent: 'center' }}
-            >
-              <IconButton
-                aria-label="Subtract One Day"
-                sx={sxButton}
-                onClick={() => {
-                  props.onSubtractOneDay(props.show.showId);
-                }}
-              >
-                <FastRewindIcon style={{ color: 'yellow' }} />
-              </IconButton>
-              <IconButton
-                aria-label="Add One Day"
-                sx={sxButton}
-                onClick={() => {
-                  props.onAddOneDay(props.show.showId);
-                }}
-              >
-                <FastForewardIcon style={{ color: 'cyan' }} />
-              </IconButton>
-              <IconButton
-                aria-label="Binge"
-                sx={sxButton}
-                onClick={() => {
-                  props.onBingeWatchShow(props.show);
-                }}
-              >
-                <TrackChangesIcon style={{ color: 'orange' }} />
-              </IconButton>
-            </Stack>
-          </Stack>
-        </Grid>
+          </Grid>
+        )}
       </Grid>
     </Card>
   );

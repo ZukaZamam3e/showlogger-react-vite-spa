@@ -5,6 +5,7 @@ import { TvStatsTab } from '../TvStats/TvStatsTab';
 import { MovieStatsTab } from '../MovieStats/MovieStatsTab';
 import { YearStatsTab } from '../YearStats/YearStatsTab';
 import { WatchListTab } from '../WatchList/WatchListTab';
+import { FriendHistoryTab } from '../FriendHistory/FriendHistoryTab';
 
 interface ShowsTabPanelProps {
   children?: ReactNode;
@@ -49,7 +50,11 @@ export const Shows = () => {
       label: 'Movie Stats',
       content: <MovieStatsTab isMobile={isMobile} />,
     },
-    { id: 3, label: 'Friends', content: null },
+    {
+      id: 3,
+      label: 'Friends',
+      content: <FriendHistoryTab isMobile={isMobile} />,
+    },
     {
       id: 4,
       label: 'Year Stats',

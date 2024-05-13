@@ -7,12 +7,19 @@ import nia_landscape from './../../assets/nia_landscape.png';
 
 interface AmcCardProps {
   show: ShowModel;
+  name?: string;
   isMobile: boolean;
+  hasButtons?: boolean;
   onSelectShow: (show: ShowModel) => void;
   onDeleteShow: (showId: number) => void;
 }
 
 export const AmcCard = (props: AmcCardProps) => {
+  let hasButtons = true;
+  if (props.hasButtons != null) {
+    hasButtons = props.hasButtons;
+  }
+
   const sxButton = { border: 1, borderRadius: '25%' };
 
   const runtime = <>{props.show.runtime && <>{props.show.runtimeZ}</>}</>;
@@ -27,6 +34,15 @@ export const AmcCard = (props: AmcCardProps) => {
   );
 
   const totalPurchases = props.show.totalPurchases ?? 0;
+
+  const name =
+    props.name != null ? (
+      <Typography variant="body2" color="text.primary">
+        {props.name}
+      </Typography>
+    ) : (
+      <></>
+    );
 
   let imageUrl = props.show.imageUrl;
 
@@ -79,6 +95,7 @@ export const AmcCard = (props: AmcCardProps) => {
             },
           }}
         >
+          {name}
           <Typography
             variant="body2"
             color="text.primary"
@@ -100,34 +117,36 @@ export const AmcCard = (props: AmcCardProps) => {
             {formatter.format(totalPurchases)}
           </Typography>
         </Grid>
-        <Grid xs={6} sm={12}>
-          <Stack direction="column" spacing={2}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ justifyContent: 'center' }}
-            >
-              <IconButton
-                aria-label="Edit"
-                sx={sxButton}
-                onClick={() => {
-                  props.onSelectShow(props.show);
-                }}
+        {hasButtons && (
+          <Grid xs={6} sm={12}>
+            <Stack direction="column" spacing={2}>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: 'center' }}
               >
-                <EditIcon style={{ color: 'cornflowerblue' }} />
-              </IconButton>
-              <IconButton
-                aria-label="Delete"
-                sx={sxButton}
-                onClick={() => {
-                  props.onDeleteShow(props.show.showId);
-                }}
-              >
-                <DeleteIcon style={{ color: 'red' }} />
-              </IconButton>
+                <IconButton
+                  aria-label="Edit"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onSelectShow(props.show);
+                  }}
+                >
+                  <EditIcon style={{ color: 'cornflowerblue' }} />
+                </IconButton>
+                <IconButton
+                  aria-label="Delete"
+                  sx={sxButton}
+                  onClick={() => {
+                    props.onDeleteShow(props.show.showId);
+                  }}
+                >
+                  <DeleteIcon style={{ color: 'red' }} />
+                </IconButton>
+              </Stack>
             </Stack>
-          </Stack>
-        </Grid>
+          </Grid>
+        )}
       </Grid>
     </Card>
   );
