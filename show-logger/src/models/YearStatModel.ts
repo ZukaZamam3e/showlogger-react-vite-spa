@@ -1,3 +1,5 @@
+import { YearStatDataModel } from './YearStatDataModel';
+
 export interface YearStatModel {
   userId: number;
   name: string;
@@ -20,4 +22,6 @@ export interface YearStatModel {
   aListMembership: number;
   aListTickets: number;
   amcPurchases: number;
+
+  data: YearStatDataModel[];
 }

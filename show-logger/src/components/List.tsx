@@ -8,9 +8,12 @@ interface ListProps {
   children: ReactNode;
   isMobile: boolean;
   count: number;
-  onGet: (page: number, searchText: string) => void;
+  take: number;
+  onGet?: (page: number, searchText: string) => void;
   onToggleSearch?: () => void;
   clearSearch?: boolean;
+  hideSearch?: boolean;
+  hidePagination?: boolean;
 }
 
 export const List = (props: ListProps) => {
@@ -19,9 +22,8 @@ export const List = (props: ListProps) => {
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [searchTimer, setSearchTimer] = useState<any>(null);
-  const take = 12;
-  let pages = props.count && Math.floor(props.count / take);
-  if (props.count % take >= 1) {
+  let pages = props.count && Math.floor(props.count / props.take);
+  if (props.count % props.take >= 1) {
     pages += 1;
   }
 
@@ -33,7 +35,9 @@ export const List = (props: ListProps) => {
 
   const handlePageOnChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(() => value);
-    props.onGet(value - 1, searchText);
+    if (props.onGet != null) {
+      props.onGet(value - 1, searchText);
+    }
   };
 
   const handleToggleSearch = () => {
@@ -68,12 +72,18 @@ export const List = (props: ListProps) => {
     if (searchText !== '') {
       const timer = setTimeout(() => {
         setPage(1);
-        props.onGet(0, text);
+        if (props.onGet != null) {
+          props.onGet(0, text);
+        }
       }, 250);
 
       setSearchTimer(timer);
     }
   };
+
+  const hidePagination =
+    props.hidePagination != null ? props.hidePagination : false;
+  const hideSearch = props.hideSearch != null ? props.hideSearch : false;
 
   return (
     <>
@@ -104,31 +114,33 @@ export const List = (props: ListProps) => {
         >
           {props.children}
         </Box>
-        <Stack
-          alignItems="center"
-          sx={{
-            position: 'fixed',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            height: {
-              xs: 54,
-              sm: 42,
-            },
-            backgroundColor: theme.palette.secondary.dark,
-          }}
-        >
-          <Pagination
+        {!hidePagination && (
+          <Stack
+            alignItems="center"
             sx={{
-              paddingTop: '7px',
+              position: 'fixed',
+              bottom: 0,
+              right: 0,
+              left: 0,
+              height: {
+                xs: 54,
+                sm: 42,
+              },
+              backgroundColor: theme.palette.secondary.dark,
             }}
-            size="small"
-            siblingCount={siblingCount}
-            count={pages}
-            page={page}
-            onChange={handlePageOnChange}
-          />
-        </Stack>
+          >
+            <Pagination
+              sx={{
+                paddingTop: '7px',
+              }}
+              size="small"
+              siblingCount={siblingCount}
+              count={pages}
+              page={page}
+              onChange={handlePageOnChange}
+            />
+          </Stack>
+        )}
         {isSearching ? (
           <>
             <ListSearch
@@ -139,18 +151,20 @@ export const List = (props: ListProps) => {
           </>
         ) : (
           <>
-            <Fab
-              sx={{
-                position: 'fixed',
-                bottom: placements.fab.firstIconBottom,
-                right: placements.fab.right,
-              }}
-              color="info"
-              aria-label="add"
-              onClick={handleToggleSearch}
-            >
-              <SearchIcon />
-            </Fab>
+            {!hideSearch && (
+              <Fab
+                sx={{
+                  position: 'fixed',
+                  bottom: placements.fab.firstIconBottom,
+                  right: placements.fab.right,
+                }}
+                color="info"
+                aria-label="add"
+                onClick={handleToggleSearch}
+              >
+                <SearchIcon />
+              </Fab>
+            )}
           </>
         )}
       </Box>

@@ -6,6 +6,7 @@ import { MovieStatsTab } from '../MovieStats/MovieStatsTab';
 import { YearStatsTab } from '../YearStats/YearStatsTab';
 import { WatchListTab } from '../WatchList/WatchListTab';
 import { FriendHistoryTab } from '../FriendHistory/FriendHistoryTab';
+import { AmcTab } from '../Amc/AmcTab';
 
 interface ShowsTabPanelProps {
   children?: ReactNode;
@@ -65,7 +66,11 @@ export const Shows = () => {
       label: 'Watchlist',
       content: <WatchListTab isMobile={isMobile} />,
     },
-    { id: 6, label: 'AMC', content: null },
+    {
+      id: 6,
+      label: 'AMC',
+      content: <AmcTab isMobile={isMobile} />,
+    },
   ];
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

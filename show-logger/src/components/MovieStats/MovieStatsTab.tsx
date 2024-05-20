@@ -40,6 +40,7 @@ export const MovieStatsTab = (props: MovieStatsTabProps) => {
         setIsLoading(false);
       });
   };
+
   useEffect(() => {
     get(0, '');
   }, []);
@@ -51,7 +52,12 @@ export const MovieStatsTab = (props: MovieStatsTabProps) => {
 
   return (
     <>
-      <List count={movieStatsCount} isMobile={props.isMobile} onGet={get}>
+      <List
+        count={movieStatsCount}
+        isMobile={props.isMobile}
+        onGet={get}
+        take={take}
+      >
         {movieStats.map((movieStat: MovieStatModel) => (
           <MovieStatCard key={movieStat.showId} movieStat={movieStat} />
         ))}

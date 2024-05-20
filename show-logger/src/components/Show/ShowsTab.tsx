@@ -1,22 +1,12 @@
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../config/apiConfig';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ShowModel, createNewShow } from '../../models/ShowModel';
-import {
-  Backdrop,
-  Box,
-  CircularProgress,
-  Fab,
-  Pagination,
-  Stack,
-  useTheme,
-} from '@mui/material';
+import { Backdrop, CircularProgress, Fab, useTheme } from '@mui/material';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
 import { ShowCard } from './ShowCard';
 import { EditShow } from './EditShow';
-import { ListSearch } from '../ListSearch';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { NewShow } from './NewShow';
 import { AddWatchFromSearchModel } from '../../models/AddWatchFromSearchModel';
@@ -376,6 +366,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
           count={showCount}
           isMobile={props.isMobile}
           onGet={get}
+          take={take}
           clearSearch={clearSearch}
           onToggleSearch={handleToggleSearch}
         >

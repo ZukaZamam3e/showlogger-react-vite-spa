@@ -53,12 +53,14 @@ export const TvCard = (props: TvCardProps) => {
 
   const hasName = props.name != null;
   const titleFontSize = hasName ? 14 : 18;
+  const gridXs = hasButtons ? 6 : 12;
 
   let imageUrl = props.show.imageUrl;
 
   if (imageUrl == '') {
     imageUrl = nia_landscape;
   }
+
   return (
     <Card
       sx={{
@@ -90,7 +92,7 @@ export const TvCard = (props: TvCardProps) => {
         }}
       >
         <Grid
-          xs={6}
+          xs={gridXs}
           sm={12}
           sx={{
             minHeight: {

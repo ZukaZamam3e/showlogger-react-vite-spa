@@ -189,6 +189,7 @@ export const WatchListTab = (props: WatchListTabProps) => {
         isMobile={props.isMobile}
         onGet={get}
         clearSearch={clearSearch}
+        take={take}
       >
         {watchList.map((watchlist: WatchListModel) => (
           <WatchListCard

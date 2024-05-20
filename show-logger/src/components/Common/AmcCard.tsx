@@ -44,6 +44,10 @@ export const AmcCard = (props: AmcCardProps) => {
       <></>
     );
 
+  const hasName = props.name != null;
+  const titleFontSize = hasName ? 14 : 18;
+  const gridXs = hasButtons ? 6 : 12;
+
   let imageUrl = props.show.imageUrl;
 
   if (imageUrl == '') {
@@ -81,7 +85,7 @@ export const AmcCard = (props: AmcCardProps) => {
         }}
       >
         <Grid
-          xs={6}
+          xs={gridXs}
           sm={12}
           sx={{
             minHeight: {
@@ -99,7 +103,7 @@ export const AmcCard = (props: AmcCardProps) => {
           <Typography
             variant="body2"
             color="text.primary"
-            sx={{ fontSize: 18 }}
+            sx={{ fontSize: titleFontSize }}
           >
             {showName}
           </Typography>

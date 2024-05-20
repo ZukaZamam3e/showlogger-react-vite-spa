@@ -1,18 +1,13 @@
 import {
   Box,
   Button,
-  Card,
   Fab,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   InputAdornment,
   InputBaseComponentProps,
   InputLabel,
   OutlinedInput,
   Paper,
-  Stack,
-  Switch,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -21,12 +16,12 @@ import { ShowModel } from '../../models/ShowModel';
 import Grid from '@mui/material/Unstable_Grid2';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import { EditTransaction } from './EditTransaction';
-import { NewTransaction } from './NewTransaction';
+import { NewTransaction } from '../Common/NewTransaction';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { TransactionModel } from '../../models/TransactionModel';
 import { SearchResultsModel } from '../../models/SearchResultsModel';

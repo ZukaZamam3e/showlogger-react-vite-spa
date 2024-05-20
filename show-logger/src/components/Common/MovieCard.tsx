@@ -43,6 +43,10 @@ export const MovieCard = (props: MovieCardProps) => {
       <></>
     );
 
+  const hasName = props.name != null;
+  const titleFontSize = hasName ? 14 : 18;
+  const gridXs = hasButtons ? 6 : 12;
+
   let imageUrl = props.show.imageUrl;
 
   if (imageUrl == '') {
@@ -80,7 +84,7 @@ export const MovieCard = (props: MovieCardProps) => {
         }}
       >
         <Grid
-          xs={6}
+          xs={gridXs}
           sm={12}
           sx={{
             minHeight: {
@@ -98,7 +102,7 @@ export const MovieCard = (props: MovieCardProps) => {
           <Typography
             variant="body2"
             color="text.primary"
-            sx={{ fontSize: 18 }}
+            sx={{ fontSize: titleFontSize }}
           >
             {showName}
           </Typography>

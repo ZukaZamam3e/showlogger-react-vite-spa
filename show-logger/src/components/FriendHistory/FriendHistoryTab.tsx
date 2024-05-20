@@ -52,7 +52,12 @@ export const FriendHistoryTab = (props: FriendHistoryTabProps) => {
 
   return (
     <>
-      <List count={friendHistoryCount} isMobile={props.isMobile} onGet={get}>
+      <List
+        count={friendHistoryCount}
+        isMobile={props.isMobile}
+        onGet={get}
+        take={take}
+      >
         {friendHistory.map((fh: FriendHistoryModel) => (
           <FriendHistoryCard
             key={fh.show.showId}

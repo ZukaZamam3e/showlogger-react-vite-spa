@@ -58,14 +58,14 @@
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 export const protectedResources = {
-    oaprojectsApi: {
-        weatherEndpoint: import.meta.env.VITE_APP_API_URL + '/WeatherForecast',
-        authEndpoint: import.meta.env.VITE_APP_API_URL  + '/auth',
-        showEndpoint: import.meta.env.VITE_APP_API_URL  + '/show',
-        scopes: {
-            write: ['api://89f937e2-f440-4ae3-86dc-b0ec5ba9a11c/User.ReadWrite'],
-        }
+  oaprojectsApi: {
+    weatherEndpoint: import.meta.env.VITE_APP_API_URL + '/WeatherForecast',
+    authEndpoint: import.meta.env.VITE_APP_API_URL + '/auth',
+    showEndpoint: import.meta.env.VITE_APP_API_URL + '/show',
+    scopes: {
+      write: ['api://89f937e2-f440-4ae3-86dc-b0ec5ba9a11c/User.ReadWrite'],
     },
+  },
 };
 
 // /**
@@ -76,6 +76,6 @@ export const protectedResources = {
 //  */
 // export const loginRequest = {
 //     scopes: [
-//         ...protectedResources.oaprojectsApi.scopes.write, 
+//         ...protectedResources.oaprojectsApi.scopes.write,
 //     ],
 // };

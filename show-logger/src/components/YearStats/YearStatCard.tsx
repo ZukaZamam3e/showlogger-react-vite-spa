@@ -1,9 +1,22 @@
 import { YearStatModel } from '../../models/YearStatModel';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Stack,
+  Typography,
+} from '@mui/material';
+import Slider from 'react-slick';
 import { formatter } from '../../models/ShowModel';
+import nia_landscape from './../../assets/nia_landscape.png';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface YearStatCardProps {
   yearStat: YearStatModel;
+  onSelect: (yearStat: YearStatModel) => void;
 }
 
 export const YearStatCard = (props: YearStatCardProps) => {
@@ -74,6 +87,25 @@ export const YearStatCard = (props: YearStatCardProps) => {
       <></>
     );
 
+  const backdrops: any = props.yearStat.data.map(d => {
+    if (d.infoBackdropUrl == '' || d.infoBackdropUrl == null) {
+      d.infoBackdropUrl = nia_landscape;
+    }
+
+    return d;
+  });
+
+  const sliderSettings = {
+    arrows: true,
+    infinite: backdrops.length > 1,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 2000,
+    autoplaySpeed: 5000,
+    cssEase: 'linear',
+  };
+
   return (
     <Card
       sx={{
@@ -85,9 +117,52 @@ export const YearStatCard = (props: YearStatCardProps) => {
         },
       }}
     >
+      <div style={{ maxHeight: 315 }}>
+        <Slider {...sliderSettings}>
+          {backdrops.map((b: any) => (
+            <>
+              <strong
+                style={{
+                  height: 24,
+                  maxHeight: 24,
+                  fontSize: b.showName.length > 33 ? 10 : 16,
+                }}
+              >
+                {b.showName}
+              </strong>
+              <CardMedia
+                key={b}
+                component="img"
+                image={b.infoBackdropUrl}
+                sx={{
+                  height: {
+                    xs: 205,
+                    sm: 265,
+                  },
+                  maxHeight: {
+                    xs: 205,
+                    sm: 265,
+                  },
+                }}
+              />
+              <div
+                style={{
+                  height: 24,
+                  maxHeight: 24,
+                  fontSize: 14,
+                }}
+              >
+                {b.totalRuntimeZ}
+                {b.totalRuntimeZ != '' && b.showTypeId == 1000 && <> - </>}
+                {b.showTypeId == 1000 && <>{b.watchCount} episodes</>}
+              </div>
+            </>
+          ))}
+        </Slider>
+      </div>
       <CardHeader
-        title={props.yearStat.year}
-        subheader={props.yearStat.name}
+        title={props.yearStat.name}
+        subheader={props.yearStat.year}
         subheaderTypographyProps={{ color: 'text.primary' }}
         sx={{ pb: 0 }}
       />
@@ -95,7 +170,7 @@ export const YearStatCard = (props: YearStatCardProps) => {
         sx={{
           minHeight: {
             xs: 0,
-            sm: 155,
+            sm: 205,
           },
           pt: 1,
         }}
@@ -117,6 +192,18 @@ export const YearStatCard = (props: YearStatCardProps) => {
         {amcTime}
         {totalSpent}
       </CardContent>
+      <Stack direction="column" spacing={2} sx={{ p: 2 }}>
+        <Stack direction="row" spacing={1} sx={{ justifyContent: 'center' }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              props.onSelect(props.yearStat);
+            }}
+          >
+            See More
+          </Button>
+        </Stack>
+      </Stack>
     </Card>
   );
 };
