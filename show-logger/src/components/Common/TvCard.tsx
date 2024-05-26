@@ -8,6 +8,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import FastForewardIcon from '@mui/icons-material/FastForward';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import nia_landscape from './../../assets/nia_landscape.png';
+import { SLIconButton } from './SLIconButton';
 
 interface TvCardProps {
   show: ShowModel;
@@ -28,7 +29,7 @@ export const TvCard = (props: TvCardProps) => {
     hasButtons = props.hasButtons;
   }
 
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
 
   const hasInfoUrl = !!props.show.infoUrl;
 
@@ -134,66 +135,60 @@ export const TvCard = (props: TvCardProps) => {
                 spacing={1}
                 sx={{ justifyContent: 'center' }}
               >
-                <IconButton
+                <SLIconButton
                   aria-label="Edit"
-                  sx={sxButton}
                   onClick={() => {
                     props.onSelectShow(props.show);
                   }}
                 >
                   <EditIcon style={{ color: 'cornflowerblue' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Add Next Episode"
-                  sx={sxButton}
                   onClick={() => {
                     props.onAddNextEpisode(props.show.showId);
                   }}
                 >
                   <AddIcon style={{ color: 'lightgreen' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Delete"
-                  sx={sxButton}
                   onClick={() => {
                     props.onDeleteShow(props.show.showId);
                   }}
                 >
                   <DeleteIcon style={{ color: 'red' }} />
-                </IconButton>
+                </SLIconButton>
               </Stack>
               <Stack
                 direction="row"
                 spacing={1}
                 sx={{ justifyContent: 'center' }}
               >
-                <IconButton
+                <SLIconButton
                   aria-label="Subtract One Day"
-                  sx={sxButton}
                   onClick={() => {
                     props.onSubtractOneDay(props.show.showId);
                   }}
                 >
                   <FastRewindIcon style={{ color: 'yellow' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Add One Day"
-                  sx={sxButton}
                   onClick={() => {
                     props.onAddOneDay(props.show.showId);
                   }}
                 >
                   <FastForewardIcon style={{ color: 'cyan' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Binge"
-                  sx={sxButton}
                   onClick={() => {
                     props.onBingeWatchShow(props.show);
                   }}
                 >
                   <TrackChangesIcon style={{ color: 'orange' }} />
-                </IconButton>
+                </SLIconButton>
               </Stack>
             </Stack>
           </Grid>

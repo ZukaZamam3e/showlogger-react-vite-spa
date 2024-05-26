@@ -8,7 +8,6 @@ import {
   InputLabel,
   OutlinedInput,
   Paper,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
@@ -26,6 +25,8 @@ import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { TransactionModel } from '../../models/TransactionModel';
 import { SearchResultsModel } from '../../models/SearchResultsModel';
 import { placements } from '../../config/placementConfig';
+import { SLTextField } from '../Common/SLTextField';
+import { SLInput } from '../Common/SLInput';
 
 interface EditShowProps {
   show: ShowModel;
@@ -94,7 +95,7 @@ export const EditShow = (props: EditShowProps) => {
   const dateWatchEnabled =
     props.show.watchlist == null || !props.show.watchlist;
 
-  const onChange = (e: any) => {
+  const handleChange = (e: any) => {
     const updatedShow = () => {
       if (
         e.target.name === 'seasonNumber' ||
@@ -350,26 +351,22 @@ export const EditShow = (props: EditShowProps) => {
             />
           </Grid>
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               fullWidth
               name="showName"
               label="Name"
               defaultValue={show.showName}
-              onChange={e => {
-                onChange(e);
-              }}
+              onChange={handleChange}
             />
           </Grid>
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               fullWidth
               name="showNotes"
               label="Notes"
               multiline
               defaultValue={show.showNotes}
-              onChange={e => {
-                onChange(e);
-              }}
+              onChange={handleChange}
             />
           </Grid>
           <Grid xs={12}>
@@ -393,16 +390,14 @@ export const EditShow = (props: EditShowProps) => {
           {show.showTypeId == 1000 && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
-                <TextField
+                <SLTextField
                   fullWidth
                   name="seasonNumber"
                   label="Season"
                   type="number"
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   value={seasonNumber}
-                  onChange={e => {
-                    onChange(e);
-                  }}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid xs={12} sm={6}>
@@ -420,16 +415,14 @@ export const EditShow = (props: EditShowProps) => {
           {show.showTypeId == 1000 && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
-                <TextField
+                <SLTextField
                   fullWidth
                   name="episodeNumber"
                   label="Episode"
                   type="number"
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   value={episodeNumber}
-                  onChange={e => {
-                    onChange(e);
-                  }}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid xs={12} sm={6}>
@@ -464,7 +457,7 @@ export const EditShow = (props: EditShowProps) => {
               <Grid xs={12} sm={12}>
                 <FormControl fullWidth>
                   <InputLabel>Total Purchases</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -484,7 +477,7 @@ export const EditShow = (props: EditShowProps) => {
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>A List Ticket</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -493,14 +486,14 @@ export const EditShow = (props: EditShowProps) => {
                     label="A List Ticket"
                     type="number"
                     value={amcAlistTicket}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Tax</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -509,7 +502,7 @@ export const EditShow = (props: EditShowProps) => {
                     label="Tax"
                     type="number"
                     value={amcTax}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>
@@ -520,7 +513,7 @@ export const EditShow = (props: EditShowProps) => {
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Benefits</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -529,14 +522,14 @@ export const EditShow = (props: EditShowProps) => {
                     label="Benefits"
                     type="number"
                     value={amcBenefits}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Rewards</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -545,7 +538,7 @@ export const EditShow = (props: EditShowProps) => {
                     label="Rewards"
                     type="number"
                     value={amcRewards}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>
@@ -557,7 +550,7 @@ export const EditShow = (props: EditShowProps) => {
               <Grid xs={6} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>AMC Ticket</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
@@ -566,21 +559,21 @@ export const EditShow = (props: EditShowProps) => {
                     label="AMC Ticket"
                     type="number"
                     value={amcTicket}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>
               <Grid xs={6} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Quantity</InputLabel>
-                  <OutlinedInput
+                  <SLInput
                     inputProps={{ style: { textAlign: 'right' } }}
                     // startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     name="ticketQuantity"
                     label="Quantity"
                     type="number"
                     value={amcTicketQauntity}
-                    onChange={e => amcInfoUpdate(e.target.name, e.target.value)}
+                    onChange={(e:any) => amcInfoUpdate(e.target.name, e.target.value)}
                   />
                 </FormControl>
               </Grid>

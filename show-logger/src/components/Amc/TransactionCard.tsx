@@ -4,6 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { formatter } from '../../models/ShowModel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { SLIconButton } from '../Common/SLIconButton';
 
 interface TransactionProps {
   transaction: TransactionModel;
@@ -12,7 +13,7 @@ interface TransactionProps {
 }
 
 export const TransactionCard = (props: TransactionProps) => {
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
   return (
     <>
       <Card
@@ -70,24 +71,22 @@ export const TransactionCard = (props: TransactionProps) => {
                 spacing={1}
                 sx={{ justifyContent: 'center' }}
               >
-                <IconButton
+                <SLIconButton
                   aria-label="Edit"
-                  sx={sxButton}
                   onClick={() => {
                     props.onSelectTransaction(props.transaction);
                   }}
                 >
                   <EditIcon style={{ color: 'cornflowerblue' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Delete"
-                  sx={sxButton}
                   onClick={() => {
                     props.onDeleteTransaction(props.transaction.transactionId);
                   }}
                 >
                   <DeleteIcon style={{ color: 'red' }} />
-                </IconButton>
+                </SLIconButton>
               </Stack>
             </Stack>
           </Grid>

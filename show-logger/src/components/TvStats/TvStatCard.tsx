@@ -2,6 +2,7 @@ import { TvStatModel } from '../../models/TvStatModel';
 import { Card, CardMedia, IconButton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import AddIcon from '@mui/icons-material/Add';
+import { SLIconButton } from '../Common/SLIconButton';
 
 export interface TvStatCardProps {
   tvStat: TvStatModel;
@@ -33,7 +34,7 @@ export const TvStatCard = (props: TvStatCardProps) => {
       <>{props.tvStat.showName}</>
     );
   const imageUrl = props.tvStat.infoBackdropUrl;
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
 
   return (
     <Card
@@ -117,15 +118,14 @@ export const TvStatCard = (props: TvStatCardProps) => {
               spacing={1}
               sx={{ justifyContent: 'center' }}
             >
-              <IconButton
+              <SLIconButton
                 aria-label="Add Next Episode"
-                sx={sxButton}
                 onClick={() => {
                   props.onAddNextEpisode(props.tvStat.showId);
                 }}
               >
                 <AddIcon style={{ color: 'lightgreen' }} />
-              </IconButton>
+              </SLIconButton>
             </Stack>
           </Stack>
         </Grid>

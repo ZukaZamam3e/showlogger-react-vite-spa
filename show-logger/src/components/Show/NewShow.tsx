@@ -3,26 +3,17 @@ import { CodeValueModel } from '../../models/CodeValueModel';
 import { ShowModel } from '../../models/ShowModel';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import {
-  Backdrop,
   Box,
   Button,
-  CircularProgress,
-  MobileStepper,
-  Paper,
   Typography,
   useTheme,
 } from '@mui/material';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
 import StepLabel from '@mui/material/StepLabel';
 import { EditShow } from './EditShow';
 import { ShowLookUp } from './ShowLookUp';
 import { SearchResultsModel } from '../../models/SearchResultsModel';
-import { ErrorMessage } from '../ErrorMessage';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
 
 const steps = ['Search', 'Create'];
 
@@ -51,8 +42,6 @@ export const NewShow = (props: NewShowProps) => {
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
       throw new Error("You can't skip a step that isn't optional.");
     }
 

@@ -3,7 +3,6 @@ import {
   Button,
   Fab,
   Paper,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
@@ -16,6 +15,7 @@ import dayjs from 'dayjs';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from 'react';
+import { SLTextField } from '../Common/SLTextField';
 
 interface EditWatchListProps {
   watchlist: WatchListModel;
@@ -33,7 +33,7 @@ export const EditWatchList = (props: EditWatchListProps) => {
     props.watchlist.episodeNumber ?? 1,
   );
 
-  const onChange = (e: any) => {
+  const handleChange = (e: any) => {
     const updatedWatchlist = () => {
       if (
         e.target.name === 'seasonNumber' ||
@@ -126,26 +126,23 @@ export const EditWatchList = (props: EditWatchListProps) => {
             />
           </Grid>
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               fullWidth
               name="showName"
               label="Name"
               defaultValue={watchlist.showName}
-              onChange={e => {
-                onChange(e);
-              }}
+              onChange={handleChange}
+
             />
           </Grid>
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               fullWidth
               name="showNotes"
               label="Notes"
               multiline
               defaultValue={watchlist.showNotes}
-              onChange={e => {
-                onChange(e);
-              }}
+              onChange={handleChange}
             />
           </Grid>
           <Grid xs={12}>
@@ -169,16 +166,14 @@ export const EditWatchList = (props: EditWatchListProps) => {
           {watchlist.showTypeId == 1000 && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
-                <TextField
+                <SLTextField
                   fullWidth
                   name="seasonNumber"
                   label="Season"
                   type="number"
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   value={seasonNumber}
-                  onChange={e => {
-                    onChange(e);
-                  }}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid xs={12} sm={6}>
@@ -196,16 +191,14 @@ export const EditWatchList = (props: EditWatchListProps) => {
           {watchlist.showTypeId == 1000 && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
-                <TextField
+                <SLTextField
                   fullWidth
                   name="episodeNumber"
                   label="Episode"
                   type="number"
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   value={episodeNumber}
-                  onChange={e => {
-                    onChange(e);
-                  }}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid xs={12} sm={6}>

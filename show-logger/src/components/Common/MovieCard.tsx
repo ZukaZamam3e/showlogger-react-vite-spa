@@ -4,6 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import nia_landscape from './../../assets/nia_landscape.png';
+import { SLIconButton } from './SLIconButton';
 
 interface MovieCardProps {
   show: ShowModel;
@@ -20,7 +21,7 @@ export const MovieCard = (props: MovieCardProps) => {
     hasButtons = props.hasButtons;
   }
 
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
 
   const runtime = <>{props.show.runtime && <>{props.show.runtimeZ}</>}</>;
 
@@ -125,24 +126,22 @@ export const MovieCard = (props: MovieCardProps) => {
                 spacing={1}
                 sx={{ justifyContent: 'center' }}
               >
-                <IconButton
+                <SLIconButton
                   aria-label="Edit"
-                  sx={sxButton}
                   onClick={() => {
                     props.onSelectShow(props.show);
                   }}
                 >
                   <EditIcon style={{ color: 'cornflowerblue' }} />
-                </IconButton>
-                <IconButton
+                </SLIconButton>
+                <SLIconButton
                   aria-label="Delete"
-                  sx={sxButton}
                   onClick={() => {
                     props.onDeleteShow(props.show.showId);
                   }}
                 >
                   <DeleteIcon style={{ color: 'red' }} />
-                </IconButton>
+                </SLIconButton>
               </Stack>
             </Stack>
           </Grid>

@@ -8,7 +8,6 @@ import {
   InputLabel,
   OutlinedInput,
   Paper,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
@@ -21,6 +20,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { placements } from '../../config/placementConfig';
 import { NewTransaction } from '../Common/NewTransaction';
+import { SLTextField } from '../Common/SLTextField';
+import { SLInput } from '../Common/SLInput';
 
 interface EditAmcTransactionProps {
   transaction: TransactionModel;
@@ -40,7 +41,7 @@ export const EditAmcTransaction = (props: EditAmcTransactionProps) => {
     setTransaction(updatedShow);
   };
 
-  const onChange = (e: any) => {
+  const handleChange = (e: any) => {
     const updatedTransaction = () => {
       if (e.target.name === 'costAmt' || e.target.name === 'quantity') {
         let value = parseFloat(e.target.value);
@@ -152,18 +153,16 @@ export const EditAmcTransaction = (props: EditAmcTransactionProps) => {
               </ToggleButtonGroup>
             </Grid>
             <Grid xs={12}>
-              <TextField
+              <SLTextField
                 fullWidth
                 name="item"
                 label="Item"
                 value={transaction.item}
-                onChange={e => {
-                  onChange(e);
-                }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid xs={12}>
-              <TextField
+              <SLTextField
                 size={'small'}
                 inputProps={{ style: { textAlign: 'right' } }}
                 fullWidth
@@ -171,9 +170,7 @@ export const EditAmcTransaction = (props: EditAmcTransactionProps) => {
                 type="number"
                 label="Quantity"
                 value={transaction.quantity}
-                onChange={e => {
-                  onChange(e);
-                }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid xs={12}>
@@ -181,7 +178,7 @@ export const EditAmcTransaction = (props: EditAmcTransactionProps) => {
                 <InputLabel htmlFor="outlined-adornment-amount">
                   Amount
                 </InputLabel>
-                <OutlinedInput
+                <SLInput
                   size={'small'}
                   inputProps={{ style: { textAlign: 'right' } }}
                   startAdornment={
@@ -191,9 +188,7 @@ export const EditAmcTransaction = (props: EditAmcTransactionProps) => {
                   label="Cost"
                   type="number"
                   value={transaction.costAmt}
-                  onChange={e => {
-                    onChange(e);
-                  }}
+                  onChange={handleChange}
                 />
               </FormControl>
             </Grid>

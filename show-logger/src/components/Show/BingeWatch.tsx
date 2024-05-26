@@ -10,6 +10,7 @@ import { BingeWatchModel } from '../../models/BingeWatchModel';
 import { placements } from '../../config/placementConfig';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { SLTextField } from '../Common/SLTextField';
 
 export interface BingeWatchProps {
   show: ShowModel;
@@ -35,7 +36,7 @@ export const BingeWatch = (props: BingeWatchProps) => {
   const [endEpisode, setEndEpisode] = useState(
     (props.show.episodeNumber ?? 1) + 2,
   );
-  const onChange = (e: any) => {
+  const handleChange = (e: any) => {
     const updatedShow = () => {
       if (
         e.target.name === 'seasonNumber' ||
@@ -147,7 +148,7 @@ export const BingeWatch = (props: BingeWatchProps) => {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               fullWidth
               name="showName"
               label="Name"
@@ -157,16 +158,14 @@ export const BingeWatch = (props: BingeWatchProps) => {
           </Grid>
           <Grid container spacing={3} xs={12}>
             <Grid xs={6} sm={6}>
-              <TextField
+              <SLTextField
                 fullWidth
                 name="seasonNumber"
                 label="Season"
                 type="number"
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 value={seasonNumber}
-                onChange={e => {
-                  onChange(e);
-                }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid xs={3}>
@@ -194,16 +193,14 @@ export const BingeWatch = (props: BingeWatchProps) => {
           </Grid>
           <Grid container spacing={3} xs={12}>
             <Grid xs={6} sm={6}>
-              <TextField
+              <SLTextField
                 fullWidth
                 name="startEpisode"
                 label="Start"
                 type="number"
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 value={startEpisode}
-                onChange={e => {
-                  onChange(e);
-                }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid xs={3}>
@@ -231,16 +228,14 @@ export const BingeWatch = (props: BingeWatchProps) => {
           </Grid>
           <Grid container spacing={3} xs={12}>
             <Grid xs={6} sm={6}>
-              <TextField
+              <SLTextField
                 fullWidth
                 name="endEpisode"
                 label="End"
                 type="number"
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 value={endEpisode}
-                onChange={e => {
-                  onChange(e);
-                }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid xs={3}>

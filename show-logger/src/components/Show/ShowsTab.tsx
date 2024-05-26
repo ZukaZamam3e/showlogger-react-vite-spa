@@ -312,42 +312,74 @@ export const ShowsTab = (props: ShowsTabProps) => {
     setHideAddButton(prev => !prev);
   };
 
-  let body: ReactNode;
+  const sxBody = {
+    display: !editing.show && !creating.show && !bingeWatchEdit.show ? "initial" : "none"
+  };
 
-  if (editing.show) {
-    body = (
-      <>
-        <EditShow
-          show={editing.editingShow}
-          showTypeIds={showTypeIds}
-          transactionItems={transactionItems}
-          onCancelSelectedShow={handleCancelSelectedShow}
-          onShowSave={handleShowSave}
-          searchSkippedOrEdit={true}
-        />
-      </>
-    );
-  } else if (creating.show) {
-    body = (
-      <NewShow
-        show={createNewShow()}
-        showTypeIds={showTypeIds}
-        transactionItems={transactionItems}
-        onCancelSelectedShow={handleCancelCreatingShow}
-        onShowSave={handleShowSave}
-      />
-    );
-  } else if (bingeWatchEdit.show) {
-    body = (
-      <BingeWatch
-        show={bingeWatchEdit.bingeWatchEditShow}
-        onBingeSave={handleBingeSave}
-        onCancelBinge={handleCancelBingeWatchShow}
-      />
-    );
-  } else {
-    body = (
-      <>
+  const editShow = editing.show && <EditShow
+    show={editing.editingShow}
+    showTypeIds={showTypeIds}
+    transactionItems={transactionItems}
+    onCancelSelectedShow={handleCancelSelectedShow}
+    onShowSave={handleShowSave}
+    searchSkippedOrEdit={true}
+  />
+
+  const createShow = creating.show && <NewShow
+  show={createNewShow()}
+  showTypeIds={showTypeIds}
+  transactionItems={transactionItems}
+  onCancelSelectedShow={handleCancelCreatingShow}
+  onShowSave={handleShowSave}
+/>
+
+const bingeShow = bingeWatchEdit.show && <BingeWatch
+show={bingeWatchEdit.bingeWatchEditShow}
+onBingeSave={handleBingeSave}
+onCancelBinge={handleCancelBingeWatchShow}
+/>;
+
+  // if (editing.show) {
+  //   body = (
+  //     <>
+  //       <EditShow
+  //         show={editing.editingShow}
+  //         showTypeIds={showTypeIds}
+  //         transactionItems={transactionItems}
+  //         onCancelSelectedShow={handleCancelSelectedShow}
+  //         onShowSave={handleShowSave}
+  //         searchSkippedOrEdit={true}
+  //       />
+  //     </>
+  //   );
+  // } else 
+  
+  // if (creating.show) {
+  //   body = (
+  //     <NewShow
+  //       show={createNewShow()}
+  //       showTypeIds={showTypeIds}
+  //       transactionItems={transactionItems}
+  //       onCancelSelectedShow={handleCancelCreatingShow}
+  //       onShowSave={handleShowSave}
+  //     />
+  //   );
+  // } else 
+  
+  // if (bingeWatchEdit.show) {
+  //   body = (
+  //     <BingeWatch
+  //       show={bingeWatchEdit.bingeWatchEditShow}
+  //       onBingeSave={handleBingeSave}
+  //       onCancelBinge={handleCancelBingeWatchShow}
+  //     />
+  //   );
+  // } else {
+
+    const body = (
+      <div
+        style={sxBody}
+      >
         {!hideAddButton && (
           <Fab
             sx={{
@@ -384,119 +416,15 @@ export const ShowsTab = (props: ShowsTabProps) => {
             />
           ))}
         </List>
-      </>
+      </div>
     );
-    // body = (
-    //   <>
-    //     <Box
-    //       sx={{
-    //         width: '90vw',
-    //       }}
-    //     >
-    //       <Box
-    //         sx={{
-    //           display: 'grid',
-    //           columnGap: '10px',
-    //           rowGap: '10px',
-    //           paddingBottom: {
-    //             xs: '185px',
-    //             sm: '185px',
-    //             md: '52px',
-    //             lg: '52px',
-    //           },
-    //           gridTemplateColumns: {
-    //             xs: '1fr',
-    //             sm: '1fr 1fr',
-    //             md: '1fr 1fr 1fr',
-    //             lg: '1fr 1fr 1fr 1fr',
-    //             xl: '1fr 1fr 1fr 1fr 1fr 1fr',
-    //           },
-    //         }}
-    //       >
-    //         {shows.map((show: ShowModel) => (
-    //           <ShowCard
-    //             key={show.showId}
-    //             show={show}
-    //             isMobile={props.isMobile}
-    //             onSelectShow={handleSelectShow}
-    //             onAddNextEpisode={handleAddNextEpisode}
-    //             onDeleteShow={handleDelete}
-    //             onAddOneDay={handleAddOneDay}
-    //             onSubtractOneDay={handleSubtractOneDay}
-    //             onBingeWatchShow={handleBingeWatchShow}
-    //           />
-    //         ))}
-    //       </Box>
-    //       <Stack
-    //         alignItems="center"
-    //         sx={{
-    //           position: 'fixed',
-    //           bottom: 0,
-    //           right: 0,
-    //           left: 0,
-    //           height: {
-    //             xs: 54,
-    //             sm: 42,
-    //           },
-    //           //paddingTop: 7,
-    //           backgroundColor: theme.palette.secondary.dark,
-    //         }}
-    //       >
-    //         <Pagination
-    //           sx={{
-    //             paddingTop: '7px',
-    //           }}
-    //           size="small"
-    //           siblingCount={siblingCount}
-    //           count={pages}
-    //           page={page}
-    //           onChange={handlePageOnChange}
-    //         />
-    //       </Stack>
-    //       {isSearching ? (
-    //         <>
-    //           <ListSearch
-    //             searchText={searchText}
-    //             onCancelSearch={handleToggleSearch}
-    //             onSearchUpdate={handleSearchUpdate}
-    //           />
-    //         </>
-    //       ) : (
-    //         <>
-    //           <Fab
-    //             sx={{
-    //               position: 'fixed',
-    //               bottom: placements.fab.firstIconBottom,
-    //               right: placements.fab.right,
-    //             }}
-    //             color="success"
-    //             aria-label="add"
-    //             onClick={handleAddNew}
-    //           >
-    //             <AddIcon />
-    //           </Fab>
-    //           <Fab
-    //             sx={{
-    //               position: 'fixed',
-    //               bottom: placements.fab.secondIconBottom,
-    //               right: placements.fab.right,
-    //             }}
-    //             color="info"
-    //             aria-label="add"
-    //             onClick={handleToggleSearch}
-    //           >
-    //             <SearchIcon />
-    //           </Fab>
-    //         </>
-    //       )}
-    //     </Box>
-    //   </>
-    // );
-  }
 
   return (
     <>
       {body}
+      {editShow}
+      {createShow}
+      {bingeShow}
       <ErrorMessage
         open={hasError}
         onClose={handleCloseErrors}

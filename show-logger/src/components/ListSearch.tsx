@@ -1,6 +1,7 @@
-import { Box, Fab, InputAdornment, TextField, useTheme } from '@mui/material';
+import { Box, Fab, InputAdornment, useTheme } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { SLTextField } from './Common/SLTextField';
 
 interface ListSearchProps {
   searchText: string;
@@ -27,20 +28,18 @@ export const ListSearch = (props: ListSearchProps) => {
     width: '90%',
   };
 
-  const onChange = (e: any) => {
+  const handleChange = (e: any) => {
     props.onSearchUpdate(e.target.value);
   };
 
   return (
     <Box sx={boxSx}>
-      <TextField
+      <SLTextField
         sx={textfieldSx}
         label="Search"
         autoFocus
         value={props.searchText}
-        onChange={e => {
-          onChange(e);
-        }}
+        onChange={handleChange}
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">

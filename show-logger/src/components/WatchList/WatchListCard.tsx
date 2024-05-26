@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import nia_landscape from './../../assets/nia_landscape.png';
+import { SLIconButton } from '../Common/SLIconButton';
 
 interface WatchListCardProps {
   watchlist: WatchListModel;
@@ -18,7 +19,6 @@ export const WatchListCard = (props: WatchListCardProps) => {
 
   const hasInfoUrl = !!props.watchlist.infoUrl;
 
-  const sxButton = { border: 1, borderRadius: '25%' };
   const episodeName = (
     <a target="_blank" href={props.watchlist.infoUrl}>
       {props.watchlist.episodeName}
@@ -124,33 +124,30 @@ export const WatchListCard = (props: WatchListCardProps) => {
               spacing={1}
               sx={{ justifyContent: 'center' }}
             >
-              <IconButton
+              <SLIconButton
                 aria-label="Edit"
-                sx={sxButton}
                 onClick={() => {
                   props.onSelectWatchList(props.watchlist);
                 }}
               >
                 <EditIcon style={{ color: 'cornflowerblue' }} />
-              </IconButton>
-              <IconButton
+              </SLIconButton>
+              <SLIconButton
                 aria-label="Move to Shows"
-                sx={sxButton}
                 onClick={() => {
                   props.onMoveToShows(props.watchlist.watchlistId);
                 }}
               >
                 <AddIcon style={{ color: 'lightgreen' }} />
-              </IconButton>
-              <IconButton
+              </SLIconButton>
+              <SLIconButton
                 aria-label="Delete"
-                sx={sxButton}
                 onClick={() => {
                   props.onDeleteWatchList(props.watchlist.watchlistId);
                 }}
               >
                 <DeleteIcon style={{ color: 'red' }} />
-              </IconButton>
+              </SLIconButton>
             </Stack>
           </Stack>
         </Grid>

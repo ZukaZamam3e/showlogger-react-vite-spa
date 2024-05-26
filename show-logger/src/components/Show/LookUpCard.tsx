@@ -2,12 +2,9 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
-  CardHeader,
   CardMedia,
   IconButton,
-  Paper,
   Stack,
   Typography,
   useTheme,
@@ -17,6 +14,7 @@ import { SearchResultsModel } from '../../models/SearchResultsModel';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import nia_portrait from './../../assets/nia_portrait.png';
+import { SLIconButton } from '../Common/SLIconButton';
 
 export interface LookUpCardProps {
   searchResult: SearchResultsModel;
@@ -25,7 +23,7 @@ export interface LookUpCardProps {
 
 export const LookUpCard = (props: LookUpCardProps) => {
   const theme = useTheme();
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
 
   let imageUrl = props.searchResult.imageUrl;
 
@@ -51,8 +49,6 @@ export const LookUpCard = (props: LookUpCardProps) => {
   const sxCardHeader = {
     minHeight: 66,
   };
-
-  const cardBody = {};
 
   return (
     <Card sx={{ display: 'flex' }}>
@@ -91,20 +87,18 @@ export const LookUpCard = (props: LookUpCardProps) => {
           alignItems="center"
           sx={{ pb: 2 }}
         >
-          <IconButton
+          <SLIconButton
             aria-label="Watch"
-            sx={sxButton}
             onClick={() => props.onWatchResult(props.searchResult, false)}
           >
             <VisibilityIcon />
-          </IconButton>
-          <IconButton
+          </SLIconButton>
+          <SLIconButton
             aria-label="Watchlist"
-            sx={sxButton}
             onClick={() => props.onWatchResult(props.searchResult, true)}
           >
             <QueryBuilderIcon />
-          </IconButton>
+          </SLIconButton>
         </Stack>
       </Box>
       <CardMedia component="img" sx={{ width: 151 }} image={imageUrl} />

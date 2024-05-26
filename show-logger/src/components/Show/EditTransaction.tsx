@@ -5,12 +5,12 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
-  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
+import { SLTextField } from '../Common/SLTextField';
+import { SLInput } from '../Common/SLInput';
 
 interface EditTransactionProps {
   transaction: TransactionModel;
@@ -19,7 +19,6 @@ interface EditTransactionProps {
 }
 
 export const EditTransaction = (props: EditTransactionProps) => {
-  const sxButton = { border: 1, borderRadius: '25%' };
   const deleteIndc = props.transaction.deleteTransaction;
 
   const deleteBorder = deleteIndc ? 'solid 1px red' : '';
@@ -29,19 +28,19 @@ export const EditTransaction = (props: EditTransactionProps) => {
       <Grid xs={12} sx={{ p: 0, borderRadius: 3, border: deleteBorder }}>
         <Grid container spacing={3} xs={12}>
           <Grid xs={12}>
-            <TextField
+            <SLTextField
               size={'small'}
               fullWidth
               name="item"
               label="Item"
               value={props.transaction.item}
-              onChange={e => {
+              onChange={(e:any) => {
                 props.onChange(props.transaction.transactionId, e);
               }}
             />
           </Grid>
           <Grid xs={4}>
-            <TextField
+            <SLTextField
               size={'small'}
               inputProps={{ style: { textAlign: 'right' } }}
               fullWidth
@@ -49,7 +48,7 @@ export const EditTransaction = (props: EditTransactionProps) => {
               type="number"
               label="Quantity"
               value={props.transaction.quantity}
-              onChange={e => {
+              onChange={(e:any) => {
                 props.onChange(props.transaction.transactionId, e);
               }}
             />
@@ -60,7 +59,7 @@ export const EditTransaction = (props: EditTransactionProps) => {
               <InputLabel htmlFor="outlined-adornment-amount">
                 Amount
               </InputLabel>
-              <OutlinedInput
+              <SLInput
                 size={'small'}
                 inputProps={{ style: { textAlign: 'right' } }}
                 startAdornment={
@@ -70,7 +69,7 @@ export const EditTransaction = (props: EditTransactionProps) => {
                 label="Cost"
                 type="number"
                 value={props.transaction.costAmt}
-                onChange={e => {
+                onChange={(e:any) => {
                   props.onChange(props.transaction.transactionId, e);
                 }}
               />
@@ -82,19 +81,10 @@ export const EditTransaction = (props: EditTransactionProps) => {
               icon={<DeleteIcon />}
               name="deleteTransaction"
               value={props.transaction.deleteTransaction}
-              onChange={e => {
+              onChange={(e:any) => {
                 props.onChange(props.transaction.transactionId, e);
               }}
             />
-            {/* <IconButton
-                        aria-label="Delete"
-                        sx={sxButton}
-                        size={'small'}
-                        onChange={(e) => { props.onChange(props.transaction.transactionId, e)}}
-                        //onClick={() => { props.onDeleteShow(props.show.showId) }}
-                    >
-                        <DeleteIcon />
-                    </IconButton> */}
           </Grid>
           {props.transaction.deleteTransaction && (
             <Grid xs={12} sx={{ color: 'red' }}>

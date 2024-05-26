@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  Card,
   Paper,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
@@ -13,6 +11,7 @@ import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../config/apiConfig';
 import { SearchResultsModel } from '../../models/SearchResultsModel';
 import { LookUpCard } from './LookUpCard';
+import { SLTextField } from '../Common/SLTextField';
 
 export interface ShowLookUpProps {
   onWatchResult: (searchResult: SearchResultsModel, watchlist: boolean) => void;
@@ -74,13 +73,12 @@ export const ShowLookUp = (props: ShowLookUpProps) => {
           >
             <Grid container spacing={3} alignItems="center">
               <Grid xs={12}>
-                <TextField
+                <SLTextField
                   fullWidth
                   name="showName"
                   label="Name"
                   defaultValue={name}
-                  // defaultValue={show.showName}
-                  onChange={e => {
+                  onChange={(e:any) => {
                     setName(e.target.value);
                   }}
                 />

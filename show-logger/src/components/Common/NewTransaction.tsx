@@ -6,7 +6,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import ListIcon from '@mui/icons-material/List';
@@ -14,6 +13,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { formatter } from '../../models/ShowModel';
+import { SLTextField } from './SLTextField';
+import { SLIconButton } from './SLIconButton';
 
 interface NewTransactionProps {
   transactionItems: TransactionItemModel[];
@@ -39,7 +40,7 @@ export const NewTransaction = (props: NewTransactionProps) => {
     showTransactionType = props.showTransactionType;
   }
 
-  const sxButton = { border: 1, borderRadius: '25%' };
+  
   const [optionSelect, setOptionSelect] = useState(true);
   const [selectedItem, setSelectedItem] = useState('');
 
@@ -95,24 +96,23 @@ export const NewTransaction = (props: NewTransactionProps) => {
               </Select>
             </FormControl>
           ) : (
-            <TextField
+            <SLTextField
               fullWidth
               name="item"
               label="Item"
-              onChange={event => setSelectedItem(event.target.value)}
+              onChange={(event:any) => setSelectedItem(event.target.value)}
             />
           )}
         </Grid>
         {props.textboxEnabled && (
           <Grid xs={2}>
-            <IconButton
+            <SLIconButton
               aria-label="Toggle"
-              sx={sxButton}
               size={'large'}
               onClick={handleOptionSelectToggle}
             >
               {optionSelect ? <ListIcon /> : <EditIcon />}
-            </IconButton>
+            </SLIconButton>
           </Grid>
         )}
         <Grid xs={12}>

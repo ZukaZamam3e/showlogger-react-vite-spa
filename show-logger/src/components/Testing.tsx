@@ -28,7 +28,7 @@ export const Testing = () => {
               justifyContent={'center'}
             >
               <Grid xs={6}>
-                <TextField
+                <SLTextField
                   name="showName"
                   label="Name"
                   defaultValue={'Test'}
@@ -36,61 +36,61 @@ export const Testing = () => {
                 />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
               <Grid xs={6}>
-                <TextField name="showName" label="Name" defaultValue={'Test'} />
+                <SLTextField name="showName" label="Name" defaultValue={'Test'} />
               </Grid>
             </Grid>
           </Grid>
 
           <Grid xs={12}>
-            <TextField name="showName" label="Name" defaultValue={'Test'} />
+            <SLTextField name="showName" label="Name" defaultValue={'Test'} />
           </Grid>
           <Grid xs={12}>
-            <TextField name="showName" label="Name" defaultValue={'Test'} />
+            <SLTextField name="showName" label="Name" defaultValue={'Test'} />
           </Grid>
           <Grid xs={12}>
-            <TextField name="showName" label="Name" defaultValue={'Test'} />
+            <SLTextField name="showName" label="Name" defaultValue={'Test'} />
           </Grid>
         </Grid>
       </Paper>
