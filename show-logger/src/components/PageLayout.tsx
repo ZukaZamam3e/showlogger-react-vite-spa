@@ -1,18 +1,9 @@
-import {
-  AuthenticatedTemplate,
-  MsalAuthenticationTemplate,
-} from '@azure/msal-react';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { NavigationBar } from './NavigationBar';
-import { Box, Container, Paper } from '@mui/material';
-// import { loginRequest, protectedResources } from "../authConfig";
-// import useFetchWithMsal from '../hooks/useFetchWithMsal';
-import { InteractionType } from '@azure/msal-browser';
-import { Profile } from './Profile';
+import { Box, Container } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useFetch } from '../hooks/useFetchOAProjectsAPI';
-import { protectedResources } from '../config/apiConfig';
-// import useFetchWithAuth0 from "../hooks/useFetchWithAuth0";
+import { Loading } from './Loading';
+import { ErrorMessage } from './ErrorMessage';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -20,15 +11,6 @@ interface PageLayoutProps {
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
   const { isAuthenticated } = useAuth0();
-  const { getData } = useFetch();
-
-  const fetchData = async () => {
-    await getData(protectedResources.oaprojectsApi.authEndpoint + '/login');
-  };
-
-  useEffect(() => {
-    fetchData();
-  });
 
   return (
     <Box
@@ -58,6 +40,8 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         >
           {isAuthenticated ? children : <div>need to authenticate</div>}
         </Box>
+        <Loading />
+        <ErrorMessage />
       </Container>
     </Box>
   );

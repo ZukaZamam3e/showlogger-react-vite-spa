@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
-import { ErrorMessage } from '../ErrorMessage';
-import { Backdrop, CircularProgress, Fab } from '@mui/material';
+import { Fab } from '@mui/material';
 import { YearStatCard } from './YearStatCard';
 import { YearStatModel } from '../../models/YearStatModel';
 import { List } from '../List';
@@ -10,13 +9,17 @@ import { YearStatDataModel } from '../../models/YearStatDataModel';
 import { YearStatDataCard } from './YearStatDataCard';
 import { placements } from '../../config/placementConfig';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { useDispatch } from 'react-redux';
+import { startLoading, stopLoading } from '../../slices/isLoadingSlice';
+import { showErrors } from '../../slices/errorsSlice';
 
 interface YearStatsTabProps {
   isMobile: boolean;
 }
 
 export const YearStatsTab = (props: YearStatsTabProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const { getData } = useFetch();
   const [yearStats, setYearStats] = useState<YearStatModel[]>([]);
   const [yearStatsCount, setYearStatsCount] = useState<number>(0);
@@ -26,12 +29,10 @@ export const YearStatsTab = (props: YearStatsTabProps) => {
   const [yearStatData, setYearStatData] = useState<YearStatDataModel[]>([]);
   const [yearStatDataCount, setYearStatDataCount] = useState<number>(0);
 
-  const [errors, setErrors] = useState<string[]>([]);
-  const [hasError, setHasError] = useState(false);
   const take = 18;
 
   const get = async (page: number, search: string) => {
-    setIsLoading(true);
+    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.statEndpoint}/getyearstats?offset=${offset}&take=${take}&search=${search}`,
@@ -41,12 +42,11 @@ export const YearStatsTab = (props: YearStatsTabProps) => {
           setYearStats(json.model.yearStats);
           setYearStatsCount(json.model.count);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
@@ -59,11 +59,6 @@ export const YearStatsTab = (props: YearStatsTabProps) => {
     setYearStatDataCount(yearStat.data.length);
     setName(yearStat.name);
     setYear(yearStat.year);
-  };
-
-  const handleCloseErrors = () => {
-    setErrors([]);
-    setHasError(false);
   };
 
   const handleCancelData = () => {
@@ -178,17 +173,5 @@ export const YearStatsTab = (props: YearStatsTabProps) => {
     );
   }
 
-  return (
-    <>
-      {body}
-      <ErrorMessage
-        open={hasError}
-        onClose={handleCloseErrors}
-        errors={errors}
-      />
-      <Backdrop open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
-  );
+  return <>{body}</>;
 };

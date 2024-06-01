@@ -74,7 +74,6 @@ export const Shows = () => {
   ];
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log(newValue);
     setSelectedTab(newValue);
   };
 

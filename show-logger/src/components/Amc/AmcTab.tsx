@@ -161,61 +161,60 @@ export const AmcTab = (props: AmcTabProps) => {
     setEditing({ show: true, editingTransaction: createNewTransaction() });
   };
 
-  let body: ReactNode;
+  const sxBody = {
+    display: !editing.show ? 'initial' : 'none',
+  };
 
-  if (editing.show) {
-    body = (
-      <>
-        <EditAmcTransaction
-          transaction={editing.editingTransaction}
-          transactionTypeIds={transactionTypeIds}
-          transactionItems={transactionItems}
-          onTransactionSave={handleTransactionSave}
-          onCancelSelectedTransaction={handleCancelSelectedTransaction}
-        />
-      </>
-    );
-  } else {
-    body = (
-      <>
-        {!hideAddButton && (
-          <Fab
-            sx={{
-              position: 'fixed',
-              bottom: placements.fab.secondIconBottom,
-              right: placements.fab.right,
-            }}
-            color="success"
-            aria-label="add"
-            onClick={handleAddNew}
-          >
-            <AddIcon />
-          </Fab>
-        )}
-        <List
-          count={transactionCount}
-          isMobile={props.isMobile}
-          onGet={get}
-          clearSearch={clearSearch}
-          onToggleSearch={handleToggleSearch}
-          take={take}
+  const editTransaction = editing.show && (
+    <EditAmcTransaction
+      transaction={editing.editingTransaction}
+      transactionTypeIds={transactionTypeIds}
+      transactionItems={transactionItems}
+      onTransactionSave={handleTransactionSave}
+      onCancelSelectedTransaction={handleCancelSelectedTransaction}
+    />
+  );
+
+  const body = (
+    <div style={sxBody}>
+      {!hideAddButton && (
+        <Fab
+          sx={{
+            position: 'fixed',
+            bottom: placements.fab.secondIconBottom,
+            right: placements.fab.right,
+          }}
+          color="success"
+          aria-label="add"
+          onClick={handleAddNew}
         >
-          {transactions.map((transaction: TransactionModel) => (
-            <TransactionCard
-              key={transaction.transactionId}
-              transaction={transaction}
-              onSelectTransaction={handleSelectTransaction}
-              onDeleteTransaction={handleDeleteTransaction}
-            />
-          ))}
-        </List>
-      </>
-    );
-  }
+          <AddIcon />
+        </Fab>
+      )}
+      <List
+        count={transactionCount}
+        isMobile={props.isMobile}
+        onGet={get}
+        clearSearch={clearSearch}
+        onToggleSearch={handleToggleSearch}
+        take={take}
+      >
+        {transactions.map((transaction: TransactionModel) => (
+          <TransactionCard
+            key={transaction.transactionId}
+            transaction={transaction}
+            onSelectTransaction={handleSelectTransaction}
+            onDeleteTransaction={handleDeleteTransaction}
+          />
+        ))}
+      </List>
+    </div>
+  );
 
   return (
     <>
       {body}
+      {editTransaction}
       <ErrorMessage
         open={hasError}
         onClose={handleCloseErrors}

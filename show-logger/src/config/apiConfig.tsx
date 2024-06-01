@@ -3,6 +3,7 @@ export const protectedResources = {
     audience: 'https://oaprojects-api.oaprojects.net',
     weatherEndpoint: import.meta.env.VITE_APP_API_URL + '/WeatherForecast',
     authEndpoint: import.meta.env.VITE_APP_API_URL + '/auth',
+    loginEndpoint: import.meta.env.VITE_APP_API_URL + '/login',
     showEndpoint: import.meta.env.VITE_APP_API_URL + '/show',
     statEndpoint: import.meta.env.VITE_APP_API_URL + '/stat',
     infoEndpoint: import.meta.env.VITE_APP_API_URL + '/info',

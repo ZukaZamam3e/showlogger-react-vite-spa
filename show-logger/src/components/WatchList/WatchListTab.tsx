@@ -1,8 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
-import { ErrorMessage } from '../ErrorMessage';
-import { Backdrop, CircularProgress } from '@mui/material';
 import { WatchListCard } from './WatchListCard';
 import {
   WatchListModel,
@@ -11,19 +9,20 @@ import {
 import { List } from '../List';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import { EditWatchList } from './EditWatchList';
+import { useDispatch } from 'react-redux';
+import { startLoading, stopLoading } from '../../slices/isLoadingSlice';
+import { showErrors } from '../../slices/errorsSlice';
 
 interface WatchListTabProps {
   isMobile: boolean;
 }
 
 export const WatchListTab = (props: WatchListTabProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const { getData, postData } = useFetch();
   const [watchList, setWatchList] = useState<WatchListModel[]>([]);
   const [watchListCount, setWatchListCount] = useState<number>(0);
   const [showTypeIds, setShowTypeIds] = useState<CodeValueModel[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [hasError, setHasError] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
   const [editing, setEditing] = useState({
     show: false,
@@ -36,7 +35,7 @@ export const WatchListTab = (props: WatchListTabProps) => {
   }
 
   const load = async () => {
-    setIsLoading(true);
+    dispatch(startLoading());
     await getData(
       `${protectedResources.oaprojectsApi.watchlistEnpoint}/load?take=${take}`,
     )
@@ -46,17 +45,16 @@ export const WatchListTab = (props: WatchListTabProps) => {
           setWatchListCount(json.model.count);
           setShowTypeIds(json.model.showTypeIds);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const get = async (page: number, search: string) => {
-    setIsLoading(true);
+    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.watchlistEnpoint}/get?offset=${offset}&take=${take}&search=${search}`,
@@ -66,22 +64,16 @@ export const WatchListTab = (props: WatchListTabProps) => {
           setWatchList(json.model.watchLists);
           setWatchListCount(json.model.count);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
   useEffect(() => {
     load();
   }, []);
-
-  const handleCloseErrors = () => {
-    setErrors([]);
-    setHasError(false);
-  };
 
   const handleSelectWatchList = (watchlist: WatchListModel) => {
     setEditing({ show: true, editingWatchList: watchlist });
@@ -89,7 +81,7 @@ export const WatchListTab = (props: WatchListTabProps) => {
 
   const handleMoveToShows = async (watchlistId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.watchlistEnpoint}/movetoshows`,
       {
@@ -101,19 +93,18 @@ export const WatchListTab = (props: WatchListTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleDeleteWatchList = async (watchlistId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.watchlistEnpoint}/delete`,
       {
@@ -124,20 +115,19 @@ export const WatchListTab = (props: WatchListTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
 
     await get(0, '');
   };
 
   const handleWatchlistSave = async (watchlist: WatchListModel) => {
-    setIsLoading(true);
+    dispatch(startLoading());
 
     let url = `${protectedResources.oaprojectsApi.watchlistEnpoint}/save`;
 
@@ -148,15 +138,14 @@ export const WatchListTab = (props: WatchListTabProps) => {
 
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(error => {
         console.log(error);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
@@ -168,22 +157,21 @@ export const WatchListTab = (props: WatchListTabProps) => {
     load();
   }, []);
 
-  let body: ReactNode;
+  const sxBody = {
+    display: !editing.show ? 'initial' : 'none',
+  };
 
-  if (editing.show) {
-    body = (
-      <>
-        <EditWatchList
-          watchlist={editing.editingWatchList}
-          showTypeIds={showTypeIds}
-          onCancelSelectedWatchlist={handleCancelSelectedWatchlist}
-          onWatchlistSave={handleWatchlistSave}
-          //   searchSkippedOrEdit={true}
-        />
-      </>
-    );
-  } else {
-    body = (
+  const editShow = editing.show && (
+    <EditWatchList
+      watchlist={editing.editingWatchList}
+      showTypeIds={showTypeIds}
+      onCancelSelectedWatchlist={handleCancelSelectedWatchlist}
+      onWatchlistSave={handleWatchlistSave}
+    />
+  );
+
+  const body = (
+    <div style={sxBody}>
       <List
         count={watchListCount}
         isMobile={props.isMobile}
@@ -201,20 +189,13 @@ export const WatchListTab = (props: WatchListTabProps) => {
           />
         ))}
       </List>
-    );
-  }
+    </div>
+  );
 
   return (
     <>
       {body}
-      <ErrorMessage
-        open={hasError}
-        onClose={handleCloseErrors}
-        errors={errors}
-      />
-      <Backdrop open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {editShow}
     </>
   );
 };

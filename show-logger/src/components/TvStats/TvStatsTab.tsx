@@ -2,27 +2,26 @@ import { useEffect, useState } from 'react';
 import { TvStatModel } from '../../models/TvStatModel';
 import { protectedResources } from '../../config/apiConfig';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
-import { ErrorMessage } from '../ErrorMessage';
-import { Backdrop, CircularProgress } from '@mui/material';
 import { TvStatCard } from './TvStatCard';
 import { List } from '../List';
+import { useDispatch } from 'react-redux';
+import { startLoading, stopLoading } from '../../slices/isLoadingSlice';
+import { showErrors } from '../../slices/errorsSlice';
 
 interface TvStatsTabProps {
   isMobile: boolean;
 }
 
 export const TvStatsTab = (props: TvStatsTabProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const { getData, postData } = useFetch();
   const [tvStats, setTvStats] = useState<TvStatModel[]>([]);
   const [tvStatsCount, setTvStatsCount] = useState<number>(0);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [hasError, setHasError] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
   const take = 12;
 
   const get = async (page: number, search: string) => {
-    setIsLoading(true);
+    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.statEndpoint}/gettvstats?offset=${offset}&take=${take}&search=${search}`,
@@ -32,19 +31,18 @@ export const TvStatsTab = (props: TvStatsTabProps) => {
           setTvStats(json.model.tvStats);
           setTvStatsCount(json.model.count);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleAddNextEpisode = async (showId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/addNextEpisode`,
       {
@@ -57,13 +55,12 @@ export const TvStatsTab = (props: TvStatsTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
 
     await get(0, '');
@@ -73,36 +70,21 @@ export const TvStatsTab = (props: TvStatsTabProps) => {
     get(0, '');
   }, []);
 
-  const handleCloseErrors = () => {
-    setErrors([]);
-    setHasError(false);
-  };
-
   return (
-    <>
-      <List
-        count={tvStatsCount}
-        isMobile={props.isMobile}
-        onGet={get}
-        clearSearch={clearSearch}
-        take={take}
-      >
-        {tvStats.map((tvStat: TvStatModel) => (
-          <TvStatCard
-            key={tvStat.showId}
-            tvStat={tvStat}
-            onAddNextEpisode={handleAddNextEpisode}
-          />
-        ))}
-      </List>
-      <ErrorMessage
-        open={hasError}
-        onClose={handleCloseErrors}
-        errors={errors}
-      />
-      <Backdrop open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
+    <List
+      count={tvStatsCount}
+      isMobile={props.isMobile}
+      onGet={get}
+      clearSearch={clearSearch}
+      take={take}
+    >
+      {tvStats.map((tvStat: TvStatModel) => (
+        <TvStatCard
+          key={tvStat.showId}
+          tvStat={tvStat}
+          onAddNextEpisode={handleAddNextEpisode}
+        />
+      ))}
+    </List>
   );
 };

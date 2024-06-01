@@ -1,33 +1,37 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
+import { hideErrors } from '../slices/errorsSlice';
+import { useDispatch } from 'react-redux';
 
-export interface ErrorMessageProps {
-    open: boolean;
-    onClose: () => void;
-    errors: string[];
-}
+export const ErrorMessage = () => {
+  const errors: string[] = useSelector((state: any) => state.errors.value);
+  const dispatch = useDispatch();
 
-export const ErrorMessage = (props: ErrorMessageProps) => {
-    return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-        >
-            <DialogTitle>
-                {"Error"}
-            </DialogTitle>
-            <DialogContent>
-                {props.errors.map(((error: string, index: number) => (
-                    <div key={index}>{error}</div>
-                )))}
-            </DialogContent>
-            <DialogActions>
-                <Button
-                    onClick={props.onClose}
-                    autoFocus
-                >
-                    Close
-                </Button>
-            </DialogActions>
-        </Dialog>
-    )
-}
+  const showErrors = errors.length > 0;
+
+  const handleClose = () => {
+    dispatch(hideErrors());
+  };
+
+  return (
+    <Dialog open={showErrors} onClose={handleClose}>
+      <DialogTitle>{'Error'}</DialogTitle>
+      <DialogContent>
+        {errors.map((error: string, index: number) => (
+          <div key={index}>{error}</div>
+        ))}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};

@@ -1,8 +1,8 @@
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../config/apiConfig';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShowModel, createNewShow } from '../../models/ShowModel';
-import { Backdrop, CircularProgress, Fab, useTheme } from '@mui/material';
+import { Fab, useTheme } from '@mui/material';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import AddIcon from '@mui/icons-material/Add';
 import { ShowCard } from './ShowCard';
@@ -10,18 +10,20 @@ import { EditShow } from './EditShow';
 import { TransactionItemModel } from '../../models/TransactionItemModel';
 import { NewShow } from './NewShow';
 import { AddWatchFromSearchModel } from '../../models/AddWatchFromSearchModel';
-import { ErrorMessage } from '../ErrorMessage';
 import { BingeWatch } from './BingeWatch';
 import { placements } from '../../config/placementConfig';
 import { BingeWatchModel } from '../../models/BingeWatchModel';
 import { List } from '../List';
+import { startLoading, stopLoading } from '../../slices/isLoadingSlice';
+import { showErrors } from '../../slices/errorsSlice';
+import { useDispatch } from 'react-redux';
 
 interface ShowsTabProps {
   isMobile: boolean;
 }
 
 export const ShowsTab = (props: ShowsTabProps) => {
-  const theme = useTheme();
+  const dispatch = useDispatch();
 
   const { getData, postData } = useFetch();
   const [shows, setShows] = useState<ShowModel[]>([]);
@@ -30,11 +32,6 @@ export const ShowsTab = (props: ShowsTabProps) => {
   const [transactionItems, setTransactionItems] = useState<
     TransactionItemModel[]
   >([]);
-  const [transactionTypeIds, setTransactionTypeIds] = useState<
-    CodeValueModel[]
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
   const [hideAddButton, setHideAddButton] = useState(false);
 
@@ -53,12 +50,10 @@ export const ShowsTab = (props: ShowsTabProps) => {
     bingeWatchEditShow: createNewShow(),
   });
 
-  const [errors, setErrors] = useState<string[]>([]);
-
   const take = 12;
 
   const load = async () => {
-    setIsLoading(true);
+    dispatch(startLoading());
     await getData(
       `${protectedResources.oaprojectsApi.showEndpoint}/load?take=${take}`,
     )
@@ -67,20 +62,18 @@ export const ShowsTab = (props: ShowsTabProps) => {
           setShows(json.model.shows);
           setShowCount(json.model.count);
           setShowTypeIds(json.model.showTypeIds);
-          setTransactionTypeIds(json.model.transactionTypeIds);
           setTransactionItems(json.model.transactionItems);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const get = async (page: number, search: string) => {
-    setIsLoading(true);
+    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.showEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
@@ -90,12 +83,11 @@ export const ShowsTab = (props: ShowsTabProps) => {
           setShows(json.model.shows);
           setShowCount(json.model.count);
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
@@ -103,7 +95,7 @@ export const ShowsTab = (props: ShowsTabProps) => {
     show: ShowModel,
     searchSkippedOrEdit: boolean,
   ) => {
-    setIsLoading(true);
+    dispatch(startLoading());
 
     let endpoint = protectedResources.oaprojectsApi.showEndpoint;
     let hook = 'save';
@@ -147,21 +139,21 @@ export const ShowsTab = (props: ShowsTabProps) => {
 
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          console.log(json);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(error => {
         console.log(error);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleAddNextEpisode = async (showId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/addNextEpisode`,
       {
@@ -173,19 +165,18 @@ export const ShowsTab = (props: ShowsTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleDelete = async (showId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(`${protectedResources.oaprojectsApi.showEndpoint}/delete`, {
       showId: showId,
     })
@@ -193,19 +184,18 @@ export const ShowsTab = (props: ShowsTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleAddOneDay = async (showId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/addoneday`,
       {
@@ -216,19 +206,18 @@ export const ShowsTab = (props: ShowsTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleSubtractOneDay = async (showId: number) => {
     setClearSearch(prev => !prev);
-    setIsLoading(true);
+    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.showEndpoint}/subtractoneday`,
       {
@@ -239,18 +228,17 @@ export const ShowsTab = (props: ShowsTabProps) => {
         if (json.errors.length == 0) {
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {})
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
   const handleBingeSave = async (binge: BingeWatchModel) => {
-    setIsLoading(true);
+    dispatch(startLoading());
 
     let url = `${protectedResources.oaprojectsApi.showEndpoint}/addrange`;
 
@@ -261,15 +249,14 @@ export const ShowsTab = (props: ShowsTabProps) => {
 
           await get(0, '');
         } else {
-          setHasError(true);
-          setErrors(json.errors);
+          dispatch(showErrors(json.errors));
         }
       })
       .catch(error => {
         console.log(error);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatch(stopLoading());
       });
   };
 
@@ -303,121 +290,86 @@ export const ShowsTab = (props: ShowsTabProps) => {
     setCreating({ show: true, creatingShow: newShow });
   };
 
-  const handleCloseErrors = () => {
-    setErrors([]);
-    setHasError(false);
-  };
-
   const handleToggleSearch = () => {
     setHideAddButton(prev => !prev);
   };
 
   const sxBody = {
-    display: !editing.show && !creating.show && !bingeWatchEdit.show ? "initial" : "none"
+    display:
+      !editing.show && !creating.show && !bingeWatchEdit.show
+        ? 'initial'
+        : 'none',
   };
 
-  const editShow = editing.show && <EditShow
-    show={editing.editingShow}
-    showTypeIds={showTypeIds}
-    transactionItems={transactionItems}
-    onCancelSelectedShow={handleCancelSelectedShow}
-    onShowSave={handleShowSave}
-    searchSkippedOrEdit={true}
-  />
+  const editShow = editing.show && (
+    <EditShow
+      show={editing.editingShow}
+      showTypeIds={showTypeIds}
+      transactionItems={transactionItems}
+      onCancelSelectedShow={handleCancelSelectedShow}
+      onShowSave={handleShowSave}
+      searchSkippedOrEdit={true}
+    />
+  );
 
-  const createShow = creating.show && <NewShow
-  show={createNewShow()}
-  showTypeIds={showTypeIds}
-  transactionItems={transactionItems}
-  onCancelSelectedShow={handleCancelCreatingShow}
-  onShowSave={handleShowSave}
-/>
+  const createShow = creating.show && (
+    <NewShow
+      show={createNewShow()}
+      showTypeIds={showTypeIds}
+      transactionItems={transactionItems}
+      onCancelSelectedShow={handleCancelCreatingShow}
+      onShowSave={handleShowSave}
+    />
+  );
 
-const bingeShow = bingeWatchEdit.show && <BingeWatch
-show={bingeWatchEdit.bingeWatchEditShow}
-onBingeSave={handleBingeSave}
-onCancelBinge={handleCancelBingeWatchShow}
-/>;
+  const bingeShow = bingeWatchEdit.show && (
+    <BingeWatch
+      show={bingeWatchEdit.bingeWatchEditShow}
+      onBingeSave={handleBingeSave}
+      onCancelBinge={handleCancelBingeWatchShow}
+    />
+  );
 
-  // if (editing.show) {
-  //   body = (
-  //     <>
-  //       <EditShow
-  //         show={editing.editingShow}
-  //         showTypeIds={showTypeIds}
-  //         transactionItems={transactionItems}
-  //         onCancelSelectedShow={handleCancelSelectedShow}
-  //         onShowSave={handleShowSave}
-  //         searchSkippedOrEdit={true}
-  //       />
-  //     </>
-  //   );
-  // } else 
-  
-  // if (creating.show) {
-  //   body = (
-  //     <NewShow
-  //       show={createNewShow()}
-  //       showTypeIds={showTypeIds}
-  //       transactionItems={transactionItems}
-  //       onCancelSelectedShow={handleCancelCreatingShow}
-  //       onShowSave={handleShowSave}
-  //     />
-  //   );
-  // } else 
-  
-  // if (bingeWatchEdit.show) {
-  //   body = (
-  //     <BingeWatch
-  //       show={bingeWatchEdit.bingeWatchEditShow}
-  //       onBingeSave={handleBingeSave}
-  //       onCancelBinge={handleCancelBingeWatchShow}
-  //     />
-  //   );
-  // } else {
-
-    const body = (
-      <div
-        style={sxBody}
-      >
-        {!hideAddButton && (
-          <Fab
-            sx={{
-              position: 'fixed',
-              bottom: placements.fab.secondIconBottom,
-              right: placements.fab.right,
-            }}
-            color="success"
-            aria-label="add"
-            onClick={handleAddNew}
-          >
-            <AddIcon />
-          </Fab>
-        )}
-        <List
-          count={showCount}
-          isMobile={props.isMobile}
-          onGet={get}
-          take={take}
-          clearSearch={clearSearch}
-          onToggleSearch={handleToggleSearch}
+  const body = (
+    <div style={sxBody}>
+      {!hideAddButton && (
+        <Fab
+          sx={{
+            position: 'fixed',
+            bottom: placements.fab.secondIconBottom,
+            right: placements.fab.right,
+          }}
+          color="success"
+          aria-label="add"
+          onClick={handleAddNew}
         >
-          {shows.map((show: ShowModel) => (
-            <ShowCard
-              key={show.showId}
-              show={show}
-              isMobile={props.isMobile}
-              onSelectShow={handleSelectShow}
-              onAddNextEpisode={handleAddNextEpisode}
-              onDeleteShow={handleDelete}
-              onAddOneDay={handleAddOneDay}
-              onSubtractOneDay={handleSubtractOneDay}
-              onBingeWatchShow={handleBingeWatchShow}
-            />
-          ))}
-        </List>
-      </div>
-    );
+          <AddIcon />
+        </Fab>
+      )}
+      <List
+        count={showCount}
+        isMobile={props.isMobile}
+        onGet={get}
+        take={take}
+        clearSearch={clearSearch}
+        onToggleSearch={handleToggleSearch}
+      >
+        {shows.map((show: ShowModel) => (
+          <ShowCard
+            key={show.showId}
+            show={show}
+            isMobile={props.isMobile}
+            onSelectShow={handleSelectShow}
+            onAddNextEpisode={handleAddNextEpisode}
+            onDeleteShow={handleDelete}
+            onAddOneDay={handleAddOneDay}
+            onSubtractOneDay={handleSubtractOneDay}
+            onBingeWatchShow={handleBingeWatchShow}
+          />
+        ))}
+      </List>
+    </div>
+  );
 
   return (
     <>
@@ -425,14 +377,6 @@ onCancelBinge={handleCancelBingeWatchShow}
       {editShow}
       {createShow}
       {bingeShow}
-      <ErrorMessage
-        open={hasError}
-        onClose={handleCloseErrors}
-        errors={errors}
-      />
-      <Backdrop open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </>
   );
 };
