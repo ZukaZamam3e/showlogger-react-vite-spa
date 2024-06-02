@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-
 import { HomePage } from './HomePage/HomePage';
-import { Shows } from './Show/Shows';
+import { Shows } from './Shows/Shows';
 import { LandingPage } from './LandingPage';
+import { Books } from './Books/Books';
 
 export const Pages = () => {
   return (
@@ -15,10 +15,6 @@ export const Pages = () => {
       <Route path="/friends" element={<Friends />} />
     </Routes>
   );
-};
-
-export const Books = () => {
-  return <>Books</>;
 };
 
 export const Info = () => {

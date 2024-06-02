@@ -1,16 +1,32 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { NavigationBar } from './NavigationBar';
 import { Box, Container } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Loading } from './Loading';
-import { ErrorMessage } from './ErrorMessage';
+import { ErrorMessage } from './Common/ErrorMessage';
+import { updateIsMobile } from '../slices/isMobileSlice';
+import { useDispatch } from 'react-redux';
 
 interface PageLayoutProps {
   children: ReactNode;
 }
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
+  const dispatch = useDispatch();
+
   const { isAuthenticated } = useAuth0();
+
+  useEffect(() => {
+    detectWindowSize();
+  }, [window.screen.width]);
+
+  const detectWindowSize = () => {
+    window.innerWidth <= 760
+      ? dispatch(updateIsMobile(true))
+      : dispatch(updateIsMobile(false));
+  };
+
+  window.onresize = detectWindowSize;
 
   return (
     <Box

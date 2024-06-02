@@ -10,5 +10,6 @@ export const protectedResources = {
     watchlistEnpoint: import.meta.env.VITE_APP_API_URL + '/watchlist',
     friendHistoryEnpoint: import.meta.env.VITE_APP_API_URL + '/friendhistory',
     transactionEnpoint: import.meta.env.VITE_APP_API_URL + '/transaction',
+    bookEndpoint: import.meta.env.VITE_APP_API_URL + '/book',
   },
 };

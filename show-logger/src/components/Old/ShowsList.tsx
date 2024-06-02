@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import { ShowModel, createNewShow } from '../../models/ShowModel';
 import { protectedResources } from '../../authConfig';
-import { EditShow } from '../Show/EditShow';
+import { EditShow } from '../Shows/Show/EditShow';
 import { Backdrop, CircularProgress, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import { ShowListSearch } from '../ListSearch';
 import Grid from '@mui/material/Unstable_Grid2';
-import { ShowCard } from '../Show/ShowCard';
+import { ShowCard } from '../Shows/Show/ShowCard';
 
 interface ShowsListProps {
   isMobile: boolean;

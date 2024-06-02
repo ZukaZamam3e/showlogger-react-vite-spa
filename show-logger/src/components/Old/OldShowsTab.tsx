@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ShowModel, createNewShow, getShowData } from '../../models/ShowModel';
-import { ShowCard } from '../Show/ShowCard';
+import { ShowCard } from '../Shows/Show/ShowCard';
 import Grid from '@mui/material/Unstable_Grid2';
 import {
   Backdrop,
@@ -21,7 +21,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import useFetchWithMsal from '../../hooks/useFetchWithMsal';
 import { protectedResources } from '../../authConfig';
-import { EditShow } from '../Show/EditShow';
+import { EditShow } from '../Shows/Show/EditShow';
 import { CodeValueModel } from '../../models/CodeValueModel';
 import { ShowListSearch } from '../ListSearch';
 import SearchIcon from '@mui/icons-material/Search';

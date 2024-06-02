@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../config/apiConfig';
@@ -15,7 +14,7 @@ export const HomePage = () => {
   const dispatch = useDispatch();
   const userPref = useSelector((state: any) => state.userPref.value);
 
-  const { getData, postData } = useFetch();
+  const { postData } = useFetch();
 
   console.log(userPref);
 

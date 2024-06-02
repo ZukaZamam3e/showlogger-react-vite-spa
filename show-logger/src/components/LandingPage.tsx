@@ -7,7 +7,7 @@ import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { updateUserPref } from '../slices/userPrefSlice';
 import { showErrors } from '../slices/errorsSlice';
 import { protectedResources } from '../config/apiConfig';
-import { Shows } from './Show/Shows';
+import { Shows } from './Shows/Shows';
 import { HomePage } from './HomePage/HomePage';
 
 export const LandingPage = () => {
