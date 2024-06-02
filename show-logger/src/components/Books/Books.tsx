@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { BookTab } from './Book/BookTab';
 import { SLTab } from '../Common/SLTab';
 import { BookFriendHistoryTab } from './FriendHistory/BookFriendHistoryTab';

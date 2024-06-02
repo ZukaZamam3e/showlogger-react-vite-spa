@@ -9,6 +9,7 @@ export const protectedResources = {
     infoEndpoint: import.meta.env.VITE_APP_API_URL + '/info',
     watchlistEnpoint: import.meta.env.VITE_APP_API_URL + '/watchlist',
     friendHistoryEnpoint: import.meta.env.VITE_APP_API_URL + '/friendhistory',
+    friendEndpoint: import.meta.env.VITE_APP_API_URL + '/friend',
     transactionEnpoint: import.meta.env.VITE_APP_API_URL + '/transaction',
     bookEndpoint: import.meta.env.VITE_APP_API_URL + '/book',
   },

@@ -6,7 +6,6 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
   Paper,
   ToggleButton,
   ToggleButtonGroup,
