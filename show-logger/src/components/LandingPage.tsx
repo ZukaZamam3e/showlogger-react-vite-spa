@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { updateUserPref } from '../slices/userPrefSlice';
@@ -9,9 +8,9 @@ import { showErrors } from '../slices/errorsSlice';
 import { protectedResources } from '../config/apiConfig';
 import { Shows } from './Shows/Shows';
 import { HomePage } from './HomePage/HomePage';
+import { Books } from './Books/Books';
 
 export const LandingPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getData } = useFetch();
   const userPref = useSelector((state: any) => state.userPref.value);
@@ -41,6 +40,8 @@ export const LandingPage = () => {
 
   if (userPref?.defaultArea === 'shows') {
     body = <Shows />;
+  } else if (userPref?.defaultArea === 'books') {
+    body = <Books />;
   } else {
     body = <HomePage />;
   }
