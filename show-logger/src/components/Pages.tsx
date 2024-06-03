@@ -4,6 +4,7 @@ import { Shows } from './Shows/Shows';
 import { LandingPage } from './LandingPage';
 import { Books } from './Books/Books';
 import { Friends } from './Friends/Friends';
+import { Info } from './Info/Info';
 
 export const Pages = () => (
   <Routes>
@@ -15,7 +16,3 @@ export const Pages = () => (
     <Route path="/friends" element={<Friends />} />
   </Routes>
 );
-
-export const Info = () => {
-  return <>Info</>;
-};

@@ -12,5 +12,7 @@ export const protectedResources = {
     friendEndpoint: import.meta.env.VITE_APP_API_URL + '/friend',
     transactionEnpoint: import.meta.env.VITE_APP_API_URL + '/transaction',
     bookEndpoint: import.meta.env.VITE_APP_API_URL + '/book',
+    tvInfoEndpoint: import.meta.env.VITE_APP_API_URL + '/tvinfo',
+    movieInfoEndpoint: import.meta.env.VITE_APP_API_URL + '/movieinfo',
   },
 };
