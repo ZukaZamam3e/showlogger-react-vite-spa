@@ -66,7 +66,7 @@ export const TvInfoCard = (props: TvInfoCardProps) => {
         }}
       >
         <Grid
-          xs={10}
+          xs={8}
           sm={12}
           sx={{
             minHeight: {
@@ -120,7 +120,7 @@ export const TvInfoCard = (props: TvInfoCardProps) => {
           )}
         </Grid> */}
         </Grid>
-        <Grid xs={2} sm={12}>
+        <Grid xs={4} sm={12}>
           <Stack direction="column" spacing={2}>
             <Stack
               direction="row"

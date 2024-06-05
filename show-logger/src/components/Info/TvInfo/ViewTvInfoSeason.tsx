@@ -7,9 +7,13 @@ import { showErrors } from '../../../slices/errorsSlice';
 import { TvInfoSeasonModel } from '../../../models/TvInfoSeasonModel';
 import { TvEpisodeInfoModel } from '../../../models/TvEpisodeInfoModel';
 import { protectedResources } from '../../../config/apiConfig';
+import { Fab } from '@mui/material';
+import { placements } from '../../../config/placementConfig';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface ViewTvInfoSeasonProps {
   season: TvInfoSeasonModel;
+  onCancelSelectedSeason: () => void;
 }
 
 export const ViewTvInfoSeason = (props: ViewTvInfoSeasonProps) => {
@@ -20,11 +24,11 @@ export const ViewTvInfoSeason = (props: ViewTvInfoSeasonProps) => {
   const get = async (search: string) => {
     dispatch(startLoading());
     await getData(
-      `${protectedResources.oaprojectsApi.tvInfoEndpoint}/getepisodes?tvInfoId=${props.season.tvInfoId}&seasonNumber=${props.season.seasonNumber}&search=${search}`,
+      `${protectedResources.oaprojectsApi.tvInfoEndpoint}/getepisodes?tvInfoId=${props.season.tvInfoId}&seasonNumber=${props.season.seasonNumber}&search=${search}&take=${props.season.episodeCount}`,
     )
       .then(json => {
         if (json.errors.length == 0) {
-          setEpisodes(json.model.episodes);
+          setEpisodes(json.model.tvEpisodeInfos);
         } else {
           dispatch(showErrors(json.errors));
         }
@@ -38,5 +42,27 @@ export const ViewTvInfoSeason = (props: ViewTvInfoSeasonProps) => {
     get('');
   }, []);
 
-  return <>{props.season.seasonName}</>;
+  return (
+    <>
+      {props.season.seasonName}
+      {episodes.map(episode => (
+        <>
+          <br />
+          {episode.episodeName}
+        </>
+      ))}
+      <Fab
+        sx={{
+          position: 'fixed',
+          bottom: placements.fab.secondIconBottom,
+          right: placements.fab.right,
+        }}
+        color="error"
+        aria-label="add"
+        onClick={props.onCancelSelectedSeason}
+      >
+        <CancelIcon />
+      </Fab>
+    </>
+  );
 };

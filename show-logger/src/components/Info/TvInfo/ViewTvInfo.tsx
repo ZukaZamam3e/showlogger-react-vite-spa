@@ -6,10 +6,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { SLTextField } from '../../Common/SLTextField';
-import { TvInfoSeasonModel } from '../../../models/TvInfoSeasonModel';
+import {
+  TvInfoSeasonModel,
+  createNewSeason,
+} from '../../../models/TvInfoSeasonModel';
+import { useState } from 'react';
+import { ViewTvInfoSeason } from './ViewTvInfoSeason';
 
 interface SeasonButtonProps {
   season: TvInfoSeasonModel;
+  onSelectSeason: (season: TvInfoSeasonModel) => void;
 }
 
 export const SeasonButton = (props: SeasonButtonProps) => {
@@ -24,7 +30,11 @@ export const SeasonButton = (props: SeasonButtonProps) => {
   }
 
   return (
-    <Button fullWidth variant="outlined">
+    <Button
+      fullWidth
+      variant="outlined"
+      onClick={() => props.onSelectSeason(props.season)}
+    >
       {seasonName} - {props.season.episodeCount} episodes
     </Button>
   );
@@ -36,6 +46,25 @@ interface ViewTvInfoProps {
 }
 
 export const ViewTvInfo = (props: ViewTvInfoProps) => {
+  const [viewingSeason, setViewingSeason] = useState({
+    show: false,
+    season: createNewSeason(),
+  });
+
+  const handleSelectSeason = (season: TvInfoSeasonModel) => {
+    setViewingSeason({
+      show: true,
+      season: season,
+    });
+  };
+
+  const handleCancelSelectedSeason = () => {
+    setViewingSeason({
+      show: false,
+      season: createNewSeason(),
+    });
+  };
+
   const disabledStyle = {
     '& .MuiInputBase-input.Mui-disabled': {
       WebkitTextFillColor: '#FFFFFF',
@@ -45,8 +74,19 @@ export const ViewTvInfo = (props: ViewTvInfoProps) => {
     },
   };
 
-  return (
-    <>
+  const sxBody = {
+    display: !viewingSeason.show ? 'initial' : 'none',
+  };
+
+  const season = viewingSeason.show && (
+    <ViewTvInfoSeason
+      season={viewingSeason.season}
+      onCancelSelectedSeason={handleCancelSelectedSeason}
+    />
+  );
+
+  const body = (
+    <div style={sxBody}>
       <Box
         sx={{
           paddingBottom: {
@@ -107,7 +147,10 @@ export const ViewTvInfo = (props: ViewTvInfoProps) => {
             </Grid>
             {props.tvInfo.seasons.map((season: TvInfoSeasonModel) => (
               <Grid xs={12} key={season.seasonNumber}>
-                <SeasonButton season={season} />
+                <SeasonButton
+                  season={season}
+                  onSelectSeason={handleSelectSeason}
+                />
               </Grid>
             ))}
           </Grid>
@@ -125,6 +168,13 @@ export const ViewTvInfo = (props: ViewTvInfoProps) => {
       >
         <CancelIcon />
       </Fab>
+    </div>
+  );
+
+  return (
+    <>
+      {body}
+      {season}
     </>
   );
 };
