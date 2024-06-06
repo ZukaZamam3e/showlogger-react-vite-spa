@@ -2,15 +2,15 @@ export interface TvEpisodeInfoModel {
   tvEpisodeInfoId: number;
   tvInfoId: number;
   apiType: number;
-  apiId: number;
-  seasonName: number;
-  episodeName: number;
+  apiId: string;
+  seasonName: string;
+  episodeName: string;
   seasonNumber: number;
   episodeNumber: number;
   seasonEpisode: number;
-  episodeOverview: number;
+  episodeOverview: string;
   runtime: number;
   airDate: number;
-  imageUrl: number;
+  imageUrl: string;
   overallEpisodeNumber: number;
 }

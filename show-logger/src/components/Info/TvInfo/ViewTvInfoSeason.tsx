@@ -10,6 +10,7 @@ import { protectedResources } from '../../../config/apiConfig';
 import { Fab } from '@mui/material';
 import { placements } from '../../../config/placementConfig';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { TvInfoSeasonCard } from './TvInfoSeasonCard';
 
 interface ViewTvInfoSeasonProps {
   season: TvInfoSeasonModel;
@@ -45,12 +46,12 @@ export const ViewTvInfoSeason = (props: ViewTvInfoSeasonProps) => {
   return (
     <>
       {props.season.seasonName}
-      {episodes.map(episode => (
-        <>
-          <br />
-          {episode.episodeName}
-        </>
-      ))}
+      <List count={episodes.length} take={episodes.length}>
+        {episodes.map(episode => (
+          <TvInfoSeasonCard episode={episode} />
+        ))}
+      </List>
+
       <Fab
         sx={{
           position: 'fixed',
