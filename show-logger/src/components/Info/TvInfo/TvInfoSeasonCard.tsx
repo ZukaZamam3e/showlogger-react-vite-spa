@@ -13,6 +13,16 @@ export const TvInfoSeasonCard = (props: TvInfoSeasonCardProp) => {
     imageUrl = nia_landscape;
   }
 
+  const airDateRuntime = `${
+    props.episode.airDate
+      ? new Date(props.episode.airDate).toLocaleDateString()
+      : 'No Air Date'
+  } • ${props.episode.runtime != null ? `${props.episode.runtime}m` : 'No Runtime'}`;
+
+  const sxContent = {
+    textAlign: 'left',
+  };
+
   return (
     <Card
       sx={{
@@ -30,14 +40,16 @@ export const TvInfoSeasonCard = (props: TvInfoSeasonCardProp) => {
           },
         }}
       />
-      <CardContent>
-        <Typography variant="body2" color="text.primary">
-          {props.episode.episodeNumber} {props.episode.episodeName}
+      <CardContent sx={sxContent}>
+        <Typography variant="h6" color="text.primary">
+          {props.episode.episodeNumber} - {props.episode.episodeName}
         </Typography>
-        <Typography variant="body2" color="text.primary">
-          {props.episode.airDate &&
-            new Date(props.episode.airDate).toLocaleDateString()}
-          •{props.episode.runtime && <>{props.episode.runtime}m</>}
+        <Typography
+          variant="body2"
+          color="text.primary"
+          sx={{ fontSize: 16, pb: 3 }}
+        >
+          {airDateRuntime}
         </Typography>
         <Typography variant="body2" color="text.primary">
           {props.episode.episodeOverview}

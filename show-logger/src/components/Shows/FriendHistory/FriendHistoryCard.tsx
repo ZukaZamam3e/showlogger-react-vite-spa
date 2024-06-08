@@ -44,7 +44,6 @@ export const FriendHistoryCard = (props: FriendHistoryCardProps) => {
       <AmcCard
         show={props.show}
         name={props.name}
-        isMobile={props.isMobile}
         hasButtons={false}
         onSelectShow={() => {}}
         onDeleteShow={() => {}}

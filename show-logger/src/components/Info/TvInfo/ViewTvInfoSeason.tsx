@@ -46,6 +46,7 @@ export const ViewTvInfoSeason = (props: ViewTvInfoSeasonProps) => {
   return (
     <>
       {props.season.seasonName}
+      <hr />
       <List count={episodes.length} take={episodes.length}>
         {episodes.map(episode => (
           <TvInfoSeasonCard episode={episode} />
