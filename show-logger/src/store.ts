@@ -3,6 +3,7 @@ import isLoadingReducer from './slices/isLoadingSlice';
 import errorsReducer from './slices/errorsSlice';
 import userPrefSlice from './slices/userPrefSlice';
 import isMobileSlice from './slices/isMobileSlice';
+import popupSlice from './slices/popupSlice';
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     errors: errorsReducer,
     userPref: userPrefSlice,
     isMobile: isMobileSlice,
+    popup: popupSlice,
   },
 });

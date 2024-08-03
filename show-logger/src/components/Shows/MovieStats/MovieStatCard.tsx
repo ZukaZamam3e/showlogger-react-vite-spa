@@ -83,7 +83,7 @@ export const MovieStatCard = (props: MovieStatCardProps) => {
                 Ticket: {formatter.format(props.movieStat.ticketAmt)}
               </Typography>
               <Typography variant="body2" color="text.primary">
-                Purchases: {formatter.format(props.movieStat.purchaseAmt)}
+                Total: {formatter.format(props.movieStat.totalAmt)}
               </Typography>
             </>
           )}

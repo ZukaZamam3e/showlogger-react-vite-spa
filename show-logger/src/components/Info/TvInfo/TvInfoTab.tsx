@@ -4,14 +4,10 @@ import { useEffect, useState } from 'react';
 import { List } from '../../Common/List';
 import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
 import { showErrors } from '../../../slices/errorsSlice';
-// import { placements } from '../../../config/placementConfig';
-// import { Fab } from '@mui/material';
-// import AddIcon from '@mui/icons-material/Add';
 import { protectedResources } from '../../../config/apiConfig';
 import { TvInfoCard } from './TvInfoCard';
 import { TvInfoModel, createNewTvInfo } from '../../../models/TvInfoModel';
 import { ViewTvInfo } from './ViewTvInfo';
-// import { EditBook } from './EditBook';
 
 export const TvInfoTab = () => {
   const dispatch = useDispatch();
@@ -19,6 +15,7 @@ export const TvInfoTab = () => {
   const { getData, postData } = useFetch();
   const [tvInfos, setTvInfos] = useState<TvInfoModel[]>([]);
   const [tvInfoCount, setTvInfoCount] = useState<number>(0);
+  const [clearSearch, setClearSearch] = useState(false);
   const [viewing, setViewing] = useState({
     show: false,
     viewingTvInfo: createNewTvInfo(),
@@ -77,6 +74,30 @@ export const TvInfoTab = () => {
     });
   };
 
+  const handleDeleteTvInfo = async (tvInfoId: number) => {
+    setClearSearch(prev => !prev);
+    dispatch(startLoading());
+    await postData(
+      `${protectedResources.oaprojectsApi.tvInfoEndpoint}/delete`,
+      {
+        tvInfoId: tvInfoId,
+      },
+    )
+      .then(async json => {
+        if (json.errors.length == 0) {
+          await get(0, '');
+        } else {
+          dispatch(showErrors(json.errors));
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        dispatch(stopLoading());
+      });
+
+    await get(0, '');
+  };
+
   const sxBody = {
     display: !viewing.show ? 'initial' : 'none',
   };
@@ -90,13 +111,18 @@ export const TvInfoTab = () => {
 
   const body = (
     <div style={sxBody}>
-      <List count={tvInfoCount} onGet={get} take={take}>
+      <List
+        count={tvInfoCount}
+        onGet={get}
+        clearSearch={clearSearch}
+        take={take}
+      >
         {tvInfos.map((tvInfo: TvInfoModel) => (
           <TvInfoCard
             key={tvInfo.tvInfoId}
             tvInfo={tvInfo}
             onSelectTvInfo={handleSelectTvInfo}
-            // onDeleteBook={handleDeleteBook}
+            onDeleteTvInfo={handleDeleteTvInfo}
           />
         ))}
       </List>

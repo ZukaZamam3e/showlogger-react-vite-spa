@@ -1,5 +1,5 @@
 import { ShowModel } from '../../../models/ShowModel';
-import { Card, CardMedia, Stack, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -52,6 +52,8 @@ export const TvCard = (props: TvCardProps) => {
   const hasName = props.name != null;
   const titleFontSize = hasName ? 14 : 18;
   const gridXs = hasButtons ? 6 : 12;
+  const notesFontSize =
+    props.show.showNotes && props.show.showNotes.length > 38 ? 10 : 14;
 
   let imageUrl = props.show.imageUrl;
 
@@ -94,7 +96,6 @@ export const TvCard = (props: TvCardProps) => {
           sm={12}
           sx={{
             minHeight: {
-              xs: 155,
               sm: 161,
             },
             p: 1,
@@ -122,6 +123,13 @@ export const TvCard = (props: TvCardProps) => {
           </Typography>
           <Typography variant="body2" color="text.primary">
             {runtime}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.primary"
+            sx={{ fontSize: notesFontSize }}
+          >
+            {props.show.showNotes}
           </Typography>
         </Grid>
         {hasButtons && (

@@ -45,7 +45,8 @@ export const AmcCard = (props: AmcCardProps) => {
   const hasName = props.name != null;
   const titleFontSize = hasName ? 14 : 18;
   const gridXs = hasButtons ? 6 : 12;
-
+  const notesFontSize =
+    props.show.showNotes && props.show.showNotes.length > 38 ? 10 : 14;
   let imageUrl = props.show.imageUrl;
 
   if (imageUrl == '') {
@@ -117,6 +118,13 @@ export const AmcCard = (props: AmcCardProps) => {
           </Typography>
           <Typography variant="body2" color="text.r">
             {formatter.format(totalPurchases)}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.primary"
+            sx={{ fontSize: notesFontSize }}
+          >
+            {props.show.showNotes}
           </Typography>
         </Grid>
         {hasButtons && (

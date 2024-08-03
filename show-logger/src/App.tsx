@@ -43,6 +43,15 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderWidth: '3px !important',
+          borderStyle: 'solid !important',
+          borderColor: '#3a3a3c !important',
+        },
+      },
+    },
   },
 });
 

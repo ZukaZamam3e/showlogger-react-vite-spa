@@ -9,6 +9,7 @@ import nia_landscape from './../../../assets/nia_landscape.png';
 interface TvInfoCardProps {
   tvInfo: TvInfoModel;
   onSelectTvInfo: (tvInfo: TvInfoModel) => void;
+  onDeleteTvInfo: (tvInfoId: number) => void;
 }
 
 export const TvInfoCard = (props: TvInfoCardProps) => {
@@ -96,29 +97,6 @@ export const TvInfoCard = (props: TvInfoCardProps) => {
           <Typography variant="body2" color="text.primary">
             Total Episodes: {totalEpisodes}
           </Typography>
-          {/* <Typography variant="body2" color="text.primary">
-            {props.tvStat.watched}
-          </Typography>
-          <Typography variant="body2" color="text.primary">
-            {`${new Date(props.tvStat.firstWatched).toLocaleDateString()} - ${new Date(props.tvStat.lastWatched).toLocaleDateString()}`}
-          </Typography>
-          <Typography variant="body2" color="text.primary">
-            {`${props.tvStat.episodesWatched} total - ${totalDays}`}
-          </Typography>
-          {hasNextEpisode && (
-            <>
-              <Typography variant="body2" color="text.primary">
-                {nextEpisodeName}
-              </Typography>
-              <Typography variant="body2" color="text.primary">
-                {props.tvStat.nextWatched}
-              </Typography>
-              <Typography variant="body2" color="text.primary">
-                {episodesLeft}
-              </Typography>
-            </>
-          )}
-        </Grid> */}
         </Grid>
         <Grid xs={4} sm={12}>
           <Stack direction="column" spacing={2}>
@@ -138,7 +116,7 @@ export const TvInfoCard = (props: TvInfoCardProps) => {
               <SLIconButton
                 aria-label="Delete"
                 onClick={() => {
-                  //props.onDeleteBook(props.book.bookId);
+                  props.onDeleteTvInfo(props.tvInfo.tvInfoId);
                 }}
               >
                 <DeleteIcon style={{ color: 'red' }} />

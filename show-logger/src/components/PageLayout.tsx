@@ -6,6 +6,7 @@ import { Loading } from './Loading';
 import { ErrorMessage } from './Common/ErrorMessage';
 import { updateIsMobile } from '../slices/isMobileSlice';
 import { useDispatch } from 'react-redux';
+import { PopUpNotification } from './Common/PopUpNotification';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -58,6 +59,7 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
         </Box>
         <Loading />
         <ErrorMessage />
+        <PopUpNotification />
       </Container>
     </Box>
   );

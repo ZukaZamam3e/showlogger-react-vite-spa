@@ -14,5 +14,6 @@ export const protectedResources = {
     bookEndpoint: import.meta.env.VITE_APP_API_URL + '/book',
     tvInfoEndpoint: import.meta.env.VITE_APP_API_URL + '/tvinfo',
     movieInfoEndpoint: import.meta.env.VITE_APP_API_URL + '/movieinfo',
+    unlinkedShowsEndpoint: import.meta.env.VITE_APP_API_URL + '/unlinkedshows',
   },
 };
