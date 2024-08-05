@@ -3,13 +3,24 @@ import { useDispatch } from 'react-redux';
 import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { showErrors } from '../slices/errorsSlice';
 
-export const useFetch = () => {
+interface ApiResponseModel {
+  model: any;
+  errors: string[];
+}
+
+export const useOAProjectsAPIFetch = () => {
   const { isAuthenticated, getAccessTokenSilently, error } = useAuth0();
   const dispatch = useDispatch();
 
   const getData = async (endpoint: string) => {
+    const response: ApiResponseModel = {
+      model: null,
+      errors: [],
+    };
+
     dispatch(startLoading());
     let accessToken;
+
     try {
       if (isAuthenticated) {
         accessToken = await getAccessTokenSilently({
@@ -21,50 +32,45 @@ export const useFetch = () => {
       }
     } catch {
       dispatch(stopLoading());
-      const body = {
-        errors: ['Login session has expired. Please login again.'],
-      };
-      dispatch(showErrors(body.errors));
-      return body;
+      response.errors = ['Login session has expired. Please login again.'];
     }
 
-    try {
-      if (isAuthenticated) {
-        const headers = new Headers();
-        const bearer = `Bearer ${accessToken}`;
+    if (response.errors.length == 0) {
+      try {
+        if (isAuthenticated) {
+          const headers = new Headers();
+          const bearer = `Bearer ${accessToken}`;
 
-        headers.append('Authorization', bearer);
+          headers.append('Authorization', bearer);
 
-        let options = {
-          method: 'GET',
-          headers: headers,
-        };
+          let options = {
+            method: 'GET',
+            headers: headers,
+          };
 
-        const response = await fetch(endpoint, options)
-          .then(data => (data ? data.json() : null))
-          .catch(e => {
-            return {
-              errors: [e],
-            };
-          });
-        dispatch(stopLoading());
+          const fetchResponse = await fetch(endpoint, options)
+            .then(data => (data ? data.json() : null))
+            .catch(e => {
+              return {
+                errors: [e],
+              };
+            });
 
-        if (response.errors.length > 0) {
-          dispatch(showErrors(response.errors));
+          response.errors = fetchResponse.errors;
+          response.model = fetchResponse.model;
         }
-
-        return response;
+      } catch {
+        response.errors = ['Error during request. Please try again later.'];
       }
-    } catch {
-      dispatch(stopLoading());
-
-      const body = {
-        errors: ['Error during request. Please try again later.'],
-      };
-      dispatch(showErrors(body.errors));
-      return body;
     }
+
     dispatch(stopLoading());
+
+    if (response.errors.length > 0) {
+      dispatch(showErrors(response.errors));
+    }
+
+    return response.model;
   };
 
   const postData = async (endpoint: string, data: any) => {

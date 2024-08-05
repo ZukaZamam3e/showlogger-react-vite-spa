@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux';
 import { useFetch } from '../hooks/useFetchOAProjectsAPI';
-import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { showErrors } from '../slices/errorsSlice';
 import { protectedResources } from '../config/apiConfig';
 import { TvEpisodeInfoModel } from '../models/TvEpisodeInfoModel';
@@ -14,21 +13,16 @@ export const tvInfoApi = () => {
     let data: TvInfoModel[] = [];
     let count: number = 0;
 
-    dispatch(startLoading());
     await getData(
       `${protectedResources.oaprojectsApi.tvInfoEndpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          data = json.model.tvInfos;
-          count = json.model.count;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    ).then(json => {
+      if (json.errors.length == 0) {
+        data = json.model.tvInfos;
+        count = json.model.count;
+      } else {
+        dispatch(showErrors(json.errors));
+      }
+    });
 
     return {
       data,
@@ -40,22 +34,17 @@ export const tvInfoApi = () => {
     let data: TvInfoModel[] = [];
     let count: number = 0;
 
-    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.tvInfoEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          data = json.model.tvInfos;
-          count = json.model.count;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    ).then(json => {
+      if (json.errors.length == 0) {
+        data = json.model.tvInfos;
+        count = json.model.count;
+      } else {
+        dispatch(showErrors(json.errors));
+      }
+    });
 
     return {
       data,
@@ -65,7 +54,6 @@ export const tvInfoApi = () => {
 
   const deleteTvInfo = async (tvInfoId: number) => {
     let success: boolean = false;
-    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.tvInfoEndpoint}/delete`,
       {
@@ -79,10 +67,7 @@ export const tvInfoApi = () => {
           dispatch(showErrors(json.errors));
         }
       })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+      .catch(() => {});
 
     return success;
   };
@@ -94,24 +79,19 @@ export const tvInfoApi = () => {
     search?: string,
   ) => {
     let data: TvEpisodeInfoModel[] = [];
-    dispatch(startLoading());
     await getData(
       `${protectedResources.oaprojectsApi.tvInfoEndpoint}/getepisodes?` +
         `tvInfoId=${tvInfoId}` +
         `&seasonNumber=${seasonNumber}` +
         `&search=${search}` +
         `&take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          data = json.model.tvEpisodeInfos;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    ).then(json => {
+      if (json.errors.length == 0) {
+        data = json.model.tvEpisodeInfos;
+      } else {
+        dispatch(showErrors(json.errors));
+      }
+    });
 
     return data;
   };

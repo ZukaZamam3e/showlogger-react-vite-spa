@@ -12,21 +12,16 @@ export const movieInfoApi = () => {
   const loadMovieInfo = async (take: number) => {
     let data: MovieInfoModel[] = [];
     let count: number = 0;
-    dispatch(startLoading());
     await getData(
       `${protectedResources.oaprojectsApi.movieInfoEndpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          data = json.model.movieInfos;
-          count = json.model.count;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    ).then(json => {
+      if (json.errors.length == 0) {
+        data = json.model.movieInfos;
+        count = json.model.count;
+      } else {
+        dispatch(showErrors(json.errors));
+      }
+    });
 
     return {
       data,
@@ -37,22 +32,17 @@ export const movieInfoApi = () => {
   const getMovieInfo = async (page: number, search: string, take: number) => {
     let data: MovieInfoModel[] = [];
     let count: number = 0;
-    dispatch(startLoading());
     const offset = page * take;
     await getData(
       `${protectedResources.oaprojectsApi.movieInfoEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          data = json.model.movieInfos;
-          count = json.model.count;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    ).then(json => {
+      if (json.errors.length == 0) {
+        data = json.model.movieInfos;
+        count = json.model.count;
+      } else {
+        dispatch(showErrors(json.errors));
+      }
+    });
 
     return { data, count };
   };
@@ -60,7 +50,6 @@ export const movieInfoApi = () => {
   const deleteMovieInfo = async (movieInfoId: number) => {
     let success: boolean = false;
 
-    dispatch(startLoading());
     await postData(
       `${protectedResources.oaprojectsApi.movieInfoEndpoint}/delete`,
       {
@@ -74,10 +63,7 @@ export const movieInfoApi = () => {
           dispatch(showErrors(json.errors));
         }
       })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+      .catch(() => {});
 
     return success;
   };
