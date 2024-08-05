@@ -10,51 +10,25 @@ import {
   MovieInfoModel,
   createNewMovieInfo,
 } from '../../../models/MovieInfoModel';
+import { movieInfoApi } from '../../../api/movieInfoApi';
 
 export const MovieInfoTab = () => {
-  const dispatch = useDispatch();
-
-  const { getData, postData } = useFetch();
+  const { loadMovieInfo, getMovieInfo, deleteMovieInfo } = movieInfoApi();
   const [movieInfos, setMovieInfos] = useState<MovieInfoModel[]>([]);
   const [movieInfoCount, setMovieInfoCount] = useState<number>(0);
   const [clearSearch, setClearSearch] = useState(false);
   const take = 12;
 
   const load = async () => {
-    dispatch(startLoading());
-    await getData(
-      `${protectedResources.oaprojectsApi.movieInfoEndpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setMovieInfos(json.model.movieInfos);
-          setMovieInfoCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await loadMovieInfo(take);
+    setMovieInfos(data);
+    setMovieInfoCount(count);
   };
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.movieInfoEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setMovieInfos(json.model.movieInfos);
-          setMovieInfoCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getMovieInfo(page, search, take);
+    setMovieInfos(data);
+    setMovieInfoCount(count);
   };
 
   useEffect(() => {
@@ -63,26 +37,11 @@ export const MovieInfoTab = () => {
 
   const handleDeleteMovieInfo = async (movieInfoId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.movieInfoEndpoint}/delete`,
-      {
-        movieInfoId: movieInfoId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await deleteMovieInfo(movieInfoId);
 
-    await get(0, '');
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const body = (
