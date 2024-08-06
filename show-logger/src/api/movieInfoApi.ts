@@ -23,7 +23,7 @@ export const movieInfoApi = () => {
     };
   };
 
-  const getMovieInfo = async (page: number, search: string, take: number) => {
+  const getMovieInfo = async (page: number, take: number, search: string) => {
     let data: MovieInfoModel[] = [];
     let count: number = 0;
     const offset = page * take;

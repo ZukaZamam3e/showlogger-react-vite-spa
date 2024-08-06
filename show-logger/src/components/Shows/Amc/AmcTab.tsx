@@ -1,6 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { protectedResources } from '../../../config/apiConfig';
-import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
+import { useEffect, useState } from 'react';
 import { TransactionCard } from './TransactionCard';
 import {
   TransactionModel,
@@ -12,14 +10,17 @@ import AddIcon from '@mui/icons-material/Add';
 import { CodeValueModel } from '../../../models/CodeValueModel';
 import { EditAmcTransaction } from './EditAmcTransaction';
 import { TransactionItemModel } from '../../../models/TransactionItemModel';
-import { useDispatch, useSelector } from 'react-redux';
-import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
-import { showErrors } from '../../../slices/errorsSlice';
+import { useSelector } from 'react-redux';
 import { Fab } from '@mui/material';
+import { transactionApi } from '../../../api/transactionApi';
 
 export const AmcTab = () => {
-  const dispatch = useDispatch();
-  const { getData, postData } = useFetch();
+  const {
+    loadTransaction,
+    getTransaction,
+    saveTransaction,
+    deleteTransaction,
+  } = transactionApi();
   const [transactions, setTransactions] = useState<TransactionModel[]>([]);
   const [transactionCount, setTransactionCount] = useState<number>(0);
   const [transactionTypeIds, setTransactionTypeIds] = useState<
@@ -44,90 +45,37 @@ export const AmcTab = () => {
   }, [isMobile]);
 
   const load = async () => {
-    dispatch(startLoading());
-    await getData(
-      `${protectedResources.oaprojectsApi.transactionEnpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setTransactions(json.model.transactions);
-          setTransactionCount(json.model.count);
-          setTransactionTypeIds(json.model.transactionTypeIds);
-          setTransactionItems(json.model.transactionItems);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count, transactionTypeIds, items } =
+      await loadTransaction(take);
+    setTransactions(data);
+    setTransactionCount(count);
+    setTransactionTypeIds(transactionTypeIds);
+    setTransactionItems(items);
   };
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.transactionEnpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setTransactions(json.model.transactions);
-          setTransactionCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getTransaction(page, take, search);
+    setTransactions(data);
+    setTransactionCount(count);
   };
 
   const handleTransactionSave = async (transaction: TransactionModel) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
+    const updatedTransaction = await saveTransaction(transaction);
 
-    await postData(
-      `${protectedResources.oaprojectsApi.transactionEnpoint}/save`,
-      transaction,
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          handleCancelSelectedTransaction();
-
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    if (updatedTransaction != null) {
+      handleCancelSelectedTransaction();
+      await get(0, '');
+    }
   };
 
   const handleDeleteTransaction = async (transactionId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.transactionEnpoint}/delete`,
-      {
-        transactionId: transactionId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await deleteTransaction(transactionId);
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   useEffect(() => {

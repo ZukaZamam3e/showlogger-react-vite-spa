@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-import { protectedResources } from '../../../config/apiConfig';
-import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
 import { List } from '../../Common/List';
-import { useDispatch } from 'react-redux';
-import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
-import { showErrors } from '../../../slices/errorsSlice';
 import { FriendCard } from './FriendCard';
 import { FriendModel } from '../../../models/FriendModel';
 import { Fab } from '@mui/material';
 import { placements } from '../../../config/placementConfig';
 import AddIcon from '@mui/icons-material/Add';
 import { RequestFriend } from './RequestFriend';
+import { friendApi } from '../../../api/friendApi';
 
 export const FriendTab = () => {
-  const dispatch = useDispatch();
-  const { getData, postData } = useFetch();
+  const {
+    loadFriend,
+    getFriend,
+    acceptFriendRequest,
+    denyFriendRequest,
+    addFriend,
+    deleteFriend,
+  } = friendApi();
   const [friends, setFriends] = useState<FriendModel[]>([]);
   const [friendCount, setFriendCount] = useState<number>(0);
   const [clearSearch, setClearSearch] = useState(false);
@@ -23,41 +25,15 @@ export const FriendTab = () => {
   const take = 12;
 
   const load = async () => {
-    dispatch(startLoading());
-    await getData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setFriends(json.model.friends);
-          setFriendCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await loadFriend(take);
+    setFriends(data);
+    setFriendCount(count);
   };
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setFriends(json.model.friends);
-          setFriendCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getFriend(page, take, search);
+    setFriends(data);
+    setFriendCount(count);
   };
 
   useEffect(() => {
@@ -66,92 +42,41 @@ export const FriendTab = () => {
 
   const handleAcceptFriendRequest = async (friendRequestId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/acceptfriendrequest`,
-      {
-        friendRequestId: friendRequestId * -1,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await acceptFriendRequest(friendRequestId * -1);
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleDenyFriendRequest = async (friendRequestId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/denyfriendrequest`,
-      {
-        friendRequestId: friendRequestId * -1,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await denyFriendRequest(friendRequestId * -1);
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleDeleteFriend = async (friendId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/delete`,
-      {
-        friendId: friendId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await deleteFriend(friendId);
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleSendFriendRequest = async (email: string) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.friendEndpoint}/addfriend`,
-      {
-        email: email,
-        dateAdded: new Date(),
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          handleCancelFriendRequest();
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await addFriend({
+      email: email,
+      dateAdded: new Date(),
+    });
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleAddNew = () => {

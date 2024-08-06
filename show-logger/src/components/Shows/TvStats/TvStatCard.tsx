@@ -99,6 +99,9 @@ export const TvStatCard = (props: TvStatCardProps) => {
           {hasNextEpisode && (
             <>
               <Typography variant="body2" color="text.primary">
+                Up next: {/* Glee has an issue */}
+              </Typography>
+              <Typography variant="body2" color="text.primary">
                 {nextEpisodeName}
               </Typography>
               <Typography variant="body2" color="text.primary">

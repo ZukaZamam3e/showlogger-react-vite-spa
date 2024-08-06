@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { protectedResources } from '../../../config/apiConfig';
-import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
 import { Fab } from '@mui/material';
 import { YearStatCard } from './YearStatCard';
 import { YearStatModel } from '../../../models/YearStatModel';
@@ -9,41 +7,22 @@ import { YearStatDataModel } from '../../../models/YearStatDataModel';
 import { YearStatDataCard } from './YearStatDataCard';
 import { placements } from '../../../config/placementConfig';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useDispatch } from 'react-redux';
-import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
-import { showErrors } from '../../../slices/errorsSlice';
+import { statApi } from '../../../api/statApi';
 
 export const YearStatsTab = () => {
-  const dispatch = useDispatch();
-
-  const { getData } = useFetch();
+  const { getYearStats } = statApi();
   const [yearStats, setYearStats] = useState<YearStatModel[]>([]);
   const [yearStatsCount, setYearStatsCount] = useState<number>(0);
-
   const [name, setName] = useState<string>('');
   const [year, setYear] = useState<number>();
   const [yearStatData, setYearStatData] = useState<YearStatDataModel[]>([]);
   const [yearStatDataCount, setYearStatDataCount] = useState<number>(0);
-
   const take = 18;
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.statEndpoint}/getyearstats?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setYearStats(json.model.yearStats);
-          setYearStatsCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getYearStats(page, take, search);
+    setYearStats(data);
+    setYearStatsCount(count);
   };
 
   useEffect(() => {

@@ -24,7 +24,7 @@ export const bookApi = () => {
     };
   };
 
-  const getBook = async (page: number, search: string, take: number) => {
+  const getBook = async (page: number, take: number, search: string) => {
     let data: BookModel[] = [];
     let count: number = 0;
     const offset = page * take;
@@ -44,8 +44,36 @@ export const bookApi = () => {
     };
   };
 
+  const saveBook = async (book: BookModel) => {
+    let data: BookModel | null = null;
+    await postData(
+      `${protectedResources.oaprojectsApi.bookEndpoint}/save`,
+      book,
+    ).then(async json => {
+      if (json.errors.length == 0) {
+        data = json.model;
+      }
+    });
+    return data;
+  };
+
+  const deleteBook = async (bookId: number) => {
+    let success: boolean = false;
+    await postData(`${protectedResources.oaprojectsApi.bookEndpoint}/delete`, {
+      bookId: bookId,
+    }).then(async json => {
+      if (json.errors.length == 0) {
+        success = true;
+      }
+    });
+
+    return success;
+  };
+
   return {
     loadBook,
     getBook,
+    saveBook,
+    deleteBook,
   };
 };

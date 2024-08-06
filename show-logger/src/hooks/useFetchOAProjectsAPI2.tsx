@@ -61,7 +61,6 @@ export const useFetch = () => {
 
     try {
       if (isAuthenticated) {
-        console.log(options);
         const fetchResponse = await fetch(endpoint, options)
           .then(data => (data ? data.json() : null))
           .catch(e => {

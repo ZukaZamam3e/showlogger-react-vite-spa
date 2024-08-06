@@ -26,7 +26,7 @@ export const MovieInfoTab = () => {
   };
 
   const get = async (page: number, search: string) => {
-    const { data, count } = await getMovieInfo(page, search, take);
+    const { data, count } = await getMovieInfo(page, take, search);
     setMovieInfos(data);
     setMovieInfoCount(count);
   };

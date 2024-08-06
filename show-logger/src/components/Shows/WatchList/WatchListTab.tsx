@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { protectedResources } from '../../../config/apiConfig';
-import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
 import { WatchListCard } from './WatchListCard';
 import {
   WatchListModel,
@@ -9,13 +7,16 @@ import {
 import { List } from '../../Common/List';
 import { CodeValueModel } from '../../../models/CodeValueModel';
 import { EditWatchList } from './EditWatchList';
-import { useDispatch } from 'react-redux';
-import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
-import { showErrors } from '../../../slices/errorsSlice';
+import { watchListApi } from '../../../api/watchlistApi';
 
 export const WatchListTab = () => {
-  const dispatch = useDispatch();
-  const { getData, postData } = useFetch();
+  const {
+    loadWatchList,
+    getWatchList,
+    saveWatchList,
+    deleteWatchList,
+    moveToShows,
+  } = watchListApi();
   const [watchList, setWatchList] = useState<WatchListModel[]>([]);
   const [watchListCount, setWatchListCount] = useState<number>(0);
   const [showTypeIds, setShowTypeIds] = useState<CodeValueModel[]>([]);
@@ -27,41 +28,16 @@ export const WatchListTab = () => {
   const take = 12;
 
   const load = async () => {
-    dispatch(startLoading());
-    await getData(
-      `${protectedResources.oaprojectsApi.watchlistEnpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setWatchList(json.model.watchLists);
-          setWatchListCount(json.model.count);
-          setShowTypeIds(json.model.showTypeIds);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count, showTypeIds } = await loadWatchList(take);
+    setWatchList(data);
+    setWatchListCount(count);
+    setShowTypeIds(showTypeIds);
   };
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.watchlistEnpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setWatchList(json.model.watchLists);
-          setWatchListCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getWatchList(page, take, search);
+    setWatchList(data);
+    setWatchListCount(count);
   };
   useEffect(() => {
     load();
@@ -73,72 +49,29 @@ export const WatchListTab = () => {
 
   const handleMoveToShows = async (watchlistId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.watchlistEnpoint}/movetoshows`,
-      {
-        watchlistId: watchlistId,
-        dateWatched: new Date(),
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await moveToShows(watchlistId, new Date());
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleDeleteWatchList = async (watchlistId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.watchlistEnpoint}/delete`,
-      {
-        watchlistId: watchlistId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await deleteWatchList(watchlistId);
 
-    await get(0, '');
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleWatchlistSave = async (watchlist: WatchListModel) => {
-    dispatch(startLoading());
+    const updatedWatchList = await saveWatchList(watchlist);
 
-    let url = `${protectedResources.oaprojectsApi.watchlistEnpoint}/save`;
-
-    await postData(url, watchlist)
-      .then(async json => {
-        if (json.errors.length == 0) {
-          handleCancelSelectedWatchlist();
-
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    if (updatedWatchList != null) {
+      handleCancelSelectedWatchlist();
+      await get(0, '');
+    }
   };
 
   const handleCancelSelectedWatchlist = () => {

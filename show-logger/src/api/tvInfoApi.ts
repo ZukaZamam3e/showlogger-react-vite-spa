@@ -27,7 +27,7 @@ export const tvInfoApi = () => {
     };
   };
 
-  const getTvInfo = async (page: number, search: string, take: number) => {
+  const getTvInfo = async (page: number, take: number, search: string) => {
     let data: TvInfoModel[] = [];
     let count: number = 0;
 

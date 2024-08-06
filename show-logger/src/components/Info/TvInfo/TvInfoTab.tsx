@@ -23,7 +23,7 @@ export const TvInfoTab = () => {
   };
 
   const get = async (page: number, search: string) => {
-    const { data, count } = await getTvInfo(page, search, take);
+    const { data, count } = await getTvInfo(page, take, search);
     setTvInfos(data);
     setTvInfoCount(count);
   };
