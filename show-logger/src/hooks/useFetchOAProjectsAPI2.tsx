@@ -20,58 +20,7 @@ export const useFetch = () => {
     );
     dispatch(stopLoading());
 
-    return response.model;
-
-    // const response: ApiResponseModel = {
-    //   model: null,
-    //   errors: [],
-    // };
-
-    // dispatch(startLoading());
-    // let accessToken: string = '';
-
-    // try {
-    //   if (isAuthenticated) {
-    //     accessToken = await getAccessTokenSilently({
-    //       authorizationParams: {
-    //         audience: 'https://oaprojects-api.oaprojects.net',
-    //         scope: 'User.ReadWrite',
-    //       },
-    //     });
-    //   }
-    // } catch {
-    //   response.errors = ['Login session has expired. Please login again.'];
-    // }
-
-    // if (response.errors.length == 0) {
-    //   try {
-    //     if (isAuthenticated) {
-    //       const fetchResponse = await fetch(
-    //         endpoint,
-    //         createGetOptions(accessToken),
-    //       )
-    //         .then(data => (data ? data.json() : null))
-    //         .catch(e => {
-    //           return {
-    //             errors: [e],
-    //           };
-    //         });
-
-    //       response.errors = fetchResponse.errors;
-    //       response.model = fetchResponse.model;
-    //     }
-    //   } catch {
-    //     response.errors = ['Error during request. Please try again later.'];
-    //   }
-    // }
-
-    // dispatch(stopLoading());
-
-    // if (response.errors.length > 0) {
-    //   dispatch(showErrors(response.errors));
-    // }
-
-    // return response.model;
+    return response;
   };
 
   const postData = async (endpoint: string, data: any) => {
@@ -82,57 +31,7 @@ export const useFetch = () => {
     );
     dispatch(stopLoading());
 
-    return response.model;
-    // const response: ApiResponseModel = {
-    //   model: null,
-    //   errors: [],
-    // };
-
-    // dispatch(startLoading());
-    // let accessToken: string = '';
-
-    // try {
-    //   if (isAuthenticated) {
-    //     accessToken = await getAccessTokenSilently({
-    //       authorizationParams: {
-    //         audience: 'https://oaprojects-api.oaprojects.net',
-    //         scope: 'User.ReadWrite',
-    //       },
-    //     });
-    //   }
-    // } catch {
-    //   response.errors = ['Login session has expired. Please login again.'];
-    // }
-
-    // if (response.errors.length == 0) {
-    //   try {
-    //     if (isAuthenticated) {
-    //       const fetchResponse = await fetch(
-    //         endpoint,
-    //         createPostOptions(accessToken, data),
-    //       )
-    //         .then(data => (data ? data.json() : null))
-    //         .catch(e => {
-    //           return {
-    //             errors: [e],
-    //           };
-    //         });
-
-    //       response.errors = fetchResponse.errors;
-    //       response.model = fetchResponse.model;
-    //     }
-    //   } catch {
-    //     response.errors = ['Error during request. Please try again later.'];
-    //   }
-    // }
-
-    // dispatch(stopLoading());
-
-    // if (response.errors.length > 0) {
-    //   dispatch(showErrors(response.errors));
-    // }
-
-    // return response.model;
+    return response;
   };
 
   const checkAuth = async () => {
@@ -162,6 +61,7 @@ export const useFetch = () => {
 
     try {
       if (isAuthenticated) {
+        console.log(options);
         const fetchResponse = await fetch(endpoint, options)
           .then(data => (data ? data.json() : null))
           .catch(e => {
@@ -190,7 +90,7 @@ export const useFetch = () => {
     headers.append('Authorization', bearer);
 
     return {
-      method: 'POST',
+      method: 'GET',
       headers: headers,
     };
   };

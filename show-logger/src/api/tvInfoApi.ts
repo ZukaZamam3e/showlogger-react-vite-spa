@@ -1,12 +1,11 @@
 import { useDispatch } from 'react-redux';
-import { useFetch } from '../hooks/useFetchOAProjectsAPI';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
 import { showErrors } from '../slices/errorsSlice';
 import { protectedResources } from '../config/apiConfig';
 import { TvEpisodeInfoModel } from '../models/TvEpisodeInfoModel';
 import { TvInfoModel } from '../models/TvInfoModel';
 
 export const tvInfoApi = () => {
-  const dispatch = useDispatch();
   const { getData, postData } = useFetch();
 
   const loadTvInfo = async (take: number) => {
@@ -19,8 +18,6 @@ export const tvInfoApi = () => {
       if (json.errors.length == 0) {
         data = json.model.tvInfos;
         count = json.model.count;
-      } else {
-        dispatch(showErrors(json.errors));
       }
     });
 
@@ -41,8 +38,6 @@ export const tvInfoApi = () => {
       if (json.errors.length == 0) {
         data = json.model.tvInfos;
         count = json.model.count;
-      } else {
-        dispatch(showErrors(json.errors));
       }
     });
 
@@ -59,15 +54,11 @@ export const tvInfoApi = () => {
       {
         tvInfoId: tvInfoId,
       },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          success = json.model;
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {});
+    ).then(async json => {
+      if (json.errors.length == 0) {
+        success = json.model;
+      }
+    });
 
     return success;
   };
@@ -88,8 +79,6 @@ export const tvInfoApi = () => {
     ).then(json => {
       if (json.errors.length == 0) {
         data = json.model.tvEpisodeInfos;
-      } else {
-        dispatch(showErrors(json.errors));
       }
     });
 
