@@ -11,7 +11,6 @@ const popupSlice = createSlice({
       state: any,
       action: PayloadAction<{ show: boolean; message: string }>,
     ) => {
-      console.log('test');
       state.show = action.payload.show;
       state.message = action.payload.message;
     },

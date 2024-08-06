@@ -10,7 +10,6 @@ function SlideTransition(props: SlideProps) {
 
 export const PopUpNotification = () => {
   const popup: any = useSelector((state: any) => state.popup);
-  console.log(popup);
   const dispatch = useDispatch();
 
   const handleClose = () => {

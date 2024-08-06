@@ -1,12 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { useFetch } from '../hooks/useFetchOAProjectsAPI';
-import { startLoading, stopLoading } from '../slices/isLoadingSlice';
-import { showErrors } from '../slices/errorsSlice';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
 import { protectedResources } from '../config/apiConfig';
 import { MovieInfoModel } from '../models/MovieInfoModel';
 
 export const movieInfoApi = () => {
-  const dispatch = useDispatch();
   const { getData, postData } = useFetch();
 
   const loadMovieInfo = async (take: number) => {
@@ -18,8 +14,6 @@ export const movieInfoApi = () => {
       if (json.errors.length == 0) {
         data = json.model.movieInfos;
         count = json.model.count;
-      } else {
-        dispatch(showErrors(json.errors));
       }
     });
 
@@ -39,8 +33,6 @@ export const movieInfoApi = () => {
       if (json.errors.length == 0) {
         data = json.model.movieInfos;
         count = json.model.count;
-      } else {
-        dispatch(showErrors(json.errors));
       }
     });
 
@@ -59,8 +51,6 @@ export const movieInfoApi = () => {
       .then(async json => {
         if (json.errors.length == 0) {
           success = json.model;
-        } else {
-          dispatch(showErrors(json.errors));
         }
       })
       .catch(() => {});

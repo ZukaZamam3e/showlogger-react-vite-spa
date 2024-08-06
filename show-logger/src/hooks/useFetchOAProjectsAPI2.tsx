@@ -8,133 +8,204 @@ interface ApiResponseModel {
   errors: string[];
 }
 
-export const useOAProjectsAPIFetch = () => {
-  const { isAuthenticated, getAccessTokenSilently, error } = useAuth0();
+export const useFetch = () => {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const dispatch = useDispatch();
 
   const getData = async (endpoint: string) => {
+    dispatch(startLoading());
+    const response = await fetchData(
+      endpoint,
+      createGetOptions(await checkAuth()),
+    );
+    dispatch(stopLoading());
+
+    return response.model;
+
+    // const response: ApiResponseModel = {
+    //   model: null,
+    //   errors: [],
+    // };
+
+    // dispatch(startLoading());
+    // let accessToken: string = '';
+
+    // try {
+    //   if (isAuthenticated) {
+    //     accessToken = await getAccessTokenSilently({
+    //       authorizationParams: {
+    //         audience: 'https://oaprojects-api.oaprojects.net',
+    //         scope: 'User.ReadWrite',
+    //       },
+    //     });
+    //   }
+    // } catch {
+    //   response.errors = ['Login session has expired. Please login again.'];
+    // }
+
+    // if (response.errors.length == 0) {
+    //   try {
+    //     if (isAuthenticated) {
+    //       const fetchResponse = await fetch(
+    //         endpoint,
+    //         createGetOptions(accessToken),
+    //       )
+    //         .then(data => (data ? data.json() : null))
+    //         .catch(e => {
+    //           return {
+    //             errors: [e],
+    //           };
+    //         });
+
+    //       response.errors = fetchResponse.errors;
+    //       response.model = fetchResponse.model;
+    //     }
+    //   } catch {
+    //     response.errors = ['Error during request. Please try again later.'];
+    //   }
+    // }
+
+    // dispatch(stopLoading());
+
+    // if (response.errors.length > 0) {
+    //   dispatch(showErrors(response.errors));
+    // }
+
+    // return response.model;
+  };
+
+  const postData = async (endpoint: string, data: any) => {
+    dispatch(startLoading());
+    const response = await fetchData(
+      endpoint,
+      createPostOptions(await checkAuth(), data),
+    );
+    dispatch(stopLoading());
+
+    return response.model;
+    // const response: ApiResponseModel = {
+    //   model: null,
+    //   errors: [],
+    // };
+
+    // dispatch(startLoading());
+    // let accessToken: string = '';
+
+    // try {
+    //   if (isAuthenticated) {
+    //     accessToken = await getAccessTokenSilently({
+    //       authorizationParams: {
+    //         audience: 'https://oaprojects-api.oaprojects.net',
+    //         scope: 'User.ReadWrite',
+    //       },
+    //     });
+    //   }
+    // } catch {
+    //   response.errors = ['Login session has expired. Please login again.'];
+    // }
+
+    // if (response.errors.length == 0) {
+    //   try {
+    //     if (isAuthenticated) {
+    //       const fetchResponse = await fetch(
+    //         endpoint,
+    //         createPostOptions(accessToken, data),
+    //       )
+    //         .then(data => (data ? data.json() : null))
+    //         .catch(e => {
+    //           return {
+    //             errors: [e],
+    //           };
+    //         });
+
+    //       response.errors = fetchResponse.errors;
+    //       response.model = fetchResponse.model;
+    //     }
+    //   } catch {
+    //     response.errors = ['Error during request. Please try again later.'];
+    //   }
+    // }
+
+    // dispatch(stopLoading());
+
+    // if (response.errors.length > 0) {
+    //   dispatch(showErrors(response.errors));
+    // }
+
+    // return response.model;
+  };
+
+  const checkAuth = async () => {
+    let accessToken: string = '';
+
+    try {
+      if (isAuthenticated) {
+        accessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: 'https://oaprojects-api.oaprojects.net',
+            scope: 'User.ReadWrite',
+          },
+        });
+      }
+    } catch {
+      dispatch(showErrors(['Login session has expired. Please login again.']));
+    }
+
+    return accessToken;
+  };
+
+  const fetchData = async (endpoint: string, options: RequestInit) => {
     const response: ApiResponseModel = {
       model: null,
       errors: [],
     };
 
-    dispatch(startLoading());
-    let accessToken;
-
     try {
       if (isAuthenticated) {
-        accessToken = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: 'https://oaprojects-api.oaprojects.net',
-            scope: 'User.ReadWrite',
-          },
-        });
-      }
-    } catch {
-      dispatch(stopLoading());
-      response.errors = ['Login session has expired. Please login again.'];
-    }
-
-    if (response.errors.length == 0) {
-      try {
-        if (isAuthenticated) {
-          const headers = new Headers();
-          const bearer = `Bearer ${accessToken}`;
-
-          headers.append('Authorization', bearer);
-
-          let options = {
-            method: 'GET',
-            headers: headers,
-          };
-
-          const fetchResponse = await fetch(endpoint, options)
-            .then(data => (data ? data.json() : null))
-            .catch(e => {
-              return {
-                errors: [e],
-              };
-            });
-
-          response.errors = fetchResponse.errors;
-          response.model = fetchResponse.model;
-        }
-      } catch {
-        response.errors = ['Error during request. Please try again later.'];
-      }
-    }
-
-    dispatch(stopLoading());
-
-    if (response.errors.length > 0) {
-      dispatch(showErrors(response.errors));
-    }
-
-    return response.model;
-  };
-
-  const postData = async (endpoint: string, data: any) => {
-    dispatch(startLoading());
-    let accessToken;
-    try {
-      if (isAuthenticated) {
-        accessToken = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: 'https://oaprojects-api.oaprojects.net',
-            scope: 'User.ReadWrite',
-          },
-        });
-      }
-    } catch {
-      dispatch(stopLoading());
-      const body = {
-        errors: ['Login session has expired. Please login again.'],
-      };
-      dispatch(showErrors(body.errors));
-      return body;
-    }
-
-    try {
-      if (isAuthenticated) {
-        const headers = new Headers();
-        const bearer = `Bearer ${accessToken}`;
-        headers.append('Authorization', bearer);
-        headers.append('Content-Type', 'application/json');
-
-        let options = {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify(data),
-        };
-
-        const response = await fetch(endpoint, options)
+        const fetchResponse = await fetch(endpoint, options)
           .then(data => (data ? data.json() : null))
           .catch(e => {
             return {
               errors: [e],
             };
           });
-        dispatch(stopLoading());
 
-        if (response.errors.length > 0) {
-          dispatch(showErrors(response.errors));
-        }
-
-        return response;
+        response.errors = fetchResponse.errors;
+        response.model = fetchResponse.model;
       }
     } catch {
-      dispatch(stopLoading());
-
-      const body = {
-        errors: ['Login session has expired. Please login again.'],
-      };
-
-      dispatch(showErrors(body.errors));
-
-      return body;
+      response.errors = ['Error during request. Please try again later.'];
     }
 
-    dispatch(stopLoading());
+    if (response.errors.length > 0) {
+      dispatch(showErrors(response.errors));
+    }
+
+    return response;
+  };
+
+  const createGetOptions = (accessToken: string) => {
+    const headers = new Headers();
+    const bearer = `Bearer ${accessToken}`;
+    headers.append('Authorization', bearer);
+
+    return {
+      method: 'POST',
+      headers: headers,
+    };
+  };
+
+  const createPostOptions = (accessToken: string, data: any) => {
+    const headers = new Headers();
+    const bearer = `Bearer ${accessToken}`;
+    headers.append('Authorization', bearer);
+    headers.append('Content-Type', 'application/json');
+
+    return {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(data),
+    };
   };
 
   return {
