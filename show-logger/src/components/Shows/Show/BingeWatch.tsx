@@ -101,19 +101,19 @@ export const BingeWatch = (props: BingeWatchProps) => {
   const handleAddEndEpisode = () => {
     const updatedBinge = {
       ...binge,
-      ['startEpisode']: binge.startEpisode + 1,
+      ['endEpisode']: binge.endEpisode + 1,
     };
     setBinge(updatedBinge);
-    setStartEpisode(() => updatedBinge.startEpisode);
+    setEndEpisode(() => updatedBinge.endEpisode);
   };
 
   const handleSubtractEndEpisode = () => {
     const updatedBinge = {
       ...binge,
-      ['startEpisode']: binge.startEpisode - 1,
+      ['endEpisode']: binge.endEpisode - 1,
     };
     setBinge(updatedBinge);
-    setStartEpisode(() => updatedBinge.startEpisode);
+    setEndEpisode(() => updatedBinge.endEpisode);
   };
 
   const handleShowDateChange = (value: any) => {

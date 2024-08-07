@@ -1,5 +1,3 @@
-import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
-import { protectedResources } from '../../../config/apiConfig';
 import { useEffect, useState } from 'react';
 import { ShowModel, createNewShow } from '../../../models/ShowModel';
 import { Fab } from '@mui/material';
@@ -14,14 +12,20 @@ import { BingeWatch } from './BingeWatch';
 import { placements } from '../../../config/placementConfig';
 import { BingeWatchModel } from '../../../models/BingeWatchModel';
 import { List } from '../../Common/List';
-import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
-import { showErrors } from '../../../slices/errorsSlice';
-import { useDispatch } from 'react-redux';
+import { showApi } from '../../../api/showApi';
 
 export const ShowsTab = () => {
-  const dispatch = useDispatch();
-
-  const { getData, postData } = useFetch();
+  const {
+    loadShow,
+    getShow,
+    saveShow,
+    addWatchFromSearch,
+    deleteShow,
+    addNextEpisode,
+    addOneday,
+    subtractOneday,
+    addRange,
+  } = showApi();
   const [shows, setShows] = useState<ShowModel[]>([]);
   const [showCount, setShowCount] = useState<number>(0);
   const [showTypeIds, setShowTypeIds] = useState<CodeValueModel[]>([]);
@@ -49,57 +53,26 @@ export const ShowsTab = () => {
   const take = 12;
 
   const load = async () => {
-    dispatch(startLoading());
-    await getData(
-      `${protectedResources.oaprojectsApi.showEndpoint}/load?take=${take}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setShows(json.model.shows);
-          setShowCount(json.model.count);
-          setShowTypeIds(json.model.showTypeIds);
-          setTransactionItems(json.model.transactionItems);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count, showTypeIds, items } = await loadShow(take);
+    setShows(data);
+    setShowCount(count);
+    setShowTypeIds(showTypeIds);
+    setTransactionItems(items);
   };
 
   const get = async (page: number, search: string) => {
-    dispatch(startLoading());
-    const offset = page * take;
-    await getData(
-      `${protectedResources.oaprojectsApi.showEndpoint}/get?offset=${offset}&take=${take}&search=${search}`,
-    )
-      .then(json => {
-        if (json.errors.length == 0) {
-          setShows(json.model.shows);
-          setShowCount(json.model.count);
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const { data, count } = await getShow(page, take, search);
+    setShows(data);
+    setShowCount(count);
   };
 
   const handleShowSave = async (
     show: ShowModel,
     searchSkippedOrEdit: boolean,
   ) => {
-    dispatch(startLoading());
-
-    let endpoint = protectedResources.oaprojectsApi.showEndpoint;
-    let hook = 'save';
-
-    let data: any = show;
+    let updatedShow: ShowModel | null = null;
 
     if (!searchSkippedOrEdit) {
-      hook = 'addwatchfromsearch';
       const watchFromSearch: AddWatchFromSearchModel = {
         api: show.api,
         type: show.type,
@@ -113,147 +86,65 @@ export const ShowsTab = () => {
         seasonNumber: show.seasonNumber,
         transactions: show.transactions,
       };
-
-      data = watchFromSearch;
+      updatedShow = await addWatchFromSearch(watchFromSearch);
+    } else {
+      updatedShow = await saveShow(show);
     }
 
-    if (show.watchlist !== null && show.watchlist) {
-      endpoint = protectedResources.oaprojectsApi.watchlistEnpoint;
-      data.dateAdded = show.dateWatched;
+    if (updatedShow != null) {
+      if (!searchSkippedOrEdit) {
+        handleCancelCreatingShow();
+      } else {
+        handleCancelSelectedShow();
+      }
+
+      await get(0, '');
     }
-
-    let url = `${endpoint}/${hook}`;
-
-    await postData(url, data)
-      .then(async json => {
-        if (json.errors.length == 0) {
-          if (!searchSkippedOrEdit) {
-            handleCancelCreatingShow();
-          } else {
-            handleCancelSelectedShow();
-          }
-
-          await get(0, '');
-        } else {
-          console.log(json);
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
   };
 
   const handleAddNextEpisode = async (showId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.showEndpoint}/addNextEpisode`,
-      {
-        showId: showId,
-        dateWatched: new Date(),
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const updatedShow = await addNextEpisode(showId, new Date());
+
+    if (updatedShow != null) {
+      await get(0, '');
+    }
   };
 
   const handleDelete = async (showId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(`${protectedResources.oaprojectsApi.showEndpoint}/delete`, {
-      showId: showId,
-    })
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const success = await deleteShow(showId);
+
+    if (success) {
+      await get(0, '');
+    }
   };
 
   const handleAddOneDay = async (showId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.showEndpoint}/addoneday`,
-      {
-        showId: showId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const updatedShow = await addOneday(showId);
+
+    if (updatedShow != null) {
+      await get(0, '');
+    }
   };
 
   const handleSubtractOneDay = async (showId: number) => {
     setClearSearch(prev => !prev);
-    dispatch(startLoading());
-    await postData(
-      `${protectedResources.oaprojectsApi.showEndpoint}/subtractoneday`,
-      {
-        showId: showId,
-      },
-    )
-      .then(async json => {
-        if (json.errors.length == 0) {
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    const updatedShow = await subtractOneday(showId);
+
+    if (updatedShow != null) {
+      await get(0, '');
+    }
   };
 
   const handleBingeSave = async (binge: BingeWatchModel) => {
-    dispatch(startLoading());
+    const success = await addRange(binge);
 
-    let url = `${protectedResources.oaprojectsApi.showEndpoint}/addrange`;
-
-    await postData(url, binge)
-      .then(async json => {
-        if (json.errors.length == 0) {
-          handleCancelBingeWatchShow();
-
-          await get(0, '');
-        } else {
-          dispatch(showErrors(json.errors));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(stopLoading());
-      });
+    if (success) {
+      handleCancelBingeWatchShow();
+      await get(0, '');
+    }
   };
 
   const handleBingeWatchShow = (show: ShowModel) => {
