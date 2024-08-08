@@ -1,16 +1,7 @@
-import {
-  Box,
-  Button,
-  Paper,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
 import { useState } from 'react';
 import { useFetch } from '../../../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../../../config/apiConfig';
 import { SearchResultsModel } from '../../../models/SearchResultsModel';
-import { SLTextField } from '../../Common/SLTextField';
 import { useDispatch } from 'react-redux';
 import { startLoading, stopLoading } from '../../../slices/isLoadingSlice';
 import { showMessage } from '../../../slices/popupSlice';
@@ -18,8 +9,13 @@ import { SearchApi } from '../../Search/SearchApi';
 import { SLIconButton } from '../../Common/SLIconButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import { SearchCard } from '../../Search/SearchCard';
+import { SearchShowModel } from '../../../models/SearchShowModel';
 
-export const SearchTab = () => {
+interface SearchTabProps {
+  searchShow?: SearchShowModel;
+}
+
+export const SearchTab = (props: SearchTabProps) => {
   const dispatch = useDispatch();
   const { postData } = useFetch();
   const [searchResults, setSearchResults] = useState<SearchResultsModel[]>([]);
@@ -49,7 +45,10 @@ export const SearchTab = () => {
   };
 
   return (
-    <SearchApi onSetSearchResults={setSearchResults}>
+    <SearchApi
+      onSetSearchResults={setSearchResults}
+      searchShow={props.searchShow}
+    >
       {searchResults.map((searchResult: SearchResultsModel) => (
         <SearchCard searchResult={searchResult}>
           <SLIconButton

@@ -1,12 +1,17 @@
 import { UnlinkedShowModel } from '../../../models/UnlinkedShowModel';
 import { Card, Stack, Typography } from '@mui/material';
 import { SLIconButton } from '../../Common/SLIconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import LinkIcon from '@mui/icons-material/Link';
+import CheckIcon from '@mui/icons-material/Check';
+import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Link } from 'react-head';
 
 interface UnlinkedShowCardProps {
   unlinkedShow: UnlinkedShowModel;
+  onSearchShow: (model: UnlinkedShowModel) => void;
+  onSelectUpdateShowName: (model: UnlinkedShowModel) => void;
+  onLinkShow: (model: UnlinkedShowModel) => void;
 }
 
 export const UnlinkedShowCard = (props: UnlinkedShowCardProps) => {
@@ -93,22 +98,30 @@ export const UnlinkedShowCard = (props: UnlinkedShowCardProps) => {
                 spacing={1}
                 sx={{ justifyContent: 'center' }}
               >
-                {/* <SLIconButton
-                  aria-label="Edit"
+                <SLIconButton
+                  aria-label="Search"
                   onClick={() => {
-                    props.onSelectBook(props.book);
+                    props.onSearchShow(props.unlinkedShow);
                   }}
                 >
-                  <EditIcon style={{ color: 'cornflowerblue' }} />
+                  <SearchIcon style={{ color: 'orange' }} />
                 </SLIconButton>
                 <SLIconButton
-                  aria-label="Delete"
+                  aria-label="Update Show Names"
                   onClick={() => {
-                    props.onDeleteBook(props.book.bookId);
+                    props.onSelectUpdateShowName(props.unlinkedShow);
                   }}
                 >
-                  <DeleteIcon style={{ color: 'red' }} />
-                </SLIconButton> */}
+                  <CheckIcon style={{ color: 'green' }} />
+                </SLIconButton>
+                <SLIconButton
+                  aria-label="Link Shows"
+                  onClick={() => {
+                    props.onLinkShow(props.unlinkedShow);
+                  }}
+                >
+                  <LinkIcon style={{ color: 'cornflowerblue' }} />
+                </SLIconButton>
               </Stack>
             </Stack>
           </Grid>

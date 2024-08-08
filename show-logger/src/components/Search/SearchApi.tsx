@@ -6,20 +6,22 @@ import {
   ToggleButtonGroup,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { SearchResultsModel } from '../../models/SearchResultsModel';
 import { SLTextField } from '../Common/SLTextField';
 import { infoApi } from '../../api/infoApi';
+import { SearchShowModel } from '../../models/SearchShowModel';
 
 export interface SearchApiProps {
   children?: ReactNode;
   onSetSearchResults: (searchResults: SearchResultsModel[]) => void;
+  searchShow?: SearchShowModel;
 }
 
 export const SearchApi = (props: SearchApiProps) => {
   const { searchApi } = infoApi();
-  const [name, setName] = useState('');
-  const [type, setType] = useState(0);
+  const [name, setName] = useState(props.searchShow?.name ?? '');
+  const [type, setType] = useState(props.searchShow?.type ?? 0);
 
   const handleTypeChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -32,6 +34,12 @@ export const SearchApi = (props: SearchApiProps) => {
     const searchResults = await searchApi(0, type, name);
     props.onSetSearchResults(searchResults);
   };
+
+  useEffect(() => {
+    if (props.searchShow !== null) {
+      handleSearchClick();
+    }
+  }, []);
 
   return (
     <>

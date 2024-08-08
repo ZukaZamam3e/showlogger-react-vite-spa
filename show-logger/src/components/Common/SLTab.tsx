@@ -1,11 +1,12 @@
 import { useTheme } from '@emotion/react';
 import { Stack, Tab, Tabs } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TabPanel } from './TabPanel';
 import { useSelector } from 'react-redux';
 
 interface SLTabProps {
   tabs: any;
+  changeToTab?: number;
 }
 
 export const SLTab = (props: SLTabProps) => {
@@ -16,6 +17,11 @@ export const SLTab = (props: SLTabProps) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
+
+  useEffect(() => {
+    setSelectedTab(props.changeToTab ?? selectedTab);
+  }, [props.changeToTab]);
+
   const tabWidth = isMobile ? '95vw' : 'initial';
   return (
     <>

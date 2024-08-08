@@ -1,11 +1,11 @@
 export interface UnlinkedShowModel {
-  showName: number;
+  showName: string;
   showTypeId: number;
-  showTypeIdZ: number;
-  lastWatched: number;
+  showTypeIdZ: string;
+  lastWatched: Date;
   watchCount: number;
-  airDate: number;
-  lastDataRefresh: number;
-  infoId: number;
-  inShowLoggerIndc: number;
+  airDate?: Date;
+  lastDataRefresh?: Date;
+  infoId?: number;
+  inShowLoggerIndc: boolean;
 }

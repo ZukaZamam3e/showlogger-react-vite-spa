@@ -1,6 +1,8 @@
 import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
 import { protectedResources } from '../config/apiConfig';
 import { UnlinkedShowModel } from '../models/UnlinkedShowModel';
+import { UpdateUnlinkedNameModel } from '../models/UpdateUnlinkedNameModel';
+import { LinkShowModel } from '../models/LinkShowModel';
 
 export const unlinkedShowsApi = () => {
   const { getData, postData } = useFetch();
@@ -48,5 +50,37 @@ export const unlinkedShowsApi = () => {
     };
   };
 
-  return { loadUnlinkedShows, getUnlinkedShows };
+  const updateShowNames = async (model: UpdateUnlinkedNameModel) => {
+    let success: boolean = false;
+    await postData(
+      `${protectedResources.oaprojectsApi.unlinkedShowsEndpoint}/updateshownames`,
+      {
+        model: model,
+      },
+    ).then(async json => {
+      if (json.errors.length == 0) {
+        success = true;
+      }
+    });
+
+    return success;
+  };
+
+  const linkShows = async (model: LinkShowModel) => {
+    let success: boolean = false;
+    await postData(
+      `${protectedResources.oaprojectsApi.unlinkedShowsEndpoint}/linkshows`,
+      {
+        model: model,
+      },
+    ).then(async json => {
+      if (json.errors.length == 0) {
+        success = true;
+      }
+    });
+
+    return success;
+  };
+
+  return { loadUnlinkedShows, getUnlinkedShows, updateShowNames, linkShows };
 };
