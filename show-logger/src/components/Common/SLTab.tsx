@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 
 interface SLTabProps {
   tabs: any;
-  changeToTab?: number;
+  changeToTab?: number | null;
+  onTabChange?: () => void;
 }
 
 export const SLTab = (props: SLTabProps) => {
@@ -16,6 +17,9 @@ export const SLTab = (props: SLTabProps) => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
+    if (!!props.onTabChange) {
+      props.onTabChange();
+    }
   };
 
   useEffect(() => {

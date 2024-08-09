@@ -7,11 +7,17 @@ import { TvInfoTab } from './TvInfo/TvInfoTab';
 import { UnlinkedShowsTab } from './UnlinkedShows/UnlinkedShowsTab';
 
 export const Info = () => {
-  const [changeToTab, setChangeToTab] = useState(-1);
-  const [searchShow, setSearchShow] = useState<SearchShowModel>();
+  const [changeToTab, setChangeToTab] = useState<number | null>(null);
+  const [searchShow, setSearchShow] = useState<SearchShowModel | null>();
   const handleSearchShow = (searchShow: SearchShowModel) => {
     setSearchShow(searchShow);
     setChangeToTab(2);
+  };
+
+  const handleTabChange = () => {
+    setSearchShow(null);
+
+    setChangeToTab(null);
   };
 
   const tabs = [
@@ -37,5 +43,11 @@ export const Info = () => {
     },
   ];
 
-  return <SLTab tabs={tabs} changeToTab={changeToTab} />;
+  return (
+    <SLTab
+      tabs={tabs}
+      changeToTab={changeToTab}
+      onTabChange={handleTabChange}
+    />
+  );
 };

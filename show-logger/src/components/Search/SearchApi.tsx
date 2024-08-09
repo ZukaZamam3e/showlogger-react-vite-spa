@@ -15,13 +15,17 @@ import { SearchShowModel } from '../../models/SearchShowModel';
 export interface SearchApiProps {
   children?: ReactNode;
   onSetSearchResults: (searchResults: SearchResultsModel[]) => void;
-  searchShow?: SearchShowModel;
+  searchShow?: SearchShowModel | null;
 }
 
 export const SearchApi = (props: SearchApiProps) => {
   const { searchApi } = infoApi();
-  const [name, setName] = useState(props.searchShow?.name ?? '');
-  const [type, setType] = useState(props.searchShow?.type ?? 0);
+  const [name, setName] = useState(
+    !!props.searchShow ? props.searchShow.name : '',
+  );
+  const [type, setType] = useState(
+    !!props.searchShow ? props.searchShow.type : 0,
+  );
 
   const handleTypeChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -36,7 +40,7 @@ export const SearchApi = (props: SearchApiProps) => {
   };
 
   useEffect(() => {
-    if (props.searchShow !== null) {
+    if (!!props.searchShow) {
       handleSearchClick();
     }
   }, []);

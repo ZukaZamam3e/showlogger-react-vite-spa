@@ -81,7 +81,7 @@ export const HomePage = () => {
           onNavigateClick={handleNavigateToLogShowsClick}
           onSetDefaultAreaClick={handleLogShowsSetAsDefault}
           onUndoDefaultAreaClick={handleUndoDefaultClick}
-          currentDefaultAreaIndc={userPref?.defaultArea === 'shows'}
+          currentDefaultAreaIndc={userPref?.defaultArea === 'Shows'}
         />
         <HomePageCard
           title="Log Books"
@@ -90,7 +90,7 @@ export const HomePage = () => {
           onNavigateClick={handleNavigateToLogBooksClick}
           onSetDefaultAreaClick={handleLogBooksSetAsDefault}
           onUndoDefaultAreaClick={handleUndoDefaultClick}
-          currentDefaultAreaIndc={userPref?.defaultArea === 'books'}
+          currentDefaultAreaIndc={userPref?.defaultArea === 'Books'}
         />
         <HomePageCard
           title="Info"

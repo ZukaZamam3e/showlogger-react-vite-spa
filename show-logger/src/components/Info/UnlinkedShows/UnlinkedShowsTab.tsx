@@ -5,6 +5,7 @@ import { UnlinkedShowCard } from './UnlinkedShowCard';
 import { unlinkedShowsApi } from '../../../api/unlinkedShowsApi';
 import { UpdateUnlinkedNameModel } from '../../../models/UpdateUnlinkedNameModel';
 import { SearchShowModel } from '../../../models/SearchShowModel';
+import { UpdateShowName } from './UpdateShowName';
 
 interface UnlinkedShowTabProps {
   onSearchShow: (model: SearchShowModel) => void;
@@ -16,6 +17,11 @@ export const UnlinkedShowsTab = (props: UnlinkedShowTabProps) => {
   const [unlinkedShows, setUnlinkedShows] = useState<UnlinkedShowModel[]>([]);
   const [unlinkedShowsCount, setUnlinkedShowsCount] = useState<number>(0);
   const [clearSearch, setClearSearch] = useState(false);
+  const [updateShowNameEdit, setUpdateShowNameEdit] = useState({
+    show: false,
+    showName: '',
+    showTypeId: -1,
+  });
   const take = 12;
 
   const load = async () => {
@@ -35,6 +41,7 @@ export const UnlinkedShowsTab = (props: UnlinkedShowTabProps) => {
     const success = await updateShowNames(model);
 
     if (success) {
+      handleCancelUpdateShowName();
       await get(0, '');
     }
   };
@@ -59,14 +66,37 @@ export const UnlinkedShowsTab = (props: UnlinkedShowTabProps) => {
     });
   };
 
-  const handleSelectUpdateShowName = (model: UnlinkedShowModel) => {};
+  const handleSelectUpdateShowName = (model: UnlinkedShowModel) => {
+    setUpdateShowNameEdit({
+      show: true,
+      showName: model.showName,
+      showTypeId: model.showTypeId,
+    });
+  };
+
+  const handleCancelUpdateShowName = () => {
+    setUpdateShowNameEdit({ show: false, showName: '', showTypeId: -1 });
+  };
 
   useEffect(() => {
     load();
   }, []);
 
+  const updateShowName = updateShowNameEdit.show && (
+    <UpdateShowName
+      showName={updateShowNameEdit.showName}
+      showTypeId={updateShowNameEdit.showTypeId}
+      onUpdateShowName={handleUpdateShowNames}
+      onCancelUpdateShowName={handleCancelUpdateShowName}
+    />
+  );
+
+  const sxBody = {
+    display: !updateShowNameEdit.show ? 'initial' : 'none',
+  };
+
   const body = (
-    <div>
+    <div style={sxBody}>
       <List
         count={unlinkedShowsCount}
         onGet={get}
@@ -86,5 +116,10 @@ export const UnlinkedShowsTab = (props: UnlinkedShowTabProps) => {
     </div>
   );
 
-  return <>{body}</>;
+  return (
+    <>
+      {body}
+      {updateShowName}
+    </>
+  );
 };

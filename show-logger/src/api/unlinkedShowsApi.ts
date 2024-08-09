@@ -54,9 +54,7 @@ export const unlinkedShowsApi = () => {
     let success: boolean = false;
     await postData(
       `${protectedResources.oaprojectsApi.unlinkedShowsEndpoint}/updateshownames`,
-      {
-        model: model,
-      },
+      model,
     ).then(async json => {
       if (json.errors.length == 0) {
         success = true;
@@ -68,11 +66,10 @@ export const unlinkedShowsApi = () => {
 
   const linkShows = async (model: LinkShowModel) => {
     let success: boolean = false;
+    console.log(model);
     await postData(
       `${protectedResources.oaprojectsApi.unlinkedShowsEndpoint}/linkshows`,
-      {
-        model: model,
-      },
+      model,
     ).then(async json => {
       if (json.errors.length == 0) {
         success = true;
