@@ -14,7 +14,6 @@ export const LandingPage = () => {
 
   const loadUserPref = async () => {
     const { data } = await loadLogin();
-    console.log(data);
     dispatch(updateUserPref(data));
   };
 
@@ -24,9 +23,9 @@ export const LandingPage = () => {
 
   let body: ReactNode = null;
 
-  if (userPref?.defaultArea === 'Shows') {
+  if (userPref?.defaultArea.toLowerCase() === 'shows') {
     body = <Shows />;
-  } else if (userPref?.defaultArea === 'Books') {
+  } else if (userPref?.defaultArea.toLowerCase() === 'books') {
     body = <Books />;
   } else {
     body = <HomePage />;

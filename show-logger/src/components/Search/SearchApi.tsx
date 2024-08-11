@@ -55,7 +55,8 @@ export const SearchApi = (props: SearchApiProps) => {
               borderWidth: '2px',
               borderColor: 'white',
               borderRadius: 3,
-              m: 2,
+              mt: 1,
+              mb: 2,
               width: '90vw',
               padding: 3,
             }}
@@ -105,6 +106,7 @@ export const SearchApi = (props: SearchApiProps) => {
           rowGap: '30px',
           paddingBottom: '52px',
           m: 'auto',
+          mb: 2,
           gridTemplateColumns: {
             xs: '1fr',
             sm: '1fr 1fr',

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { showErrors } from '../slices/errorsSlice';
 
-export const useFetch = () => {
+export const useFetch2 = () => {
   const { isAuthenticated, getAccessTokenSilently, error } = useAuth0();
   const dispatch = useDispatch();
 

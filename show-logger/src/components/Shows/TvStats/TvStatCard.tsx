@@ -10,7 +10,7 @@ export interface TvStatCardProps {
 }
 
 export const TvStatCard = (props: TvStatCardProps) => {
-  const hasNextEpisode = props.tvStat.infoId !== null;
+  const hasNextEpisode = props.tvStat.nextEpisodeInfoId !== null;
   const hasEpisodesLeft = props.tvStat.episodesLeft ?? 0 > 0;
   const totalDays = `${props.tvStat.daysSinceStarting} day${(props.tvStat.daysSinceStarting ?? 0) > 1 ? 's' : ''}`;
   const episodesLeft = (

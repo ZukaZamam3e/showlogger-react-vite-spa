@@ -61,6 +61,29 @@ export const TvCard = (props: TvCardProps) => {
     imageUrl = nia_landscape;
   }
 
+  let topCardDisplay = {
+    xs: 'none',
+    sm: 'block',
+  };
+
+  let mobileCardDisplay = {
+    xs: 'block',
+    sm: 'none',
+  };
+
+  if (props.name != null) {
+    console.log('has name');
+    topCardDisplay = {
+      xs: 'block',
+      sm: 'block',
+    };
+
+    mobileCardDisplay = {
+      xs: 'none',
+      sm: 'none',
+    };
+  }
+
   return (
     <Card
       sx={{
@@ -72,10 +95,8 @@ export const TvCard = (props: TvCardProps) => {
         component="img"
         image={imageUrl}
         sx={{
-          height: {
-            xs: 205,
-            sm: 265,
-          },
+          display: topCardDisplay,
+          height: 265,
         }}
       />
       <Grid
@@ -98,13 +119,23 @@ export const TvCard = (props: TvCardProps) => {
             minHeight: {
               sm: 161,
             },
-            p: 1,
-            mt: {
+            p: {
               xs: 0,
-              sm: 0,
+              sm: 1,
             },
+            mt: 0,
           }}
         >
+          <CardMedia
+            component="img"
+            image={imageUrl}
+            sx={{
+              display: mobileCardDisplay,
+              height: 95,
+              width: 175,
+              m: 'auto',
+            }}
+          />
           {name}
           <Typography
             variant="body2"

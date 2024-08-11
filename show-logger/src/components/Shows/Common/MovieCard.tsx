@@ -34,7 +34,7 @@ export const MovieCard = (props: MovieCardProps) => {
 
   const name =
     props.name != null ? (
-      <Typography variant="body2" color="text.primary">
+      <Typography variant="body2" color="text.primary" sx={{ fontSize: 20 }}>
         {props.name}
       </Typography>
     ) : (
@@ -52,6 +52,29 @@ export const MovieCard = (props: MovieCardProps) => {
     imageUrl = nia_landscape;
   }
 
+  let topCardDisplay = {
+    xs: 'none',
+    sm: 'block',
+  };
+
+  let mobileCardDisplay = {
+    xs: 'block',
+    sm: 'none',
+  };
+
+  if (props.name != null) {
+    console.log('has name');
+    topCardDisplay = {
+      xs: 'block',
+      sm: 'block',
+    };
+
+    mobileCardDisplay = {
+      xs: 'none',
+      sm: 'none',
+    };
+  }
+
   return (
     <Card
       sx={{
@@ -63,10 +86,8 @@ export const MovieCard = (props: MovieCardProps) => {
         component="img"
         image={imageUrl}
         sx={{
-          height: {
-            xs: 205,
-            sm: 265,
-          },
+          display: topCardDisplay,
+          height: 265,
         }}
       />
       <Grid
@@ -97,6 +118,16 @@ export const MovieCard = (props: MovieCardProps) => {
             },
           }}
         >
+          <CardMedia
+            component="img"
+            image={imageUrl}
+            sx={{
+              display: mobileCardDisplay,
+              height: 95,
+              width: 175,
+              m: 'auto',
+            }}
+          />
           {name}
           <Typography
             variant="body2"

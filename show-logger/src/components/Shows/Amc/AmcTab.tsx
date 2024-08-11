@@ -10,7 +10,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { CodeValueModel } from '../../../models/CodeValueModel';
 import { EditAmcTransaction } from './EditAmcTransaction';
 import { TransactionItemModel } from '../../../models/TransactionItemModel';
-import { useSelector } from 'react-redux';
 import { Fab } from '@mui/material';
 import { transactionApi } from '../../../api/transactionApi';
 
@@ -31,18 +30,12 @@ export const AmcTab = () => {
   >([]);
   const [clearSearch, setClearSearch] = useState(false);
   const [hideAddButton, setHideAddButton] = useState(false);
-  const isMobile = useSelector((state: any) => state.isMobile.value);
-
-  const [take, setTake] = useState(isMobile ? 12 : 24);
+  const take = 12;
 
   const [editing, setEditing] = useState({
     show: false,
     editingTransaction: createNewTransaction(),
   });
-
-  useEffect(() => {
-    setTake(isMobile ? 12 : 24);
-  }, [isMobile]);
 
   const load = async () => {
     const { data, count, transactionTypeIds, items } =

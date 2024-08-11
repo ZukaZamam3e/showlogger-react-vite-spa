@@ -66,7 +66,6 @@ export const unlinkedShowsApi = () => {
 
   const linkShows = async (model: LinkShowModel) => {
     let success: boolean = false;
-    console.log(model);
     await postData(
       `${protectedResources.oaprojectsApi.unlinkedShowsEndpoint}/linkshows`,
       model,

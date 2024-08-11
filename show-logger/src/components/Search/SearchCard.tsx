@@ -30,17 +30,23 @@ export const SearchCard = (props: SearchCardProps) => {
     <Card
       sx={{
         display: 'flex',
-        maxWidth: 380,
         m: 'auto',
       }}
     >
+      <CardMedia
+        component="img"
+        sx={{ width: 150, height: 225 }}
+        image={imageUrl}
+      />
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        <CardContent sx={{ flex: '1 0 auto', width: 150 }}>
+        <CardContent
+          sx={{ flex: '1 0 auto', width: { xs: 235, sm: 150, xl: 200 } }}
+        >
           <Typography
             variant="body2"
             color="text.primary"
@@ -68,11 +74,6 @@ export const SearchCard = (props: SearchCardProps) => {
           {props.children}
         </Stack>
       </Box>
-      <CardMedia
-        component="img"
-        sx={{ width: 150, height: 225 }}
-        image={imageUrl}
-      />
     </Card>
   );
 };

@@ -18,26 +18,23 @@ import {
   Typography,
 } from '@mui/material';
 // import { loginRequest } from '../authConfig';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 export const NavigationBar = () => {
   const pages = [
-    { title: 'Home', href: '/home' },
-    { title: 'Shows', href: '/shows' },
-    { title: 'Books', href: '/books' },
-    { title: 'Info', href: '/info' },
-    { title: 'Friends', href: '/friends' },
+    { title: 'Home', href: '/home', roles: '' },
+    { title: 'Shows', href: '/shows', roles: '' },
+    { title: 'Books', href: '/books', roles: '' },
+    { title: 'Info', href: '/info', roles: 'Info' },
+    { title: 'Friends', href: '/friends', roles: '' },
   ];
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getIdTokenClaims } = useAuth0();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -56,6 +53,14 @@ export const NavigationBar = () => {
     navigate(href);
     setAnchorElNav(null);
   };
+
+  const load = async () => {
+    // console.log(await getIdTokenClaims());
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
 
   let activeAccount;
 
@@ -113,18 +118,24 @@ export const NavigationBar = () => {
           Show Logger
         </Typography>
 
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {pages.map(page => (
-            <Button
-              key={page.title}
-              onClick={() => navigate(page.href)}
-              sx={{ color: 'white', display: 'block' }}
-            >
-              {page.title}
-            </Button>
-          ))}
-        </Box>
-        {!isAuthenticated ? <LoginButton /> : <LogoutButton />}
+        {!isAuthenticated ? (
+          <LoginButton />
+        ) : (
+          <>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map(page => (
+                <Button
+                  key={page.title}
+                  onClick={() => navigate(page.href)}
+                  sx={{ color: 'white', display: 'block' }}
+                >
+                  {page.title}
+                </Button>
+              ))}
+            </Box>
+            <LogoutButton />
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );

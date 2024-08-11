@@ -42,7 +42,6 @@ export const useFetch = () => {
         accessToken = await getAccessTokenSilently({
           authorizationParams: {
             audience: 'https://oaprojects-api.oaprojects.net',
-            scope: 'User.ReadWrite',
           },
         });
       }
