@@ -1,4 +1,4 @@
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../config/apiConfig';
 import { BookYearStatModel } from '../models/BookYearStatModel';
 import { TvStatModel } from '../models/TvStatModel';

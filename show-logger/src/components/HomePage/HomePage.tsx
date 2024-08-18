@@ -12,6 +12,12 @@ export const HomePage = () => {
   const dispatch = useDispatch();
   const userPref = useSelector((state: any) => state.userPref.value);
 
+  let defaultArea = userPref?.defaultArea;
+
+  if (defaultArea != null) {
+    defaultArea = defaultArea.toLowerCase();
+  }
+
   const handleUndoDefaultClick = async () => {
     const updatedUserPref = { ...userPref, ['defaultArea']: '' };
     await saveUserPref(updatedUserPref);
@@ -36,7 +42,9 @@ export const HomePage = () => {
   };
 
   const handleNavigateToInfoClick = () => {
-    navigate('/info');
+    if (userPref && userPref.hasAdminRole) {
+      navigate('/info');
+    }
   };
 
   const handleNavigateToFriendsClick = () => {
@@ -81,7 +89,7 @@ export const HomePage = () => {
           onNavigateClick={handleNavigateToLogShowsClick}
           onSetDefaultAreaClick={handleLogShowsSetAsDefault}
           onUndoDefaultAreaClick={handleUndoDefaultClick}
-          currentDefaultAreaIndc={userPref?.defaultArea === 'Shows'}
+          currentDefaultAreaIndc={defaultArea === 'shows'}
         />
         <HomePageCard
           title="Log Books"
@@ -90,13 +98,7 @@ export const HomePage = () => {
           onNavigateClick={handleNavigateToLogBooksClick}
           onSetDefaultAreaClick={handleLogBooksSetAsDefault}
           onUndoDefaultAreaClick={handleUndoDefaultClick}
-          currentDefaultAreaIndc={userPref?.defaultArea === 'Books'}
-        />
-        <HomePageCard
-          title="Info"
-          description="Manage the api data within the application."
-          navigateText="See Info"
-          onNavigateClick={handleNavigateToInfoClick}
+          currentDefaultAreaIndc={defaultArea === 'books'}
         />
         <HomePageCard
           title="Friends"
@@ -104,6 +106,14 @@ export const HomePage = () => {
           navigateText="See Friends"
           onNavigateClick={handleNavigateToFriendsClick}
         />
+        {userPref && userPref.hasAdminRole && (
+          <HomePageCard
+            title="Info"
+            description="Manage the api data within the application."
+            navigateText="See Info"
+            onNavigateClick={handleNavigateToInfoClick}
+          />
+        )}
       </Box>
     </Box>
   );

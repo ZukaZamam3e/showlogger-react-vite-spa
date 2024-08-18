@@ -5,14 +5,21 @@ import { LandingPage } from './LandingPage';
 import { Books } from './Books/Books';
 import { Friends } from './Friends/Friends';
 import { Info } from './Info/Info';
+import { useSelector } from 'react-redux';
 
-export const Pages = () => (
-  <Routes>
-    <Route path="/" element={<LandingPage />} />
-    <Route path="/home" element={<HomePage />} />
-    <Route path="/shows" element={<Shows />} />
-    <Route path="/books" element={<Books />} />
-    <Route path="/info" element={<Info />} />
-    <Route path="/friends" element={<Friends />} />
-  </Routes>
-);
+export const Pages = () => {
+  const userPref = useSelector((state: any) => state.userPref.value);
+
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/shows" element={<Shows />} />
+      <Route path="/books" element={<Books />} />
+      {userPref != null && userPref.hasAdminRole && (
+        <Route path="/info" element={<Info />} />
+      )}
+      <Route path="/friends" element={<Friends />} />
+    </Routes>
+  );
+};

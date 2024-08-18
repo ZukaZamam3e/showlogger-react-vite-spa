@@ -63,7 +63,6 @@ export const MovieCard = (props: MovieCardProps) => {
   };
 
   if (props.name != null) {
-    console.log('has name');
     topCardDisplay = {
       xs: 'block',
       sm: 'block',

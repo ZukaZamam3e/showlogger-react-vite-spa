@@ -7,15 +7,27 @@ import { ErrorMessage } from './Common/ErrorMessage';
 import { updateIsMobile } from '../slices/isMobileSlice';
 import { useDispatch } from 'react-redux';
 import { PopUpNotification } from './Common/PopUpNotification';
+import { loginApi } from '../api/loginApi';
+import { updateUserPref } from '../slices/userPrefSlice';
 
 interface PageLayoutProps {
   children: ReactNode;
 }
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
+  const { loadLogin } = loginApi();
   const dispatch = useDispatch();
 
   const { isAuthenticated } = useAuth0();
+
+  const loadUserPref = async () => {
+    const { data } = await loadLogin();
+    dispatch(updateUserPref(data));
+  };
+
+  useEffect(() => {
+    loadUserPref();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     detectWindowSize();
@@ -55,7 +67,19 @@ export const PageLayout = ({ children }: PageLayoutProps) => {
             justifyContent: 'center',
           }}
         >
-          {isAuthenticated ? children : <div>need to authenticate</div>}
+          {isAuthenticated ? (
+            children
+          ) : (
+            <div>
+              <div>
+                Please log in with your email you used in the old version.
+              </div>
+              <div>
+                If this your first time logging in, please contact me and I will
+                get you account set up.
+              </div>
+            </div>
+          )}
         </Box>
         <Loading />
         <ErrorMessage />

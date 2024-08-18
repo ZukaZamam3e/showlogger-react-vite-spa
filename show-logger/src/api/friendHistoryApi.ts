@@ -1,4 +1,4 @@
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../config/apiConfig';
 import { BookFriendHistoryModel } from '../models/BookFriendHistoryModel';
 import { FriendHistoryModel } from '../models/FriendHistoryModel';

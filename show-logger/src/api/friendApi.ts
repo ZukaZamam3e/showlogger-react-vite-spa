@@ -1,4 +1,4 @@
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../config/apiConfig';
 import { FriendModel } from '../models/FriendModel';
 
@@ -48,7 +48,9 @@ export const friendApi = () => {
     let success: boolean = false;
     await postData(
       `${protectedResources.oaprojectsApi.friendEndpoint}/acceptfriendrequest`,
-      friendRequestId,
+      {
+        friendRequestId,
+      },
     ).then(async json => {
       if (json.errors.length == 0) {
         success = true;
@@ -61,7 +63,9 @@ export const friendApi = () => {
     let success: boolean = false;
     await postData(
       `${protectedResources.oaprojectsApi.friendEndpoint}/denyfriendrequest`,
-      friendRequestId,
+      {
+        friendRequestId,
+      },
     ).then(async json => {
       if (json.errors.length == 0) {
         success = true;
@@ -88,7 +92,9 @@ export const friendApi = () => {
     let success: boolean = false;
     await postData(
       `${protectedResources.oaprojectsApi.friendEndpoint}/delete`,
-      friendId,
+      {
+        friendId,
+      },
     ).then(async json => {
       if (json.errors.length == 0) {
         success = true;

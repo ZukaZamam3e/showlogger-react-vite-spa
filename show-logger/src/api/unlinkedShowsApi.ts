@@ -1,4 +1,4 @@
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../config/apiConfig';
 import { UnlinkedShowModel } from '../models/UnlinkedShowModel';
 import { UpdateUnlinkedNameModel } from '../models/UpdateUnlinkedNameModel';

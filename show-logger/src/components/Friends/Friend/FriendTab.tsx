@@ -75,6 +75,7 @@ export const FriendTab = () => {
     });
 
     if (success) {
+      handleCancelFriendRequest();
       await get(0, '');
     }
   };

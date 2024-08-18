@@ -72,7 +72,6 @@ export const TvCard = (props: TvCardProps) => {
   };
 
   if (props.name != null) {
-    console.log('has name');
     topCardDisplay = {
       xs: 'block',
       sm: 'block',

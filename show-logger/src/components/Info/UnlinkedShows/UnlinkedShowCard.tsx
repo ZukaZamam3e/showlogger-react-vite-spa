@@ -15,8 +15,6 @@ interface UnlinkedShowCardProps {
 }
 
 export const UnlinkedShowCard = (props: UnlinkedShowCardProps) => {
-  console.log(props.unlinkedShow.inShowLoggerIndc);
-
   const linkShows = props.unlinkedShow.inShowLoggerIndc && (
     <SLIconButton
       aria-label="Link Shows"

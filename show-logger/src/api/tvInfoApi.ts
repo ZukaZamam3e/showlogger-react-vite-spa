@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { showErrors } from '../slices/errorsSlice';
 import { protectedResources } from '../config/apiConfig';
 import { TvEpisodeInfoModel } from '../models/TvEpisodeInfoModel';

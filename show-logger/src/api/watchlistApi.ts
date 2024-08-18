@@ -1,4 +1,4 @@
-import { useFetch } from '../hooks/useFetchOAProjectsAPI2';
+import { useFetch } from '../hooks/useFetchOAProjectsAPI';
 import { protectedResources } from '../config/apiConfig';
 import { WatchListModel } from '../models/WatchListModel';
 import { CodeValueModel } from '../models/CodeValueModel';

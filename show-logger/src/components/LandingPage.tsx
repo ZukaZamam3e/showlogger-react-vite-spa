@@ -1,31 +1,23 @@
 import { useSelector } from 'react-redux';
-import { ReactNode, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateUserPref } from '../slices/userPrefSlice';
+import { ReactNode } from 'react';
 import { Shows } from './Shows/Shows';
 import { HomePage } from './HomePage/HomePage';
 import { Books } from './Books/Books';
-import { loginApi } from '../api/loginApi';
 
 export const LandingPage = () => {
-  const { loadLogin } = loginApi();
-  const dispatch = useDispatch();
   const userPref = useSelector((state: any) => state.userPref.value);
 
-  const loadUserPref = async () => {
-    const { data } = await loadLogin();
-    dispatch(updateUserPref(data));
-  };
+  let defaultArea = userPref?.defaultArea;
 
-  useEffect(() => {
-    loadUserPref();
-  }, []);
+  if (defaultArea != null) {
+    defaultArea = defaultArea.toLowerCase();
+  }
 
   let body: ReactNode = null;
 
-  if (userPref?.defaultArea.toLowerCase() === 'shows') {
+  if (defaultArea === 'shows') {
     body = <Shows />;
-  } else if (userPref?.defaultArea.toLowerCase() === 'books') {
+  } else if (defaultArea === 'books') {
     body = <Books />;
   } else {
     body = <HomePage />;

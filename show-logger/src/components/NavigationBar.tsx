@@ -1,44 +1,39 @@
 import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-  useMsal,
-} from '@azure/msal-react';
-// import { Nav, Navbar, Dropdown, DropdownButton } from 'react-bootstrap';
-import {
   AppBar,
-  Avatar,
   Box,
   Button,
-  Container,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
-  Tooltip,
   Typography,
 } from '@mui/material';
-// import { loginRequest } from '../authConfig';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useSelector } from 'react-redux';
 
 export const NavigationBar = () => {
+  const userPref = useSelector((state: any) => state.userPref.value);
+
   const pages = [
-    { title: 'Home', href: '/home', roles: '' },
-    { title: 'Shows', href: '/shows', roles: '' },
-    { title: 'Books', href: '/books', roles: '' },
-    { title: 'Info', href: '/info', roles: 'Info' },
-    { title: 'Friends', href: '/friends', roles: '' },
+    { title: 'Home', href: '/home' },
+    { title: 'Shows', href: '/shows' },
+    { title: 'Books', href: '/books' },
+    { title: 'Friends', href: '/friends' },
   ];
 
-  const { isAuthenticated, getIdTokenClaims } = useAuth0();
+  if (userPref && userPref.hasAdminRole) {
+    pages.push({ title: 'Info', href: '/info' });
+  }
+
+  const { isAuthenticated } = useAuth0();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
-  const { instance } = useMsal();
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -54,19 +49,11 @@ export const NavigationBar = () => {
     setAnchorElNav(null);
   };
 
-  const load = async () => {
-    // console.log(await getIdTokenClaims());
-  };
+  const load = async () => {};
 
   useEffect(() => {
     load();
   }, []);
-
-  let activeAccount;
-
-  if (instance) {
-    activeAccount = instance.getActiveAccount();
-  }
 
   return (
     <AppBar position="fixed">
