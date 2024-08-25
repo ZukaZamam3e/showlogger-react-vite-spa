@@ -13,6 +13,8 @@ import { placements } from '../../../config/placementConfig';
 import { BingeWatchModel } from '../../../models/BingeWatchModel';
 import { List } from '../../Common/List';
 import { showApi } from '../../../api/showApi';
+import { watchListApi } from '../../../api/watchlistApi';
+import { WatchListModel } from '../../../models/WatchListModel';
 
 export const ShowsTab = () => {
   const {
@@ -26,6 +28,8 @@ export const ShowsTab = () => {
     subtractOneday,
     addRange,
   } = showApi();
+
+  const { saveWatchList } = watchListApi();
   const [shows, setShows] = useState<ShowModel[]>([]);
   const [showCount, setShowCount] = useState<number>(0);
   const [showTypeIds, setShowTypeIds] = useState<CodeValueModel[]>([]);
@@ -71,6 +75,7 @@ export const ShowsTab = () => {
     searchSkippedOrEdit: boolean,
   ) => {
     let updatedShow: ShowModel | null = null;
+    let updated: any;
 
     if (!searchSkippedOrEdit) {
       const watchFromSearch: AddWatchFromSearchModel = {
@@ -85,13 +90,15 @@ export const ShowsTab = () => {
         episodeNumber: show.episodeNumber,
         seasonNumber: show.seasonNumber,
         transactions: show.transactions,
+        watchlist: show.watchlist ?? false,
       };
-      updatedShow = await addWatchFromSearch(watchFromSearch);
+
+      updated = await addWatchFromSearch(watchFromSearch);
     } else {
       updatedShow = await saveShow(show);
     }
 
-    if (updatedShow != null) {
+    if (updatedShow != null || updated.isSuccess) {
       if (!searchSkippedOrEdit) {
         handleCancelCreatingShow();
       } else {

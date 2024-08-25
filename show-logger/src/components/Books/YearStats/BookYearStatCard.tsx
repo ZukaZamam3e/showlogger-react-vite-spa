@@ -1,8 +1,16 @@
 import { BookYearStatModel } from '../../../models/BookYearStatModel';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from '@mui/material';
 
 interface BookYearStatCardProps {
   yearStat: BookYearStatModel;
+  onSelect: (yearStat: BookYearStatModel) => void;
 }
 
 export const BookYearStatCard = (props: BookYearStatCardProps) => {
@@ -39,14 +47,36 @@ export const BookYearStatCard = (props: BookYearStatCardProps) => {
             Pages: {props.yearStat.pageCnt}
           </Typography>
           <Typography variant="body2" color="text.primary">
-            Average Days: {props.yearStat.dayAvgZ}
+            Averages
           </Typography>
           <Typography variant="body2" color="text.primary">
-            Average Chapters: {props.yearStat.chapterAvgZ}
+            Days: {props.yearStat.dayAvgZ}
           </Typography>
           <Typography variant="body2" color="text.primary">
-            Average Pages: {props.yearStat.pageAvgZ}
+            Chapters: {props.yearStat.chapterAvgZ}
           </Typography>
+          <Typography variant="body2" color="text.primary">
+            Pages: {props.yearStat.pageAvgZ}
+          </Typography>
+          <Typography variant="body2" color="text.primary">
+            Books per Month: {props.yearStat.monthAvgZ}
+          </Typography>
+          <Stack direction="column" spacing={2} sx={{ p: 2 }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ justifyContent: 'center' }}
+            >
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  props.onSelect(props.yearStat);
+                }}
+              >
+                See More
+              </Button>
+            </Stack>
+          </Stack>
         </CardContent>
       </Card>
     </>

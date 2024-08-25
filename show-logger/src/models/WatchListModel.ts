@@ -1,11 +1,11 @@
 export interface WatchListModel {
   watchlistId: number;
   showName?: string;
-  showTypeId: number;
+  showTypeId?: number;
   showTypeIdZ?: string;
   seasonNumber?: number;
   episodeNumber?: number;
-  dateAdded: Date;
+  dateAdded?: Date;
   showNotes?: string;
   infoId?: number;
 

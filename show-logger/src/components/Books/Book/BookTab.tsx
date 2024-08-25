@@ -69,6 +69,10 @@ export const BookTab = () => {
     setEditing({ show: false, editingBook: createNewBook() });
   };
 
+  const handleToggleSearch = () => {
+    setHideAddButton(prev => !prev);
+  };
+
   const sxBody = {
     display: !editing.show ? 'initial' : 'none',
   };
@@ -97,7 +101,13 @@ export const BookTab = () => {
           <AddIcon />
         </Fab>
       )}
-      <List count={bookCount} onGet={get} clearSearch={clearSearch} take={take}>
+      <List
+        count={bookCount}
+        onGet={get}
+        clearSearch={clearSearch}
+        take={take}
+        onToggleSearch={handleToggleSearch}
+      >
         {books.map((book: BookModel) => (
           <BookCard
             key={book.bookId}
