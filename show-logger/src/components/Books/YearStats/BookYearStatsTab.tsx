@@ -83,10 +83,12 @@ export const BookYearStatsTab = () => {
         <h1>
           {year} - {name}
         </h1>
+        <h2></h2>
         <hr />
         {monthData.map(md => (
           <>
             <h2>{monthNames[md.month - 1]}</h2>
+            <h3>{`${md.data.length} book${md.data.length !== 1 ? 's' : ''}`}</h3>
             <List
               count={md.data.length}
               take={take}
