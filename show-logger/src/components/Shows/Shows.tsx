@@ -6,6 +6,7 @@ import { WatchListTab } from './WatchList/WatchListTab';
 import { FriendHistoryTab } from './FriendHistory/FriendHistoryTab';
 import { AmcTab } from './Amc/AmcTab';
 import { SLTab } from '../Common/SLTab';
+import { WhatsNextTab } from './WhatsNext/WhatsNextTab';
 
 export const Shows = () => {
   const tabs = [
@@ -21,26 +22,31 @@ export const Shows = () => {
     },
     {
       id: 2,
+      label: 'Whats Next',
+      content: <WhatsNextTab />,
+    },
+    {
+      id: 3,
       label: 'Movie Stats',
       content: <MovieStatsTab />,
     },
     {
-      id: 3,
+      id: 4,
       label: 'Friends',
       content: <FriendHistoryTab />,
     },
     {
-      id: 4,
+      id: 5,
       label: 'Year Stats',
       content: <YearStatsTab />,
     },
     {
-      id: 5,
+      id: 6,
       label: 'Watchlist',
       content: <WatchListTab />,
     },
     {
-      id: 6,
+      id: 7,
       label: 'AMC',
       content: <AmcTab />,
     },

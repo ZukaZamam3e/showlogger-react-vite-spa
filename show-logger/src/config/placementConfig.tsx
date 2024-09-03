@@ -1,19 +1,17 @@
 export const placements = {
   fab: {
     firstIconBottom: {
-      xs: 32 + 16 + 12,
-      sm: 32 + 16,
+      xs: 60,
+      sm: 48,
     },
     secondIconBottom: {
-      xs: 32 + 32 + 56 + 12,
-      sm: 32 + 32 + 56,
+      xs: 132,
+      sm: 120,
+    },
+    thirdIconBottom: {
+      xs: 204,
+      sm: 192,
     },
     right: 16,
   },
 };
-
-/*
-
-xs: 32 + 32 + 56 + 12,
-                    sm: 32 + 32 + 56,
-                    */

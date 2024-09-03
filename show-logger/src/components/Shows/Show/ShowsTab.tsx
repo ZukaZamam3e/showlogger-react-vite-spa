@@ -13,8 +13,6 @@ import { placements } from '../../../config/placementConfig';
 import { BingeWatchModel } from '../../../models/BingeWatchModel';
 import { List } from '../../Common/List';
 import { showApi } from '../../../api/showApi';
-import { watchListApi } from '../../../api/watchlistApi';
-import { WatchListModel } from '../../../models/WatchListModel';
 
 export const ShowsTab = () => {
   const {
@@ -29,7 +27,6 @@ export const ShowsTab = () => {
     addRange,
   } = showApi();
 
-  const { saveWatchList } = watchListApi();
   const [shows, setShows] = useState<ShowModel[]>([]);
   const [showCount, setShowCount] = useState<number>(0);
   const [showTypeIds, setShowTypeIds] = useState<CodeValueModel[]>([]);

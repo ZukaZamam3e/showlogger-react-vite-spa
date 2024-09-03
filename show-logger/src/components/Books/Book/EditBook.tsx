@@ -91,6 +91,7 @@ export const EditBook = (props: EditBookProps) => {
               label="Start Date"
               defaultValue={props.book.startDate && dayjs(props.book.startDate)}
               onChange={value => handleStartDateChange(value)}
+              closeOnSelect
             />
           </Grid>
           <Grid xs={12}>
@@ -99,6 +100,7 @@ export const EditBook = (props: EditBookProps) => {
               label="End Date"
               defaultValue={props.book.endDate && dayjs(props.book.endDate)}
               onChange={value => handleEndDateChange(value)}
+              closeOnSelect
             />
           </Grid>
           <Grid xs={12}>
