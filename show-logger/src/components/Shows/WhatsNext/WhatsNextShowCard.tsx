@@ -1,6 +1,5 @@
 import { Card, CardMedia, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import nia_landscape from './../../../assets/nia_landscape.png';
 import { SLIconButton } from '../../Common/SLIconButton';
