@@ -1,4 +1,4 @@
-import { YearStatDataModel } from '../../models/YearStatDataModel';
+import { YearStatDataModel } from '../../../models/YearStatDataModel';
 import {
   Button,
   Card,

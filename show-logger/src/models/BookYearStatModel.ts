@@ -1,3 +1,5 @@
+import { BookYearStatDataModel } from './BookYearStatDataModel';
+
 export interface BookYearStatModel {
   userId: number;
   name: string;
@@ -12,4 +14,8 @@ export interface BookYearStatModel {
   chapterAvgZ: string;
   pageAvg: number;
   pageAvgZ: string;
+  monthAvg: number;
+  monthAvgZ: string;
+
+  data: BookYearStatDataModel[];
 }

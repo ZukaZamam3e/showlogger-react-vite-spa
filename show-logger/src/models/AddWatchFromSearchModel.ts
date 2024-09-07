@@ -12,6 +12,7 @@ export interface AddWatchFromSearchModel {
   dateWatched?: Date;
   showNotes?: string;
   restartBinge: boolean;
+  watchlist: boolean;
 
   transactions?: TransactionModel[];
 

@@ -58,7 +58,7 @@ export const BookCard = (props: BookCardProps) => {
               {props.book.chapters && <>Chapters: {props.book.chapters}</>}
             </Typography>
             <Typography variant="body2" color="text.primary">
-              {props.book.pages && <>Chapters: {props.book.pages}</>}
+              {props.book.pages && <>Pages: {props.book.pages}</>}
             </Typography>
             <Typography variant="body2" color="text.primary">
               {props.book.bookNotes}

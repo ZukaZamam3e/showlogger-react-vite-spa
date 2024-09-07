@@ -1,13 +1,12 @@
 import { Box, Fab, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { DatePicker } from '@mui/x-date-pickers';
 import { placements } from '../../../config/placementConfig';
-import dayjs from 'dayjs';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from 'react';
 import { SLTextField } from '../../Common/SLTextField';
 import { BookModel } from '../../../models/BookModel';
+import { SLDatePicker } from '../../Common/SLDatePicker';
 
 interface EditBookProps {
   book: BookModel;
@@ -33,10 +32,13 @@ export const EditBook = (props: EditBookProps) => {
   };
 
   const handleStartDateChange = (value: any) => {
+    console.log('changing start date');
     const updatedBook = {
       ...book,
       ['startDate']: value != null ? value.toDate() : null,
     };
+    console.log(updatedBook);
+
     setBook(updatedBook);
   };
 
@@ -86,19 +88,17 @@ export const EditBook = (props: EditBookProps) => {
             />
           </Grid>
           <Grid xs={12}>
-            <DatePicker
-              slotProps={{ textField: { fullWidth: true, required: false } }}
+            <SLDatePicker
               label="Start Date"
-              defaultValue={props.book.startDate && dayjs(props.book.startDate)}
-              onChange={value => handleStartDateChange(value)}
+              date={book.startDate}
+              onDateChange={handleStartDateChange}
             />
           </Grid>
           <Grid xs={12}>
-            <DatePicker
-              slotProps={{ textField: { fullWidth: true, required: false } }}
+            <SLDatePicker
               label="End Date"
-              defaultValue={props.book.endDate && dayjs(props.book.endDate)}
-              onChange={value => handleEndDateChange(value)}
+              date={book.endDate}
+              onDateChange={handleEndDateChange}
             />
           </Grid>
           <Grid xs={12}>
