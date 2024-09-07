@@ -58,7 +58,7 @@ export const WhatsNextEpisodeCard = (props: WhatsNextEpisodeCardProp) => {
         }}
       >
         <Grid
-          xs={6}
+          xs={10}
           sm={12}
           sx={{
             minHeight: {
@@ -87,7 +87,7 @@ export const WhatsNextEpisodeCard = (props: WhatsNextEpisodeCardProp) => {
             </Typography>
           </CardContent>
         </Grid>
-        <Grid xs={6} sm={12}>
+        <Grid xs={2} sm={12}>
           <Stack direction="column" spacing={2}>
             <Stack
               direction="row"

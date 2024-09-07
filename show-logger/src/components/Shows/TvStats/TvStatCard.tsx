@@ -35,6 +35,17 @@ export const TvStatCard = (props: TvStatCardProps) => {
     );
   const imageUrl = props.tvStat.infoBackdropUrl;
 
+  const gridSizes = {
+    info: {
+      xs: 10,
+      sm: 12,
+    },
+  };
+
+  if (!hasNextEpisode) {
+    gridSizes.info.xs = 12;
+  }
+
   return (
     <Card
       sx={{
@@ -66,7 +77,7 @@ export const TvStatCard = (props: TvStatCardProps) => {
         }}
       >
         <Grid
-          xs={10}
+          xs={hasNextEpisode ? 10 : 12}
           sm={12}
           sx={{
             minHeight: {
@@ -113,24 +124,26 @@ export const TvStatCard = (props: TvStatCardProps) => {
             </>
           )}
         </Grid>
-        <Grid xs={2} sm={12}>
-          <Stack direction="column" spacing={2}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ justifyContent: 'center' }}
-            >
-              <SLIconButton
-                aria-label="Add Next Episode"
-                onClick={() => {
-                  props.onAddNextEpisode(props.tvStat.showId);
-                }}
+        {hasNextEpisode && (
+          <Grid xs={2} sm={12}>
+            <Stack direction="column" spacing={2}>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: 'center' }}
               >
-                <AddIcon style={{ color: 'lightgreen' }} />
-              </SLIconButton>
+                <SLIconButton
+                  aria-label="Add Next Episode"
+                  onClick={() => {
+                    props.onAddNextEpisode(props.tvStat.showId);
+                  }}
+                >
+                  <AddIcon style={{ color: 'lightgreen' }} />
+                </SLIconButton>
+              </Stack>
             </Stack>
-          </Stack>
-        </Grid>
+          </Grid>
+        )}
       </Grid>
     </Card>
   );

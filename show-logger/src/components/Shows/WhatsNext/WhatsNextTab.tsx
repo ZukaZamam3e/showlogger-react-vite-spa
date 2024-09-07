@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { whatsNextApi } from '../../../api/whatsNextApi';
 import { WhatsNextShowModel } from '../../../models/WhatsNextShowModel';
 import { ManageSubs } from './ManageSubs';
-import { Fab } from '@mui/material';
+import { Box, Button, Fab } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
 import { placements } from '../../../config/placementConfig';
 import { List } from '../../Common/List';
@@ -21,8 +21,35 @@ export const WhatsNextTab = () => {
   const [hideListButton, setHideListButton] = useState(false);
   const [clearSearch, setClearSearch] = useState(false);
   const [managing, setManaging] = useState(false);
+  const [viewingEpisodesLeft, setViewingEpisodesLeft] = useState(false);
 
   const take = 12;
+  const today = new Date();
+  let episodesLeft: WhatsNextEpisodeModel[] = [];
+
+  whatsNextShows.forEach(m => {
+    console.log(
+      m.episodes.filter(
+        n =>
+          n.airDate != null && new Date(n.airDate).getTime() <= today.getTime(),
+      ),
+    );
+
+    episodesLeft.push(
+      ...m.episodes.filter(
+        n =>
+          n.airDate != null && new Date(n.airDate).getTime() <= today.getTime(),
+      ),
+    );
+  });
+
+  episodesLeft = episodesLeft.sort((a, b) => {
+    if (a.airDate === b.airDate) {
+      return a.episodeNumber > b.episodeNumber ? 1 : -1;
+    } else {
+      return a.airDate > b.airDate ? 1 : -1;
+    }
+  });
 
   const load = async () => {
     const { data, count } = await loadWhatsNext(take);
@@ -59,6 +86,11 @@ export const WhatsNextTab = () => {
 
   const handleCancelSelectedShow = () => {
     setEpisodes([]);
+
+    if (viewingEpisodesLeft) {
+      setViewingEpisodesLeft(false);
+      get(0, '');
+    }
   };
 
   const handleWatchEpisode = async (episode: WhatsNextEpisodeModel) => {
@@ -87,10 +119,21 @@ export const WhatsNextTab = () => {
     <ManageSubs onCancleManageSub={handleCancelManageSubs} />
   );
 
+  const handleEpisodeLeftClick = () => {
+    setEpisodes(episodesLeft);
+    setViewingEpisodesLeft(true);
+  };
+
   let body: ReactNode = null;
   if (episodes.length == 0) {
     body = (
       <div style={sxBody}>
+        {episodesLeft.length > 0 && (
+          <Button fullWidth variant="outlined" onClick={handleEpisodeLeftClick}>
+            <>Episodes Left: {episodesLeft.length}</>
+          </Button>
+        )}
+        <hr />
         {!hideListButton && (
           <Fab
             sx={{
