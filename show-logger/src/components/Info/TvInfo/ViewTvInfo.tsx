@@ -108,13 +108,6 @@ export const ViewTvInfo = (props: ViewTvInfoProps) => {
           }}
         >
           <Grid container spacing={3} alignItems="center">
-            {/* <Grid xs={12}>
-              <DatePicker
-                slotProps={{ textField: { fullWidth: true } }}
-                label="Last Updated"
-                value={dayjs(props.tvInfo.lastUpdated)}
-              />
-            </Grid> */}
             <Grid xs={12}>
               <SLTextField
                 fullWidth
