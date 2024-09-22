@@ -55,7 +55,7 @@ export const whatsNextApi = () => {
     ).then(json => {
       if (json.errors.length == 0) {
         data = json.model.subscriptions;
-        count = json.model.subscriptionsCount;
+        count = json.model.subscriptionCount;
       }
     });
 

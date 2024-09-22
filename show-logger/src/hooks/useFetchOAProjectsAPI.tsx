@@ -2,11 +2,16 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
 import { startLoading, stopLoading } from '../slices/isLoadingSlice';
 import { showErrors } from '../slices/errorsSlice';
+import dayjs from 'dayjs';
 
 interface ApiResponseModel {
   model: any;
   errors: string[];
 }
+
+Date.prototype.toJSON = function () {
+  return dayjs(this).format();
+};
 
 export const useFetch = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
