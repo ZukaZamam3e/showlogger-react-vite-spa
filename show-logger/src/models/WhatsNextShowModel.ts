@@ -14,5 +14,6 @@ export interface WhatsNextShowModel {
   infoUrl: string;
   seasonUrl: string;
   status: string;
+  daysLeft: number;
   episodes: WhatsNextEpisodeModel[];
 }

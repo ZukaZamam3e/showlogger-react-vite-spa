@@ -100,6 +100,11 @@ export const WhatsNextShowCard = (props: WhatsNextShowCardProps) => {
           <Typography variant="body2" color="text.primary">
             <>{`Episodes Left: ${props.show.episodes.length}`}</>
           </Typography>
+          {props.show.daysLeft > 0 && (
+            <Typography variant="body2" color="text.primary">
+              <>{`Days Left: ${props.show.daysLeft}`}</>
+            </Typography>
+          )}
         </Grid>
         <Grid xs={2} sm={12}>
           <Stack direction="column" spacing={2}>
