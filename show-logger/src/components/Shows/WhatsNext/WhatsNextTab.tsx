@@ -28,13 +28,6 @@ export const WhatsNextTab = () => {
   let episodesLeft: WhatsNextEpisodeModel[] = [];
 
   whatsNextShows.forEach(m => {
-    console.log(
-      m.episodes.filter(
-        n =>
-          n.airDate != null && new Date(n.airDate).getTime() <= today.getTime(),
-      ),
-    );
-
     episodesLeft.push(
       ...m.episodes.filter(
         n =>
