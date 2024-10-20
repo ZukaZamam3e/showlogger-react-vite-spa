@@ -24,11 +24,11 @@ jobs:
       with:
         node-version: 20.x
         cache: 'npm'
-        working-directory: ./show-logger
+        cache-dependency-path: show-logger/package-lock.json
     - run: npm ci
-      working-directory: ./show-logger
+      working-directory: show-logger
     - run: npm run build:production
-      working-directory: ./show-logger
+      working-directory: show-logger
 
     - name: Show Logger SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
