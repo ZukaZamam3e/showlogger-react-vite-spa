@@ -27,6 +27,13 @@ export const WhatsNextShowCard = (props: WhatsNextShowCardProps) => {
     </Typography>
   );
 
+  const today = new Date();
+  const unairedEpisodes = props.show.episodes.filter(
+    n => n.airDate != null && new Date(n.airDate).getTime() >= today.getTime(),
+  ).length;
+  console.log(props.show.showName);
+  const episodesLeft = props.show.episodes.length - unairedEpisodes;
+
   let imageUrl = props.show.backdropUrl;
 
   if (imageUrl == '') {
@@ -97,12 +104,21 @@ export const WhatsNextShowCard = (props: WhatsNextShowCardProps) => {
           <Typography variant="body2" color="text.primary">
             <>{`Season Status: ${props.show.seasonStatus}`}</>
           </Typography>
-          <Typography variant="body2" color="text.primary">
-            <>{`Episodes Left: ${props.show.episodes.length}`}</>
-          </Typography>
-          {props.show.daysLeft > 0 && (
+          {episodesLeft > 0 && (
             <Typography variant="body2" color="text.primary">
-              <>{`Days Left: ${props.show.daysLeft}`}</>
+              <>{`Episodes Left: ${episodesLeft}`}</>
+            </Typography>
+          )}
+          {props.show.nextAirDateCount > 0 && (
+            <Typography variant="body2" color="text.primary">
+              <>{`Days Left: ${props.show.nextAirDateCount} - ${props.show.nextAirDateDay} - ${new Date(
+                props.show.nextAirDate,
+              ).toLocaleDateString()}`}</>
+            </Typography>
+          )}
+          {unairedEpisodes > 0 && (
+            <Typography variant="body2" color="text.primary">
+              <>{`Unaired Episodes: ${unairedEpisodes}`}</>
             </Typography>
           )}
         </Grid>
