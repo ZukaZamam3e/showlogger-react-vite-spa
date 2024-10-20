@@ -19,9 +19,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Configure NPM
-      working-directory: dirname
-    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -29,6 +26,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build:production
+      working-directory: show-logger
 
     - name: Show Logger SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -37,7 +35,7 @@ jobs:
         server: '${{ secrets.SSH_IP_ADDRESS }}'
         port: 22
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        local_path: './dist/*'
+        local_path: './show-logger/dist/*'
         remote_path: '/oaprojects/show-logger'
 
     
