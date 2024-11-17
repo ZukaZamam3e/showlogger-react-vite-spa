@@ -52,6 +52,13 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiCardMedia: {
+      styleOverrides: {
+        root: {
+          overflow: 'visible',
+        },
+      },
+    },
   },
 });
 
