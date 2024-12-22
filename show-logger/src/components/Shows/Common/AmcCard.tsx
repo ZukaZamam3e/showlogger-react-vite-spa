@@ -149,6 +149,12 @@ export const AmcCard = (props: AmcCardProps) => {
           <Typography variant="body2" color="text.r">
             {formatter.format(totalPurchases)}
           </Typography>
+          <Typography variant="body2" color="text.primary">
+            {props.show.hasMidCreditsScene && <>Mid Credits Scene</>}
+          </Typography>
+          <Typography variant="body2" color="text.primary">
+            {props.show.hasEndCreditsScene && <>End Credits Scene</>}
+          </Typography>
           <Typography
             variant="body2"
             color="text.primary"

@@ -51,6 +51,10 @@ export const HomePage = () => {
     navigate('/friends');
   };
 
+  // const handleNavigateToHelpClick = () => {
+  //   navigate('/help');
+  // };
+
   const saveUserPref = async (model: UserPrefModel) => {
     const updatedLogin = await saveLogin(model);
 
@@ -106,6 +110,12 @@ export const HomePage = () => {
           navigateText="See Friends"
           onNavigateClick={handleNavigateToFriendsClick}
         />
+        {/* <HomePageCard
+          title="Help"
+          description="Learn how to use the different trackers."
+          navigateText="Help me!"
+          onNavigateClick={handleNavigateToHelpClick}
+        /> */}
         {userPref && userPref.hasAdminRole && (
           <HomePageCard
             title="Info"

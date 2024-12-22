@@ -19,6 +19,8 @@ export interface ShowModel {
   infoUrl?: string;
   seasonEpisode?: string;
   showNameZ?: string;
+  hasMidCreditsScene?: boolean;
+  hasEndCreditsScene?: boolean;
 
   transactions?: TransactionModel[];
 

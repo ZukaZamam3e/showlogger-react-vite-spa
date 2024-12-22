@@ -24,6 +24,7 @@ export const NavigationBar = () => {
     { title: 'Shows', href: '/shows' },
     { title: 'Books', href: '/books' },
     { title: 'Friends', href: '/friends' },
+    { title: 'Help', href: '/help' },
   ];
 
   if (userPref && userPref.hasAdminRole) {

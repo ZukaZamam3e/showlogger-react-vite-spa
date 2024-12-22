@@ -6,6 +6,7 @@ import { Books } from './Books/Books';
 import { Friends } from './Friends/Friends';
 import { Info } from './Info/Info';
 import { useSelector } from 'react-redux';
+// import { Help } from './Help/Help';
 
 export const Pages = () => {
   const userPref = useSelector((state: any) => state.userPref.value);
@@ -20,6 +21,7 @@ export const Pages = () => {
         <Route path="/info" element={<Info />} />
       )}
       <Route path="/friends" element={<Friends />} />
+      {/* <Route path="/help" element={<Help />} /> */}
     </Routes>
   );
 };
