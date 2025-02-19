@@ -22,6 +22,7 @@ export const NavigationBar = () => {
   const pages = [
     { title: 'Home', href: '/home' },
     { title: 'Shows', href: '/shows' },
+    { title: 'Watched', href: '/watched' },
     { title: 'Books', href: '/books' },
     { title: 'Friends', href: '/friends' },
     { title: 'Help', href: '/help' },
