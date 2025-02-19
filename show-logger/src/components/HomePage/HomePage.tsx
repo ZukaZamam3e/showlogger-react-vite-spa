@@ -41,6 +41,15 @@ export const HomePage = () => {
     await saveUserPref(updatedUserPref);
   };
 
+  const handleNavigateToWatchedClick = () => {
+    navigate('/watched');
+  };
+
+  const handleWatchedSetAsDefault = async () => {
+    const updatedUserPref = { ...userPref, ['defaultArea']: 'watched' };
+    await saveUserPref(updatedUserPref);
+  };
+
   const handleNavigateToInfoClick = () => {
     if (userPref && userPref.hasAdminRole) {
       navigate('/info');
@@ -94,6 +103,15 @@ export const HomePage = () => {
           onSetDefaultAreaClick={handleLogShowsSetAsDefault}
           onUndoDefaultAreaClick={handleUndoDefaultClick}
           currentDefaultAreaIndc={defaultArea === 'shows'}
+        />
+        <HomePageCard
+          title="Watched List"
+          description="See what shows you have logged and manage your watched list."
+          navigateText="Watched"
+          onNavigateClick={handleNavigateToWatchedClick}
+          onSetDefaultAreaClick={handleWatchedSetAsDefault}
+          onUndoDefaultAreaClick={handleUndoDefaultClick}
+          currentDefaultAreaIndc={defaultArea === 'watched'}
         />
         <HomePageCard
           title="Log Books"

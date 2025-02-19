@@ -6,6 +6,7 @@ import { Books } from './Books/Books';
 import { Friends } from './Friends/Friends';
 import { Info } from './Info/Info';
 import { useSelector } from 'react-redux';
+import { Watched } from './Watched/Watched';
 // import { Help } from './Help/Help';
 
 export const Pages = () => {
@@ -16,6 +17,7 @@ export const Pages = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/shows" element={<Shows />} />
+      <Route path="/watched" element={<Watched />} />
       <Route path="/books" element={<Books />} />
       {userPref != null && userPref.hasAdminRole && (
         <Route path="/info" element={<Info />} />

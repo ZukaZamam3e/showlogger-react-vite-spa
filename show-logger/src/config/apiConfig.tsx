@@ -21,5 +21,6 @@ export const protectedResources = {
       import.meta.env.VITE_APP_API_URL + '/show-logger/unlinkedshows',
     whatsNextEndpoint:
       import.meta.env.VITE_APP_API_URL + '/show-logger/whatsnext',
+    watchedEndpoint: import.meta.env.VITE_APP_API_URL + '/show-logger/watched',
   },
 };
