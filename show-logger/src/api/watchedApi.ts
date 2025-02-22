@@ -87,7 +87,7 @@ export const watchedApi = () => {
   const createWatched = async (subscription: CreatedWatchedModel) => {
     let data: CreatedWatchedModel | null = null;
     await postData(
-      `${protectedResources.oaprojectsApi.whatsNextEndpoint}/createwatched`,
+      `${protectedResources.oaprojectsApi.watchedEndpoint}/createwatched`,
       subscription,
     ).then(async json => {
       if (json.errors.length == 0) {
