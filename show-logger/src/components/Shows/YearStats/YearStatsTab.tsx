@@ -8,6 +8,7 @@ import { YearStatDataCard } from './YearStatDataCard';
 import { placements } from '../../../config/placementConfig';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { statApi } from '../../../api/statApi';
+import { YearStatSummaryCard } from './YearStatSummaryCard';
 
 export const YearStatsTab = () => {
   const { getYearStats } = statApi();
@@ -55,6 +56,10 @@ export const YearStatsTab = () => {
         <h1>
           {year} - {name}
         </h1>
+        <YearStatSummaryCard
+          yearStatData={yearStatData}
+          title={`${year} - ${name}`}
+        />
         <hr />
         {tvData.length > 0 && (
           <>

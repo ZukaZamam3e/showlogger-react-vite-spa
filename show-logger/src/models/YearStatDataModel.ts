@@ -7,6 +7,7 @@ export interface YearStatDataModel {
   watchCount: number;
   totalRuntime?: number;
   totalRuntimeZ: string;
+  posterUrl: string;
   infoBackdropUrl: string;
   infoUrl: string;
 }
