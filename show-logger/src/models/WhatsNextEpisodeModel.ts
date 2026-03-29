@@ -1,5 +1,6 @@
 export interface WhatsNextEpisodeModel {
   tvEpisodeInfoId: number;
+  showName: string;
   seasonNumber: string;
   seasonName: number;
   episodeNumber: string;

@@ -34,6 +34,15 @@ export const WhatsNextEpisodeCard = (props: WhatsNextEpisodeCardProp) => {
         flexDirection: 'column',
       }}
     >
+      <strong
+        style={{
+          height: 24,
+          maxHeight: 24,
+          fontSize: props.episode.showName.length > 33 ? 10 : 16,
+        }}
+      >
+        {props.episode.showName}
+      </strong>
       <CardMedia
         component="img"
         image={imageUrl}
