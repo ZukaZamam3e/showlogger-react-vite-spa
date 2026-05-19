@@ -52,15 +52,19 @@ export const NewTransaction = (props: NewTransactionProps) => {
   };
 
   const handleAddItem = () => {
+    console.log('Selected item: ' + selectedItem);
     if (!!selectedItem) {
+      // format - Item-Quantity-CostAmt
+      const parts = selectedItem.split('-');
       let item = optionSelect
-        ? props.transactionItems.find(m => m.item === selectedItem)
+        ? props.transactionItems.find(m => m.key === selectedItem)
         : ({
-            item: selectedItem,
-            quantity: 1,
-            costAmt: 0,
+            item: parts[0],
+            quantity: parseInt(parts[1]),
+            costAmt: parseFloat(parts[2]),
           } as TransactionItemModel);
 
+      console.log('Adding item: ' + item?.item);
       if (!!item) {
         props.onAddItem(item);
       }
@@ -84,7 +88,7 @@ export const NewTransaction = (props: NewTransactionProps) => {
                 onChange={handleItemChange}
               >
                 {props.transactionItems.map(item => (
-                  <MenuItem key={item.item} value={item.item}>
+                  <MenuItem key={item.key} value={item.key}>
                     {props.showTransactionType &&
                       `${item.transactionTypeIdZ}: `}
                     {item.item} ({item.quantity} -{' '}
