@@ -68,7 +68,11 @@ export const EditShow = (props: EditShowProps) => {
   const amcBenefits = getAmcInfoValue(2004);
   const amcAlistTicket = getAmcInfoValue(2000);
   const amcTicket = getAmcInfoValue(2001);
-  const amcTicketQauntity = getAmcInfoValue(2001, true);
+  const amcTicketQuantity = getAmcInfoValue(2001, true);
+  const popcornPass = getAmcInfoValue(2007);
+
+  const tvVisible = show.showTypeId == 1000;
+  const amcVisible = show.showTypeId == 1002;
 
   const purchases = show.transactions?.filter(m => m.transactionTypeId == 2002);
 
@@ -84,7 +88,8 @@ export const EditShow = (props: EditShowProps) => {
     sumPurchases +
     amcTax -
     amcRewards -
-    amcBenefits
+    amcBenefits -
+    popcornPass
   ).toFixed(2);
 
   const dateWatchLabel =
@@ -166,6 +171,7 @@ export const EditShow = (props: EditShowProps) => {
   };
 
   const handleAddTransactionItem = (item: TransactionItemModel) => {
+    console.log('Adding transaction item: ' + item.item);
     const newItem: TransactionModel = {
       transactionTypeId: 2002, // PURCHASE
       costAmt: item.costAmt,
@@ -237,6 +243,10 @@ export const EditShow = (props: EditShowProps) => {
         transactionTypeId = 2005;
         break;
       }
+      case 'popcornPass': {
+        transactionTypeId = 2007;
+        break;
+      }
       case 'ticket':
       case 'ticketQuantity': {
         transactionTypeId = 2001;
@@ -255,6 +265,7 @@ export const EditShow = (props: EditShowProps) => {
     );
 
     if (amcInfo?.length == 0) {
+      console.log('Adding new transaction for ' + name);
       transactions.push({
         quantity: 1,
         transactionTypeId: transactionTypeId,
@@ -305,6 +316,9 @@ export const EditShow = (props: EditShowProps) => {
       }
       case 2006: {
         return 'Tax';
+      }
+      case 2007: {
+        return 'Popcorn Pass';
       }
       default: {
         return '';
@@ -386,7 +400,7 @@ export const EditShow = (props: EditShowProps) => {
               ))}
             </ToggleButtonGroup>
           </Grid>
-          {show.showTypeId == 1000 && (
+          {tvVisible && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
                 <SLTextField
@@ -411,7 +425,7 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
             </Grid>
           )}
-          {show.showTypeId == 1000 && (
+          {tvVisible && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
                 <SLTextField
@@ -437,7 +451,7 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
             </Grid>
           )}
-          {show.showTypeId == 1000 && (
+          {tvVisible && (
             <Grid xs={12}>
               <ToggleButtonGroup
                 color="primary"
@@ -451,7 +465,7 @@ export const EditShow = (props: EditShowProps) => {
               </ToggleButtonGroup>
             </Grid>
           )}
-          {show.showTypeId == 1002 && (
+          {amcVisible && (
             <Grid container spacing={3} xs={12}>
               <Grid xs={12} sm={12}>
                 <FormControl fullWidth>
@@ -469,9 +483,27 @@ export const EditShow = (props: EditShowProps) => {
                   />
                 </FormControl>
               </Grid>
+              <Grid xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Tax</InputLabel>
+                  <SLInput
+                    inputProps={currencyInputProps}
+                    startAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                    name="tax"
+                    label="Tax"
+                    type="number"
+                    value={amcTax}
+                    onChange={(e: any) =>
+                      amcInfoUpdate(e.target.name, e.target.value)
+                    }
+                  />
+                </FormControl>
+              </Grid>
             </Grid>
           )}
-          {show.showTypeId == 1002 && (
+          {amcVisible && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -493,16 +525,16 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>Tax</InputLabel>
+                  <InputLabel>Popcorn Pass</InputLabel>
                   <SLInput
                     inputProps={currencyInputProps}
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
                     }
-                    name="tax"
-                    label="Tax"
+                    name="popcornPass"
+                    label="Popcorn Pass"
                     type="number"
-                    value={amcTax}
+                    value={popcornPass}
                     onChange={(e: any) =>
                       amcInfoUpdate(e.target.name, e.target.value)
                     }
@@ -511,7 +543,7 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
             </Grid>
           )}
-          {show.showTypeId == 1002 && (
+          {amcVisible && (
             <Grid container spacing={3} xs={6}>
               <Grid xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -551,8 +583,7 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
             </Grid>
           )}
-
-          {show.showTypeId == 1002 && (
+          {amcVisible && (
             <>
               <Grid xs={6} sm={6}>
                 <FormControl fullWidth>
@@ -581,7 +612,7 @@ export const EditShow = (props: EditShowProps) => {
                     name="ticketQuantity"
                     label="Quantity"
                     type="number"
-                    value={amcTicketQauntity}
+                    value={amcTicketQuantity}
                     onChange={(e: any) =>
                       amcInfoUpdate(e.target.name, e.target.value)
                     }
@@ -590,11 +621,11 @@ export const EditShow = (props: EditShowProps) => {
               </Grid>
             </>
           )}
-          {show.showTypeId == 1002 && (
+          {amcVisible && (
             <Grid container spacing={3} xs={12}>
               <Grid xs={12}>
                 <hr />
-                Tranasctions
+                Transactions
                 <hr />
                 <NewTransaction
                   transactionItems={props.transactionItems}
