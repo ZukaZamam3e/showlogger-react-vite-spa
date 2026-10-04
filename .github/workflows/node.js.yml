@@ -2,13 +2,13 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,27 +17,25 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js 20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20.x
-        cache: 'npm'
-        cache-dependency-path: show-logger/package-lock.json
-    - run: npm ci
-      working-directory: show-logger
-    - run: npm run build:production
-      working-directory: show-logger
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "npm"
+          cache-dependency-path: show-logger/package-lock.json
+      - run: npm ci
+        working-directory: show-logger
+      - run: npm run build:production
+        working-directory: show-logger
 
-    - name: Show Logger SFTP Deploy
-      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-      with:
-        username: '${{ secrets.SSH_USER }}'
-        server: '${{ secrets.SSH_IP_ADDRESS }}'
-        port: 22
-        ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        local_path: './show-logger/dist/*'
-        remote_path: '/oaprojects/show-logger'
-
-    
+      - name: Show Logger SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: "${{ secrets.SSH_USER }}"
+          server: "${{ secrets.SSH_IP_ADDRESS }}"
+          port: 22
+          ssh_private_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          local_path: "./show-logger/dist/*"
+          remote_path: "/oaprojects/show-logger"
